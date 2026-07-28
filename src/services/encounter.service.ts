@@ -1,10 +1,10 @@
 import type Monster from "../models/monster.js";
 import { collections } from "./database.service";
 
-async function generateMonsterSet (monsters: Monster[], encounterXP: number): Promise<Monster[]> {
+async function generateMonsterSet(monsters: Monster[], encounterXP: number): Promise<Monster[]> {
     let selectedMonsters: any[] = [];
     let monstersXP = 0;
-    
+
     while (monstersXP < encounterXP) {
         // console.log(`Current monsters XP: ${monstersXP}, Encounter XP limit: ${encounterXP}`);
         // console.log(monsters);
@@ -17,57 +17,74 @@ async function generateMonsterSet (monsters: Monster[], encounterXP: number): Pr
             // If the selected monster is already in the encounter, increment the count instead of adding a new entry
             existingMonster.count++;
         } else {
-            selectedMonsters.push({count:1, monster: selectedMonster});
+            selectedMonsters.push({ count: 1, monster: selectedMonster });
         }
         monstersXP += selectedMonster.xp;
     }
-    
-    return selectedMonsters;
-    }
 
-function getRandomMonster (arr: Monster[]): any {
-  if (arr.length === 0) return undefined;
-  const randomIndex = Math.floor(Math.random() * arr.length);
-  return arr[randomIndex];
+    return selectedMonsters;
 }
 
-export async function generateEncounter (params?: any) {
+function getRandomMonster(arr: Monster[]): any {
+    if (arr.length === 0) return undefined;
+    const randomIndex = Math.floor(Math.random() * arr.length);
+    return arr[randomIndex];
+}
+
+export async function generateEncounter(monsters: Monster[], params?: any) {
     try {
         console.log("Generating encounter with params:", params);
-        const monstersCollection = collections.monsters;
-        if (!monstersCollection) {
-            throw new Error("Monster collection is not initialized");
-        }
 
-        const conditions: any[] = [];
-        if (params) {
-            if (params.name) {
-                conditions.push({ name: { $regex: params.name } });
-            }
-            if (params.challengeRating !== undefined) {
-                var decimal = eval(params.challengeRating); 
-                conditions.push({ challenge_rating: { $lte: decimal } });
-            }
-            if (params.xp !== undefined) {
-                conditions.push({ xp: { $lte: eval(params.xp) } });
-            }
-            if (params.type) {
-                conditions.push({ type: params.type });
-            }
-        }
 
-        const query = conditions.length ? { $and: conditions } : {};
-        console.log("Querying monsters with:", query);
-        let monsters = await monstersCollection.find(query).toArray();
-        console.log(`Found ${monsters.length} monsters matching criteria.`);
+
         return await generateMonsterSet(monsters, params?.xp || 0);
     } catch (err) {
-        console.log (err);
+        console.log(err);
         throw new Error("Failed to generate encounter");
     }
 }
 
-export async function generateEncounters (params?: any) { 
-    return await generateEncounter(params);
+export async function generateEncounters(params?: any) {
+    const xpThresholdsCollection = collections.xpthresholds;
+    if (!xpThresholdsCollection) {
+        throw new Error("XP thresholds collection is not initialized");
+    }
+    const monstersCollection = collections.monsters;
+    if (!monstersCollection) {
+        throw new Error("Monster collection is not initialized");
+    }
+    
+    const xpThresholds = await xpThresholdsCollection.findOne({ level: eval(params?.avgPlayerLevel) });
+    console.log(xpThresholds);
 
+    const conditions: any[] = [];
+    if (params) {
+        if (params.name) {
+            conditions.push({ name: { $regex: params.name } });
+        }
+        if (params.monsterCR !== undefined) {
+            conditions.push({ challenge_rating: { $lte: eval(params.monsterCR) } });
+        }
+        params.monsterXP = params.monsterXP || xpThresholds['2024'].high * eval(params.partySize);
+        console.log(`Calculated monsterXP: ${params.monsterXP}`);
+        if (params.monsterXP !== undefined) {
+            conditions.push({ xp: { $lte: eval(params.monsterXP) } });
+        }
+        if (params.type) {
+            conditions.push({ type: params.type });
+        }
+    }
+    
+    const query = conditions.length ? { $and: conditions } : {};
+    console.log("Querying monsters with:", query);
+    let monsters = await monstersCollection.find(query).toArray();
+    console.log(`Found ${monsters.length} monsters matching criteria.`);
+
+
+    let encounters = [];
+    encounters.push({ difficulty: "low", encounter: await generateMonsterSet(monsters, xpThresholds['2024'].low * eval(params.partySize)) });
+    encounters.push({ difficulty: "moderate", encounter: await generateMonsterSet(monsters, xpThresholds['2024'].moderate * eval(params.partySize)) });
+    encounters.push({ difficulty: "high", encounter: await generateMonsterSet(monsters, xpThresholds['2024'].high * eval(params.partySize)) });
+
+    return encounters;
 }
