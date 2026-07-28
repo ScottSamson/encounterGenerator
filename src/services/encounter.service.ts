@@ -1,4 +1,35 @@
+import type Monster from "../models/monster.js";
 import { collections } from "./database.service";
+
+async function generateMonsterSet (monsters: Monster[], encounterXP: number): Promise<Monster[]> {
+    let selectedMonsters: any[] = [];
+    let monstersXP = 0;
+    
+    while (monstersXP < encounterXP) {
+        // console.log(`Current monsters XP: ${monstersXP}, Encounter XP limit: ${encounterXP}`);
+        // console.log(monsters);
+        const options = monsters.filter((m) => m.xp <= (encounterXP - monstersXP));
+        if (options.length === 0) break; // No more monsters can be added without exceeding XP
+        const selectedMonster = getRandomMonster(options);
+        // console.log(`Selected monster: ${selectedMonster.name} (XP: ${selectedMonster.xp})`);
+        const existingMonster = selectedMonsters.find((m) => m.monster.name === selectedMonster.name);
+        if (existingMonster) {
+            // If the selected monster is already in the encounter, increment the count instead of adding a new entry
+            existingMonster.count++;
+        } else {
+            selectedMonsters.push({count:1, monster: selectedMonster});
+        }
+        monstersXP += selectedMonster.xp;
+    }
+    
+    return selectedMonsters;
+    }
+
+function getRandomMonster (arr: Monster[]): any {
+  if (arr.length === 0) return undefined;
+  const randomIndex = Math.floor(Math.random() * arr.length);
+  return arr[randomIndex];
+}
 
 export async function generateEncounter (params?: any) {
     try {
@@ -18,7 +49,7 @@ export async function generateEncounter (params?: any) {
                 conditions.push({ challenge_rating: { $lte: decimal } });
             }
             if (params.xp !== undefined) {
-                conditions.push({ xp: { $lte: params.xp } });
+                conditions.push({ xp: { $lte: eval(params.xp) } });
             }
             if (params.type) {
                 conditions.push({ type: params.type });
@@ -28,9 +59,15 @@ export async function generateEncounter (params?: any) {
         const query = conditions.length ? { $and: conditions } : {};
         console.log("Querying monsters with:", query);
         let monsters = await monstersCollection.find(query).toArray();
-        return monsters;
+        console.log(`Found ${monsters.length} monsters matching criteria.`);
+        return await generateMonsterSet(monsters, params?.xp || 0);
     } catch (err) {
         console.log (err);
         throw new Error("Failed to generate encounter");
     }
+}
+
+export async function generateEncounters (params?: any) { 
+    return await generateEncounter(params);
+
 }

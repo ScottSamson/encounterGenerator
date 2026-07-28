@@ -3,6 +3,7 @@ import { ObjectId } from "mongodb";
 import { collections, connectToDatabase } from "./services/database.service";
 import Monster from "./models/monster";
 import { generateEncounter } from "./services/encounter.service";
+import { generateEncounters } from './services/encounter.service.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -33,7 +34,7 @@ app.get('/api/monsters', async (req: Request, res: Response) => {
 
 app.get('/api/encounters/generate', async (req: Request, res: Response) => { 
   try { 
-    res.json(await generateEncounter(req.query));
+    res.json(await generateEncounters(req.query));
   }catch (err) {
     console.log (err);
     res.status(500).json({ message: "Failed to generate encounter", error: err });
