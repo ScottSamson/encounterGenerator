@@ -44,7 +44,7 @@
     "skills_raw": "History +12, Perception +10",
     "senses": "Darkvision 120 ft.; Passive Perception 20",
     "languages": "Deep Speech; telepathy 120 ft.",
-    "challenge_rating": "10",
+    "challenge_rating": 10,
     "xp": 5900,
     "xp_in_lair": 7200,
     "proficiency_bonus": 4,
@@ -146,7 +146,7 @@
     "immunities": "Poison, Thunder; Exhaustion, Grappled,",
     "senses": "Darkvision 60 ft.; Passive Perception 10",
     "languages": "Primordial (Auran)",
-    "challenge_rating": "5",
+    "challenge_rating": 5,
     "xp": 1800,
     "proficiency_bonus": 3,
     "traits": [
@@ -215,7 +215,7 @@
     "immunities": "Poison, Psychic; Charmed, Deafened,",
     "senses": "Blindsight 60 ft.; Passive Perception 6",
     "languages": "None",
-    "challenge_rating": "1",
+    "challenge_rating": 1,
     "xp": 200,
     "proficiency_bonus": 2,
     "actions": [
@@ -274,7 +274,7 @@
     "immunities": "Poison, Psychic; Charmed, Deafened,",
     "senses": "Blindsight 60 ft.; Passive Perception 7",
     "languages": "None",
-    "challenge_rating": "1/4",
+    "challenge_rating": 0.25,
     "xp": 50,
     "proficiency_bonus": 2,
     "actions": [
@@ -329,7 +329,7 @@
     "immunities": "Poison, Psychic; Charmed, Deafened,",
     "senses": "Blindsight 60 ft.; Passive Perception 6",
     "languages": "None",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "actions": [
@@ -383,7 +383,7 @@
     },
     "senses": "Darkvision 60 ft., Tremorsense 60 ft.; Passive Perception 11",
     "languages": "None",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "traits": [
@@ -450,7 +450,7 @@
     "gear": "Light Crossbow, Shortsword, Studded Leather Armor",
     "senses": "Passive Perception 16",
     "languages": "Common, Thieves’ Cant",
-    "challenge_rating": "8",
+    "challenge_rating": 8,
     "xp": 3900,
     "proficiency_bonus": 3,
     "traits": [
@@ -526,7 +526,7 @@
     "resistances": "Piercing",
     "senses": "Passive Perception 10",
     "languages": "Common plus one other language",
-    "challenge_rating": "0",
+    "challenge_rating": 0,
     "xp": 10,
     "proficiency_bonus": 2,
     "actions": [
@@ -582,7 +582,7 @@
     "resistances": "Bludgeoning, Piercing",
     "senses": "Passive Perception 10",
     "languages": "Common plus one other language",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "actions": [
@@ -636,7 +636,7 @@
     },
     "senses": "Passive Perception 10",
     "languages": "None",
-    "challenge_rating": "1/4",
+    "challenge_rating": 0.25,
     "xp": 50,
     "proficiency_bonus": 2,
     "actions": [
@@ -691,7 +691,7 @@
     "immunities": "Fire, Poison; Poisoned",
     "senses": "Passive Perception 11",
     "languages": "Primordial (Ignan)",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "traits": [
@@ -758,7 +758,7 @@
     "immunities": "Fire, Poison; Charmed, Frightened, Poisoned",
     "senses": "Truesight 120 ft.; Passive Perception 19",
     "languages": "Abyssal; telepathy 120 ft.",
-    "challenge_rating": "19",
+    "challenge_rating": 19,
     "xp": 22000,
     "proficiency_bonus": 6,
     "traits": [
@@ -849,7 +849,7 @@
     "gear": "Leather Armor, Light Crossbow, Scimitar",
     "senses": "Passive Perception 10",
     "languages": "Common, Thieves’ Cant",
-    "challenge_rating": "1/8",
+    "challenge_rating": 0.125,
     "xp": 25,
     "proficiency_bonus": 2,
     "actions": [
@@ -909,7 +909,7 @@
     "gear": "Pistol, Scimitar, Studded Leather Armor",
     "senses": "Passive Perception 10",
     "languages": "Common, Thieves’ Cant",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "actions": [
@@ -980,7 +980,7 @@
     "immunities": "Fire, Poison; Poisoned",
     "senses": "Darkvision 120 ft. (unimpeded by magical",
     "languages": "Infernal; telepathy 120 ft.",
-    "challenge_rating": "5",
+    "challenge_rating": 5,
     "xp": 1800,
     "proficiency_bonus": 3,
     "traits": [
@@ -1060,7 +1060,7 @@
     },
     "senses": "Darkvision 60 ft.; Passive Perception 9",
     "languages": "None",
-    "challenge_rating": "3",
+    "challenge_rating": 3,
     "xp": 700,
     "proficiency_bonus": 2,
     "actions": [
@@ -1122,7 +1122,7 @@
     "immunities": "Fire, Poison; Frightened, Poisoned",
     "senses": "Darkvision 120 ft. (unimpeded by magical",
     "languages": "Infernal; telepathy 120 ft.",
-    "challenge_rating": "3",
+    "challenge_rating": 3,
     "xp": 700,
     "proficiency_bonus": 2,
     "traits": [
@@ -1196,7 +1196,7 @@
     "immunities": "Lightning",
     "senses": "Darkvision 90 ft.; Passive Perception 16",
     "languages": "Draconic",
-    "challenge_rating": "11",
+    "challenge_rating": 11,
     "xp": 7200,
     "proficiency_bonus": 4,
     "actions": [
@@ -1273,7 +1273,7 @@
     "gear": "Greataxe, Hide Armor",
     "senses": "Passive Perception 10",
     "languages": "Common",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "traits": [
@@ -1335,7 +1335,7 @@
     "immunities": "Acid",
     "senses": "Blindsight 10 ft., Darkvision 60 ft.; Passive Perception 14",
     "languages": "Draconic",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "traits": [
@@ -1405,7 +1405,7 @@
     "immunities": "Acid",
     "senses": "Blindsight 30 ft., Darkvision 120 ft.; Passive Perception 16",
     "languages": "Common, Draconic",
-    "challenge_rating": "7",
+    "challenge_rating": 7,
     "xp": 2900,
     "proficiency_bonus": 3,
     "traits": [
@@ -1475,7 +1475,7 @@
     "immunities": "Acid",
     "senses": "Blindsight 60 ft., Darkvision 120 ft.; Passive Perception 21",
     "languages": "Common, Draconic",
-    "challenge_rating": "14",
+    "challenge_rating": 14,
     "xp": 11500,
     "xp_in_lair": 13000,
     "proficiency_bonus": 5,
@@ -1573,7 +1573,7 @@
     "immunities": "Acid",
     "senses": "Blindsight 60 ft., Darkvision 120 ft.; Passive Perception 26",
     "languages": "Common, Draconic",
-    "challenge_rating": "21",
+    "challenge_rating": 21,
     "xp": 33000,
     "xp_in_lair": 41000,
     "proficiency_bonus": 7,
@@ -1670,7 +1670,7 @@
     "immunities": "Acid, Cold, Lightning, Slashing; Charmed,",
     "senses": "Blindsight 60 ft.; Passive Perception 8",
     "languages": "None",
-    "challenge_rating": "4",
+    "challenge_rating": 4,
     "xp": 1100,
     "proficiency_bonus": 2,
     "traits": [
@@ -1745,7 +1745,7 @@
     "skills_raw": "Perception +5, Stealth +5",
     "senses": "Darkvision 60 ft.; Passive Perception 15",
     "languages": "Blink Dog; understands Elvish and Sylvan but",
-    "challenge_rating": "1/4",
+    "challenge_rating": 0.25,
     "xp": 50,
     "proficiency_bonus": 2,
     "actions": [
@@ -1807,7 +1807,7 @@
     "immunities": "Lightning",
     "senses": "Blindsight 10 ft., Darkvision 60 ft.; Passive Perception 14",
     "languages": "Draconic",
-    "challenge_rating": "3",
+    "challenge_rating": 3,
     "xp": 700,
     "proficiency_bonus": 2,
     "actions": [
@@ -1871,7 +1871,7 @@
     "immunities": "Lightning",
     "senses": "Blindsight 30 ft., Darkvision 120 ft.; Passive Perception 19",
     "languages": "Common, Draconic",
-    "challenge_rating": "9",
+    "challenge_rating": 9,
     "xp": 5000,
     "proficiency_bonus": 4,
     "actions": [
@@ -1935,7 +1935,7 @@
     "immunities": "Lightning",
     "senses": "Blindsight 60 ft., Darkvision 120 ft.; Passive Perception 22",
     "languages": "Common, Draconic",
-    "challenge_rating": "16",
+    "challenge_rating": 16,
     "xp": 15000,
     "xp_in_lair": 18000,
     "proficiency_bonus": 5,
@@ -2025,7 +2025,7 @@
     "immunities": "Lightning",
     "senses": "Blindsight 60 ft., Darkvision 120 ft.; Passive Perception 27",
     "languages": "Common, Draconic",
-    "challenge_rating": "23",
+    "challenge_rating": 23,
     "xp": 50000,
     "xp_in_lair": 62000,
     "proficiency_bonus": 7,
@@ -2116,7 +2116,7 @@
     "immunities": "Fire, Poison; Poisoned",
     "senses": "Darkvision 120 ft. (unimpeded by magical",
     "languages": "Infernal; telepathy 120 ft.",
-    "challenge_rating": "9",
+    "challenge_rating": 9,
     "xp": 5000,
     "proficiency_bonus": 4,
     "traits": [
@@ -2190,7 +2190,7 @@
     "immunities": "Fire",
     "senses": "Blindsight 10 ft., Darkvision 60 ft.; Passive Perception 14",
     "languages": "Draconic",
-    "challenge_rating": "1",
+    "challenge_rating": 1,
     "xp": 200,
     "proficiency_bonus": 2,
     "actions": [
@@ -2254,7 +2254,7 @@
     "immunities": "Fire",
     "senses": "Blindsight 30 ft., Darkvision 120 ft.; Passive Perception 16",
     "languages": "Common, Draconic",
-    "challenge_rating": "6",
+    "challenge_rating": 6,
     "xp": 2300,
     "proficiency_bonus": 3,
     "actions": [
@@ -2322,7 +2322,7 @@
     "immunities": "Fire",
     "senses": "Blindsight 60 ft., Darkvision 120 ft.; Passive Perception 21",
     "languages": "Common, Draconic",
-    "challenge_rating": "13",
+    "challenge_rating": 13,
     "xp": 10000,
     "xp_in_lair": 11500,
     "proficiency_bonus": 5,
@@ -2416,7 +2416,7 @@
     "immunities": "Fire",
     "senses": "Blindsight 60 ft., Darkvision 120 ft.; Passive Perception 24",
     "languages": "Common, Draconic",
-    "challenge_rating": "20",
+    "challenge_rating": 20,
     "xp": 25000,
     "xp_in_lair": 33000,
     "proficiency_bonus": 6,
@@ -2510,7 +2510,7 @@
     "immunities": "Lightning",
     "senses": "Blindsight 10 ft., Darkvision 60 ft.; Passive Perception 14",
     "languages": "Draconic",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "traits": [
@@ -2584,7 +2584,7 @@
     "immunities": "Lightning",
     "senses": "Blindsight 30 ft., Darkvision 120 ft.; Passive Perception 17",
     "languages": "Common, Draconic",
-    "challenge_rating": "8",
+    "challenge_rating": 8,
     "xp": 3900,
     "proficiency_bonus": 3,
     "traits": [
@@ -2658,7 +2658,7 @@
     "immunities": "Lightning",
     "senses": "Blindsight 60 ft., Darkvision 120 ft.; Passive Perception 22",
     "languages": "Common, Draconic",
-    "challenge_rating": "15",
+    "challenge_rating": 15,
     "xp": 13000,
     "xp_in_lair": 15000,
     "proficiency_bonus": 5,
@@ -2756,7 +2756,7 @@
     "immunities": "Lightning",
     "senses": "Blindsight 60 ft., Darkvision 120 ft.; Passive Perception 27",
     "languages": "Common, Draconic",
-    "challenge_rating": "22",
+    "challenge_rating": 22,
     "xp": 41000,
     "xp_in_lair": 50000,
     "proficiency_bonus": 7,
@@ -2854,7 +2854,7 @@
     "gear": "Chain Shirt, Javelins (6), Morningstar",
     "senses": "Darkvision 60 ft.; Passive Perception 11",
     "languages": "Common, Goblin",
-    "challenge_rating": "3",
+    "challenge_rating": 3,
     "xp": 700,
     "proficiency_bonus": 2,
     "traits": [
@@ -2930,7 +2930,7 @@
     "gear": "Hide Armor, Light Hammers (3)",
     "senses": "Darkvision 60 ft.; Passive Perception 10",
     "languages": "Common, Goblin",
-    "challenge_rating": "1",
+    "challenge_rating": 1,
     "xp": 200,
     "proficiency_bonus": 2,
     "traits": [
@@ -2995,7 +2995,7 @@
     "skills_raw": "Perception +6",
     "senses": "Darkvision 60 ft., Tremorsense 120 ft.; Passive Perception 16",
     "languages": "None",
-    "challenge_rating": "5",
+    "challenge_rating": 5,
     "xp": 1800,
     "proficiency_bonus": 3,
     "actions": [
@@ -3065,7 +3065,7 @@
     "gear": "Breastplate, Longbow, Pike",
     "senses": "Passive Perception 13",
     "languages": "Elvish, Sylvan",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "actions": [
@@ -3135,7 +3135,7 @@
     "immunities": "Fire, Poison; Poisoned",
     "senses": "Darkvision 120 ft. (unimpeded by magical",
     "languages": "Infernal; telepathy 120 ft.",
-    "challenge_rating": "8",
+    "challenge_rating": 8,
     "xp": 3900,
     "proficiency_bonus": 3,
     "traits": [
@@ -3218,7 +3218,7 @@
     "skills_raw": "Perception +8",
     "senses": "Darkvision 60 ft.; Passive Perception 18",
     "languages": "Understands Draconic but can’t speak",
-    "challenge_rating": "6",
+    "challenge_rating": 6,
     "xp": 2300,
     "proficiency_bonus": 3,
     "actions": [
@@ -3294,7 +3294,7 @@
     "immunities": "Poison; Poisoned",
     "senses": "Darkvision 60 ft.; Passive Perception 14",
     "languages": "Understands Deep Speech but can’t speak",
-    "challenge_rating": "4",
+    "challenge_rating": 4,
     "xp": 1100,
     "proficiency_bonus": 2,
     "traits": [
@@ -3368,7 +3368,7 @@
     "immunities": "Acid, Poison, Psychic; Charmed, Exhaustion,",
     "senses": "Darkvision 60 ft.; Passive Perception 9",
     "languages": "Common plus one other language",
-    "challenge_rating": "9",
+    "challenge_rating": 9,
     "xp": 5000,
     "proficiency_bonus": 4,
     "traits": [
@@ -3452,7 +3452,7 @@
     "immunities": "Frightened",
     "senses": "Darkvision 120 ft.; Passive Perception 12",
     "languages": "Deep Speech, Undercommon",
-    "challenge_rating": "8",
+    "challenge_rating": 8,
     "xp": 3900,
     "proficiency_bonus": 3,
     "traits": [
@@ -3531,7 +3531,7 @@
     "skills_raw": "Insight +7, Perception +11",
     "senses": "Passive Perception 21",
     "languages": "Common, Giant",
-    "challenge_rating": "9",
+    "challenge_rating": 9,
     "xp": 5000,
     "proficiency_bonus": 4,
     "actions": [
@@ -3604,7 +3604,7 @@
     "immunities": "Petrified",
     "senses": "Darkvision 60 ft.; Passive Perception 11",
     "languages": "None",
-    "challenge_rating": "1/2",
+    "challenge_rating": 0.5,
     "xp": 100,
     "proficiency_bonus": 2,
     "actions": [
@@ -3663,7 +3663,7 @@
     "gear": "Club",
     "senses": "Passive Perception 10",
     "languages": "Common",
-    "challenge_rating": "0",
+    "challenge_rating": 0,
     "xp": 10,
     "proficiency_bonus": 2,
     "traits": [
@@ -3725,7 +3725,7 @@
     "immunities": "Acid",
     "senses": "Blindsight 10 ft., Darkvision 60 ft.; Passive Perception 14",
     "languages": "Draconic",
-    "challenge_rating": "1",
+    "challenge_rating": 1,
     "xp": 200,
     "proficiency_bonus": 2,
     "actions": [
@@ -3789,7 +3789,7 @@
     "immunities": "Acid",
     "senses": "Blindsight 30 ft., Darkvision 120 ft.; Passive Perception 17",
     "languages": "Common, Draconic",
-    "challenge_rating": "7",
+    "challenge_rating": 7,
     "xp": 2900,
     "proficiency_bonus": 3,
     "actions": [
@@ -3857,7 +3857,7 @@
     "immunities": "Acid",
     "senses": "Blindsight 60 ft., Darkvision 120 ft.; Passive Perception 22",
     "languages": "Common, Draconic",
-    "challenge_rating": "14",
+    "challenge_rating": 14,
     "xp": 11500,
     "xp_in_lair": 13000,
     "proficiency_bonus": 5,
@@ -3955,7 +3955,7 @@
     "immunities": "Acid",
     "senses": "Blindsight 60 ft., Darkvision 120 ft.; Passive Perception 27",
     "languages": "Common, Draconic",
-    "challenge_rating": "21",
+    "challenge_rating": 21,
     "xp": 33000,
     "xp_in_lair": 41000,
     "proficiency_bonus": 7,
@@ -4053,7 +4053,7 @@
     "immunities": "Psychic, Radiant",
     "senses": "Truesight 120 ft.; Passive Perception 15",
     "languages": "All; telepathy 120 ft.",
-    "challenge_rating": "4",
+    "challenge_rating": 4,
     "xp": 1100,
     "proficiency_bonus": 2,
     "traits": [
@@ -4129,7 +4129,7 @@
     "immunities": "Necrotic, Poison; Charmed, Exhaustion,",
     "senses": "Blindsight 30 ft.; Passive Perception 10",
     "languages": "Understands Common but can’t speak",
-    "challenge_rating": "3",
+    "challenge_rating": 3,
     "xp": 700,
     "proficiency_bonus": 2,
     "traits": [
@@ -4191,7 +4191,7 @@
     "gear": "Leather Armor, Sickle",
     "senses": "Passive Perception 10",
     "languages": "Common",
-    "challenge_rating": "1/8",
+    "challenge_rating": 0.125,
     "xp": 25,
     "proficiency_bonus": 2,
     "actions": [
@@ -4247,7 +4247,7 @@
     "gear": "Holy Symbol, Leather Armor",
     "senses": "Passive Perception 12",
     "languages": "Common",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "actions": [
@@ -4312,7 +4312,7 @@
     "skills_raw": "Stealth +3",
     "senses": "Blindsight 60 ft.; Passive Perception 10",
     "languages": "None",
-    "challenge_rating": "1/2",
+    "challenge_rating": 0.5,
     "xp": 100,
     "proficiency_bonus": 2,
     "actions": [
@@ -4376,7 +4376,7 @@
     "immunities": "Blinded, Charmed, Deafened, Frightened,",
     "senses": "Darkvision 120 ft.; Passive Perception 15",
     "languages": "None",
-    "challenge_rating": "1",
+    "challenge_rating": 1,
     "xp": 200,
     "proficiency_bonus": 2,
     "actions": [
@@ -4437,7 +4437,7 @@
     "immunities": "Charmed, Exhaustion, Frightened",
     "senses": "Darkvision 120 ft.; Passive Perception 19",
     "languages": "All; telepathy 120 ft.",
-    "challenge_rating": "10",
+    "challenge_rating": 10,
     "xp": 5900,
     "proficiency_bonus": 4,
     "traits": [
@@ -4516,7 +4516,7 @@
     "immunities": "Lightning, Thunder",
     "senses": "Darkvision 120 ft.; Passive Perception 13",
     "languages": "Primordial (Auran)",
-    "challenge_rating": "11",
+    "challenge_rating": 11,
     "xp": 7200,
     "proficiency_bonus": 4,
     "traits": [
@@ -4602,7 +4602,7 @@
     "immunities": "Charmed",
     "senses": "Darkvision 60 ft.; Passive Perception 11",
     "languages": "Common plus three other languages",
-    "challenge_rating": "3",
+    "challenge_rating": 3,
     "xp": 700,
     "proficiency_bonus": 2,
     "actions": [
@@ -4675,7 +4675,7 @@
     "resistances": "Fire",
     "senses": "Darkvision 120 ft.; Passive Perception 11",
     "languages": "Draconic, Primordial (Aquan)",
-    "challenge_rating": "17",
+    "challenge_rating": 17,
     "xp": 18000,
     "proficiency_bonus": 6,
     "traits": [
@@ -4749,7 +4749,7 @@
     "immunities": "Poison; Poisoned",
     "senses": "Darkvision 60 ft.; Passive Perception 9",
     "languages": "Abyssal; telepathy 60 ft. (works only with",
-    "challenge_rating": "1/4",
+    "challenge_rating": 0.25,
     "xp": 50,
     "proficiency_bonus": 2,
     "actions": [
@@ -4808,7 +4808,7 @@
     "skills_raw": "Perception +6, Stealth +10",
     "senses": "Darkvision 120 ft.; Passive Perception 16",
     "languages": "Elvish, Undercommon",
-    "challenge_rating": "6",
+    "challenge_rating": 6,
     "xp": 2300,
     "proficiency_bonus": 3,
     "traits": [
@@ -4892,7 +4892,7 @@
     "gear": "Studded Leather Armor",
     "senses": "Passive Perception 15",
     "languages": "Common, Druidic, Sylvan",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "actions": [
@@ -4959,7 +4959,7 @@
     "skills_raw": "Perception +4, Stealth +5",
     "senses": "Darkvision 60 ft.; Passive Perception 14",
     "languages": "Elvish, Sylvan",
-    "challenge_rating": "1",
+    "challenge_rating": 1,
     "xp": 200,
     "proficiency_bonus": 2,
     "traits": [
@@ -5043,7 +5043,7 @@
     "immunities": "Poison; Exhaustion, Paralyzed, Petrified,",
     "senses": "Darkvision 60 ft., Tremorsense 60 ft.; Passive Perception 10",
     "languages": "Primordial (Terran)",
-    "challenge_rating": "5",
+    "challenge_rating": 5,
     "xp": 1800,
     "proficiency_bonus": 3,
     "traits": [
@@ -5116,7 +5116,7 @@
     "immunities": "Fire",
     "senses": "Darkvision 120 ft.; Passive Perception 12",
     "languages": "Primordial (Ignan)",
-    "challenge_rating": "11",
+    "challenge_rating": 11,
     "xp": 7200,
     "proficiency_bonus": 4,
     "traits": [
@@ -5199,7 +5199,7 @@
     "immunities": "Fire, Poison; Poisoned",
     "senses": "Truesight 120 ft.; Passive Perception 16",
     "languages": "Infernal; telepathy 120 ft.",
-    "challenge_rating": "12",
+    "challenge_rating": 12,
     "xp": 8400,
     "proficiency_bonus": 4,
     "traits": [
@@ -5282,7 +5282,7 @@
     "skills_raw": "Perception +3, Stealth +4, Survival +3",
     "senses": "Darkvision 60 ft.; Passive Perception 13",
     "languages": "None",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "traits": [
@@ -5367,7 +5367,7 @@
     "gear": "Battleaxe, Morningstar",
     "senses": "Darkvision 60 ft.; Passive Perception 14",
     "languages": "Giant",
-    "challenge_rating": "4",
+    "challenge_rating": 4,
     "xp": 1100,
     "proficiency_bonus": 2,
     "actions": [
@@ -5431,7 +5431,7 @@
     "immunities": "Fire, Poison; Exhaustion, Grappled, Paralyzed,",
     "senses": "Darkvision 60 ft.; Passive Perception 10",
     "languages": "Primordial (Ignan)",
-    "challenge_rating": "5",
+    "challenge_rating": 5,
     "xp": 1800,
     "proficiency_bonus": 3,
     "traits": [
@@ -5509,7 +5509,7 @@
     "immunities": "Fire",
     "senses": "Passive Perception 16",
     "languages": "Giant",
-    "challenge_rating": "9",
+    "challenge_rating": 9,
     "xp": 5000,
     "proficiency_bonus": 4,
     "actions": [
@@ -5572,7 +5572,7 @@
     "immunities": "Lightning, Poison; Charmed, Exhaustion,",
     "senses": "Darkvision 60 ft.; Passive Perception 10",
     "languages": "Understands Common plus one other language",
-    "challenge_rating": "5",
+    "challenge_rating": 5,
     "xp": 1800,
     "proficiency_bonus": 3,
     "traits": [
@@ -5654,7 +5654,7 @@
     "immunities": "Cold",
     "senses": "Passive Perception 13",
     "languages": "Giant",
-    "challenge_rating": "8",
+    "challenge_rating": 8,
     "xp": 3900,
     "proficiency_bonus": 3,
     "actions": [
@@ -5723,7 +5723,7 @@
     "immunities": "Blinded, Charmed, Deafened, Frightened",
     "senses": "Blindsight 30 ft.; Passive Perception 6",
     "languages": "None",
-    "challenge_rating": "0",
+    "challenge_rating": 0,
     "xp": 0,
     "proficiency_bonus": 2,
     "reactions": [
@@ -5778,7 +5778,7 @@
     "immunities": "Blinded, Charmed, Deafened, Frightened",
     "senses": "Blindsight 30 ft.; Passive Perception 6",
     "languages": "None",
-    "challenge_rating": "1/4",
+    "challenge_rating": 0.25,
     "xp": 50,
     "proficiency_bonus": 2,
     "actions": [
@@ -5838,7 +5838,7 @@
     "immunities": "Poison; Exhaustion, Petrified, Poisoned",
     "senses": "Darkvision 60 ft.; Passive Perception 10",
     "languages": "Primordial (Terran)",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "traits": [
@@ -5903,7 +5903,7 @@
     "immunities": "Acid; Blinded, Charmed, Deafened,",
     "senses": "Blindsight 60 ft.; Passive Perception 8",
     "languages": "None",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "traits": [
@@ -5970,7 +5970,7 @@
     "immunities": "Poison; Charmed, Exhaustion, Poisoned",
     "senses": "Darkvision 60 ft.; Passive Perception 10",
     "languages": "Common",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "traits": [
@@ -6036,7 +6036,7 @@
     "immunities": "Necrotic, Poison; Charmed, Exhaustion,",
     "senses": "Darkvision 60 ft.; Passive Perception 11",
     "languages": "Common plus one other language",
-    "challenge_rating": "4",
+    "challenge_rating": 4,
     "xp": 1100,
     "proficiency_bonus": 2,
     "traits": [
@@ -6125,7 +6125,7 @@
     "immunities": "Poison; Charmed, Exhaustion, Poisoned",
     "senses": "Darkvision 60 ft.; Passive Perception 10",
     "languages": "Common",
-    "challenge_rating": "1",
+    "challenge_rating": 1,
     "xp": 200,
     "proficiency_bonus": 2,
     "actions": [
@@ -6188,7 +6188,7 @@
     "immunities": "Prone",
     "senses": "Darkvision 60 ft.; Passive Perception 10",
     "languages": "None",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "traits": [
@@ -6259,7 +6259,7 @@
     "immunities": "Poison; Poisoned",
     "senses": "Truesight 120 ft.; Passive Perception 17",
     "languages": "Abyssal; telepathy 120 ft.",
-    "challenge_rating": "9",
+    "challenge_rating": 9,
     "xp": 5000,
     "proficiency_bonus": 4,
     "traits": [
@@ -6341,7 +6341,7 @@
     "gear": "Shield, Spears (3), Studded Leather Armor",
     "senses": "Passive Perception 11",
     "languages": "Common",
-    "challenge_rating": "5",
+    "challenge_rating": 5,
     "xp": 1800,
     "proficiency_bonus": 3,
     "actions": [
@@ -6409,7 +6409,7 @@
     },
     "senses": "Darkvision 60 ft.; Passive Perception 10",
     "languages": "Gnoll",
-    "challenge_rating": "1/2",
+    "challenge_rating": 0.5,
     "xp": 100,
     "proficiency_bonus": 2,
     "actions": [
@@ -6475,7 +6475,7 @@
     "gear": "Daggers (3)",
     "senses": "Darkvision 60 ft.; Passive Perception 9",
     "languages": "Common, Goblin",
-    "challenge_rating": "1/8",
+    "challenge_rating": 0.125,
     "xp": 25,
     "proficiency_bonus": 2,
     "actions": [
@@ -6537,7 +6537,7 @@
     "gear": "Leather Armor, Scimitar, Shield, Shortbow",
     "senses": "Darkvision 60 ft.; Passive Perception 9",
     "languages": "Common, Goblin",
-    "challenge_rating": "1/4",
+    "challenge_rating": 0.25,
     "xp": 50,
     "proficiency_bonus": 2,
     "actions": [
@@ -6603,7 +6603,7 @@
     "gear": "Chain Shirt, Scimitar, Shield, Shortbow",
     "senses": "Darkvision 60 ft.; Passive Perception 9",
     "languages": "Common, Goblin",
-    "challenge_rating": "1",
+    "challenge_rating": 1,
     "xp": 200,
     "proficiency_bonus": 2,
     "actions": [
@@ -6679,7 +6679,7 @@
     "immunities": "Fire",
     "senses": "Blindsight 10 ft., Darkvision 60 ft.; Passive Perception 14",
     "languages": "Draconic",
-    "challenge_rating": "3",
+    "challenge_rating": 3,
     "xp": 700,
     "proficiency_bonus": 2,
     "traits": [
@@ -6753,7 +6753,7 @@
     "immunities": "Fire",
     "senses": "Blindsight 30 ft., Darkvision 120 ft.; Passive Perception 19",
     "languages": "Common, Draconic",
-    "challenge_rating": "10",
+    "challenge_rating": 10,
     "xp": 5900,
     "proficiency_bonus": 4,
     "traits": [
@@ -6827,7 +6827,7 @@
     "immunities": "Fire",
     "senses": "Blindsight 60 ft., Darkvision 120 ft.; Passive Perception 24",
     "languages": "Common, Draconic",
-    "challenge_rating": "17",
+    "challenge_rating": 17,
     "xp": 18000,
     "xp_in_lair": 20000,
     "proficiency_bonus": 6,
@@ -6925,7 +6925,7 @@
     "immunities": "Fire",
     "senses": "Blindsight 60 ft., Darkvision 120 ft.; Passive Perception 27",
     "languages": "Common, Draconic",
-    "challenge_rating": "24",
+    "challenge_rating": 24,
     "xp": 62000,
     "xp_in_lair": 75000,
     "proficiency_bonus": 7,
@@ -7023,7 +7023,7 @@
     "immunities": "Exhaustion, Petrified",
     "senses": "Darkvision 60 ft.; Passive Perception 17",
     "languages": "None",
-    "challenge_rating": "5",
+    "challenge_rating": 5,
     "xp": 1800,
     "proficiency_bonus": 3,
     "actions": [
@@ -7090,7 +7090,7 @@
     "immunities": "Blinded, Charmed, Deafened, Exhaustion,",
     "senses": "Blindsight 60 ft.; Passive Perception 8",
     "languages": "None",
-    "challenge_rating": "1/2",
+    "challenge_rating": 0.5,
     "xp": 100,
     "proficiency_bonus": 2,
     "traits": [
@@ -7156,7 +7156,7 @@
     "immunities": "Poison; Poisoned",
     "senses": "Blindsight 10 ft., Darkvision 60 ft.; Passive Perception 14",
     "languages": "Draconic",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "traits": [
@@ -7226,7 +7226,7 @@
     "immunities": "Poison; Poisoned",
     "senses": "Blindsight 30 ft., Darkvision 120 ft.; Passive Perception 17",
     "languages": "Common, Draconic",
-    "challenge_rating": "8",
+    "challenge_rating": 8,
     "xp": 3900,
     "proficiency_bonus": 3,
     "traits": [
@@ -7296,7 +7296,7 @@
     "immunities": "Poison; Poisoned",
     "senses": "Blindsight 60 ft., Darkvision 120 ft.; Passive Perception 22",
     "languages": "Common, Draconic",
-    "challenge_rating": "15",
+    "challenge_rating": 15,
     "xp": 13000,
     "xp_in_lair": 15000,
     "proficiency_bonus": 5,
@@ -7390,7 +7390,7 @@
     "immunities": "Poison; Poisoned",
     "senses": "Blindsight 60 ft., Darkvision 120 ft.; Passive Perception 27",
     "languages": "Common, Draconic",
-    "challenge_rating": "22",
+    "challenge_rating": 22,
     "xp": 41000,
     "xp_in_lair": 50000,
     "proficiency_bonus": 7,
@@ -7483,7 +7483,7 @@
     "skills_raw": "Arcana +5, Deception +4, Perception +4, Stealth +3",
     "senses": "Darkvision 60 ft.; Passive Perception 14",
     "languages": "Common, Elvish, Sylvan",
-    "challenge_rating": "3",
+    "challenge_rating": 3,
     "xp": 700,
     "proficiency_bonus": 2,
     "traits": [
@@ -7560,7 +7560,7 @@
     "skills_raw": "Stealth +4",
     "senses": "Darkvision 60 ft.; Passive Perception 12",
     "languages": "None",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "actions": [
@@ -7623,7 +7623,7 @@
     "skills_raw": "Perception +5",
     "senses": "Darkvision 60 ft.; Passive Perception 15",
     "languages": "None",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "actions": [
@@ -7682,7 +7682,7 @@
     "skills_raw": "Athletics +5, Perception +3, Stealth +5",
     "senses": "Blindsight 30 ft.; Passive Perception 13",
     "languages": "None",
-    "challenge_rating": "1/4",
+    "challenge_rating": 0.25,
     "xp": 50,
     "proficiency_bonus": 2,
     "actions": [
@@ -7738,7 +7738,7 @@
     "immunities": "Poison; Charmed, Paralyzed, Poisoned,",
     "senses": "Darkvision 60 ft.; Passive Perception 14",
     "languages": "Celestial, Common",
-    "challenge_rating": "10",
+    "challenge_rating": 10,
     "xp": 5900,
     "proficiency_bonus": 4,
     "traits": [
@@ -7812,7 +7812,7 @@
     "gear": "Chain Shirt, Shield, Spear",
     "senses": "Passive Perception 12",
     "languages": "Common",
-    "challenge_rating": "1/8",
+    "challenge_rating": 0.125,
     "xp": 25,
     "proficiency_bonus": 2,
     "actions": [
@@ -7868,7 +7868,7 @@
     "gear": "Breastplate, Javelins (6), Longsword, Shield",
     "senses": "Passive Perception 14",
     "languages": "Common",
-    "challenge_rating": "4",
+    "challenge_rating": 4,
     "xp": 1100,
     "proficiency_bonus": 2,
     "actions": [
@@ -7932,7 +7932,7 @@
     "resistances": "Damage type chosen for the Draconic Origin",
     "senses": "Blindsight 10 ft., Darkvision 60 ft.; Passive Perception 15",
     "languages": "Common, Draconic",
-    "challenge_rating": "5",
+    "challenge_rating": 5,
     "xp": 1800,
     "proficiency_bonus": 3,
     "traits": [
@@ -8010,7 +8010,7 @@
     },
     "senses": "Passive Perception 10",
     "languages": "Common",
-    "challenge_rating": "1",
+    "challenge_rating": 1,
     "xp": 200,
     "proficiency_bonus": 2,
     "actions": [
@@ -8074,7 +8074,7 @@
     "immunities": "Fire",
     "senses": "Darkvision 60 ft.; Passive Perception 15",
     "languages": "Understands Infernal but can’t speak",
-    "challenge_rating": "3",
+    "challenge_rating": 3,
     "xp": 700,
     "proficiency_bonus": 2,
     "traits": [
@@ -8144,7 +8144,7 @@
     "immunities": "Poison; Poisoned",
     "senses": "Darkvision 120 ft.; Passive Perception 11",
     "languages": "Abyssal; telepathy 120 ft.",
-    "challenge_rating": "8",
+    "challenge_rating": 8,
     "xp": 3900,
     "proficiency_bonus": 3,
     "traits": [
@@ -8223,7 +8223,7 @@
     "skills_raw": "Perception +2",
     "senses": "Passive Perception 12",
     "languages": "Giant",
-    "challenge_rating": "5",
+    "challenge_rating": 5,
     "xp": 1800,
     "proficiency_bonus": 3,
     "actions": [
@@ -8286,7 +8286,7 @@
     "skills_raw": "Perception +5",
     "senses": "Passive Perception 15",
     "languages": "None",
-    "challenge_rating": "1",
+    "challenge_rating": 1,
     "xp": 200,
     "proficiency_bonus": 2,
     "traits": [
@@ -8351,7 +8351,7 @@
     "gear": "Half Plate Armor, Longbow, Longsword, Shield",
     "senses": "Darkvision 60 ft.; Passive Perception 10",
     "languages": "Common, Goblin",
-    "challenge_rating": "1/2",
+    "challenge_rating": 0.5,
     "xp": 100,
     "proficiency_bonus": 2,
     "traits": [
@@ -8416,7 +8416,7 @@
     "gear": "Greatsword, Half Plate Armor, Longbow",
     "senses": "Darkvision 60 ft.; Passive Perception 10",
     "languages": "Common, Goblin",
-    "challenge_rating": "3",
+    "challenge_rating": 3,
     "xp": 700,
     "proficiency_bonus": 2,
     "traits": [
@@ -8485,7 +8485,7 @@
     "immunities": "Poison; Charmed, Poisoned",
     "senses": "Darkvision 60 ft.; Passive Perception 10",
     "languages": "Understands Common plus one other language",
-    "challenge_rating": "0",
+    "challenge_rating": 0,
     "xp": 10,
     "proficiency_bonus": 2,
     "traits": [
@@ -8547,7 +8547,7 @@
     "immunities": "Fire, Poison; Poisoned",
     "senses": "Darkvision 150 ft. (unimpeded by magical",
     "languages": "Infernal; telepathy 120 ft.",
-    "challenge_rating": "11",
+    "challenge_rating": 11,
     "xp": 7200,
     "proficiency_bonus": 4,
     "traits": [
@@ -8625,7 +8625,7 @@
     "immunities": "Blinded, Charmed, Deafened, Frightened,",
     "senses": "Darkvision 60 ft.; Passive Perception 16",
     "languages": "None",
-    "challenge_rating": "8",
+    "challenge_rating": 8,
     "xp": 3900,
     "proficiency_bonus": 3,
     "traits": [
@@ -8699,7 +8699,7 @@
     "immunities": "Cold, Fire, Poison; Poisoned",
     "senses": "Blindsight 120 ft.; Passive Perception 17",
     "languages": "Infernal; telepathy 120 ft.",
-    "challenge_rating": "14",
+    "challenge_rating": 14,
     "xp": 11500,
     "proficiency_bonus": 5,
     "traits": [
@@ -8778,7 +8778,7 @@
     "immunities": "Fire, Poison; Poisoned",
     "senses": "Darkvision 120 ft. (unimpeded by magical",
     "languages": "Common, Infernal",
-    "challenge_rating": "1",
+    "challenge_rating": 1,
     "xp": 200,
     "proficiency_bonus": 2,
     "traits": [
@@ -8848,7 +8848,7 @@
     "resistances": "Cold, Fire, Poison, Psychic",
     "senses": "Darkvision 60 ft.; Passive Perception 15",
     "languages": "Abyssal, Common, Infernal; telepathy 60 ft.",
-    "challenge_rating": "4",
+    "challenge_rating": 4,
     "xp": 1100,
     "proficiency_bonus": 2,
     "traits": [
@@ -8925,7 +8925,7 @@
     "immunities": "Poison; Exhaustion, Grappled, Paralyzed,",
     "senses": "Darkvision 60 ft.; Passive Perception 18",
     "languages": "Common, Primordial (Auran)",
-    "challenge_rating": "6",
+    "challenge_rating": 6,
     "xp": 2300,
     "proficiency_bonus": 3,
     "traits": [
@@ -8998,7 +8998,7 @@
     "immunities": "Fire, Poison, Psychic; Charmed, Exhaustion,",
     "senses": "Darkvision 120 ft.; Passive Perception 10",
     "languages": "Understands Common plus two other",
-    "challenge_rating": "16",
+    "challenge_rating": 16,
     "xp": 15000,
     "proficiency_bonus": 5,
     "traits": [
@@ -9080,7 +9080,7 @@
     "gear": "Greatsword, Heavy Crossbow, Plate Armor",
     "senses": "Passive Perception 10",
     "languages": "Common plus one other language",
-    "challenge_rating": "3",
+    "challenge_rating": 3,
     "xp": 700,
     "proficiency_bonus": 2,
     "actions": [
@@ -9149,7 +9149,7 @@
     "gear": "Daggers (3)",
     "senses": "Darkvision 60 ft.; Passive Perception 8",
     "languages": "Common, Draconic",
-    "challenge_rating": "1/8",
+    "challenge_rating": 0.125,
     "xp": 25,
     "proficiency_bonus": 2,
     "traits": [
@@ -9215,7 +9215,7 @@
     "immunities": "Cold, Lightning; Frightened, Grappled,",
     "senses": "Truesight 120 ft.; Passive Perception 21",
     "languages": "Understands Abyssal, Celestial, Infernal, and",
-    "challenge_rating": "23",
+    "challenge_rating": 23,
     "xp": 50000,
     "xp_in_lair": 62000,
     "proficiency_bonus": 7,
@@ -9312,7 +9312,7 @@
     "skills_raw": "Deception +7, Insight +4, Stealth +5",
     "senses": "Darkvision 60 ft.; Passive Perception 12",
     "languages": "Abyssal, Common",
-    "challenge_rating": "4",
+    "challenge_rating": 4,
     "xp": 1100,
     "proficiency_bonus": 2,
     "actions": [
@@ -9386,7 +9386,7 @@
     "immunities": "Fire, Poison; Charmed, Frightened, Poisoned",
     "senses": "Darkvision 120 ft. (unimpeded by magical",
     "languages": "Understands Infernal but can’t speak",
-    "challenge_rating": "0",
+    "challenge_rating": 0,
     "xp": 10,
     "proficiency_bonus": 2,
     "traits": [
@@ -9450,7 +9450,7 @@
     "gear": "Component Pouch",
     "senses": "Truesight 120 ft.; Passive Perception 19",
     "languages": "All",
-    "challenge_rating": "21",
+    "challenge_rating": 21,
     "xp": 33000,
     "xp_in_lair": 41000,
     "proficiency_bonus": 7,
@@ -9550,7 +9550,7 @@
     "gear": "Wand",
     "senses": "Passive Perception 14",
     "languages": "Common plus three other languages",
-    "challenge_rating": "6",
+    "challenge_rating": 6,
     "xp": 2300,
     "proficiency_bonus": 3,
     "actions": [
@@ -9627,7 +9627,7 @@
     "gear": "Wand",
     "senses": "Passive Perception 16",
     "languages": "Common plus five other languages",
-    "challenge_rating": "12",
+    "challenge_rating": 12,
     "xp": 8000,
     "proficiency_bonus": 4,
     "traits": [
@@ -9708,7 +9708,7 @@
     "immunities": "Fire",
     "senses": "Darkvision 60 ft.; Passive Perception 10",
     "languages": "Primordial (Ignan)",
-    "challenge_rating": "1/2",
+    "challenge_rating": 0.5,
     "xp": 100,
     "proficiency_bonus": 2,
     "traits": [
@@ -9778,7 +9778,7 @@
     },
     "senses": "Darkvision 60 ft.; Passive Perception 11",
     "languages": "Common",
-    "challenge_rating": "3",
+    "challenge_rating": 3,
     "xp": 700,
     "proficiency_bonus": 2,
     "actions": [
@@ -9843,7 +9843,7 @@
     "immunities": "Poison; Poisoned",
     "senses": "Truesight 120 ft.; Passive Perception 18",
     "languages": "Abyssal; telepathy 120 ft.",
-    "challenge_rating": "16",
+    "challenge_rating": 16,
     "xp": 15000,
     "proficiency_bonus": 5,
     "traits": [
@@ -9932,7 +9932,7 @@
     "skills_raw": "Deception +5, Perception +4, Stealth +6",
     "senses": "Darkvision 150 ft.; Passive Perception 14",
     "languages": "Common plus one other language",
-    "challenge_rating": "6",
+    "challenge_rating": 6,
     "xp": 2300,
     "proficiency_bonus": 3,
     "actions": [
@@ -10007,7 +10007,7 @@
     "immunities": "Poison; Exhaustion, Poisoned",
     "senses": "Darkvision 60 ft.; Passive Perception 12",
     "languages": "Primordial (Auran, Terran)",
-    "challenge_rating": "1/2",
+    "challenge_rating": 0.5,
     "xp": 100,
     "proficiency_bonus": 2,
     "traits": [
@@ -10082,7 +10082,7 @@
     "immunities": "Cold, Poison; Exhaustion, Poisoned",
     "senses": "Darkvision 60 ft.; Passive Perception 12",
     "languages": "Primordial (Aquan, Auran)",
-    "challenge_rating": "1/2",
+    "challenge_rating": 0.5,
     "xp": 100,
     "proficiency_bonus": 2,
     "traits": [
@@ -10157,7 +10157,7 @@
     "immunities": "Fire, Poison; Exhaustion, Poisoned",
     "senses": "Darkvision 60 ft.; Passive Perception 10",
     "languages": "Primordial (Ignan, Terran)",
-    "challenge_rating": "1/2",
+    "challenge_rating": 0.5,
     "xp": 100,
     "proficiency_bonus": 2,
     "traits": [
@@ -10227,7 +10227,7 @@
     "immunities": "Fire, Poison; Exhaustion, Poisoned",
     "senses": "Darkvision 60 ft.; Passive Perception 10",
     "languages": "Primordial (Aquan, Ignan)",
-    "challenge_rating": "1/4",
+    "challenge_rating": 0.25,
     "xp": 50,
     "proficiency_bonus": 2,
     "traits": [
@@ -10299,7 +10299,7 @@
     },
     "senses": "Passive Perception 12",
     "languages": "Common, Primordial (Aquan)",
-    "challenge_rating": "1/8",
+    "challenge_rating": 0.125,
     "xp": 25,
     "proficiency_bonus": 2,
     "traits": [
@@ -10359,7 +10359,7 @@
     },
     "senses": "Darkvision 60 ft.; Passive Perception 10",
     "languages": "Abyssal, Primordial (Aquan)",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "traits": [
@@ -10433,7 +10433,7 @@
     "immunities": "Acid; Prone",
     "senses": "Darkvision 60 ft.; Passive Perception 11",
     "languages": "None",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "traits": [
@@ -10504,7 +10504,7 @@
     "skills_raw": "Perception +7, Survival +7",
     "senses": "Darkvision 60 ft.; Passive Perception 17",
     "languages": "Abyssal",
-    "challenge_rating": "3",
+    "challenge_rating": 3,
     "xp": 700,
     "proficiency_bonus": 2,
     "actions": [
@@ -10564,7 +10564,7 @@
     "immunities": "Necrotic, Poison; Charmed, Exhaustion,",
     "senses": "Darkvision 60 ft.; Passive Perception 11",
     "languages": "Common plus two other languages",
-    "challenge_rating": "3",
+    "challenge_rating": 3,
     "xp": 700,
     "proficiency_bonus": 2,
     "actions": [
@@ -10629,7 +10629,7 @@
     "immunities": "Necrotic, Poison; Charmed, Exhaustion,",
     "senses": "Truesight 60 ft.; Passive Perception 19",
     "languages": "Common plus three other languages",
-    "challenge_rating": "15",
+    "challenge_rating": 15,
     "xp": 13000,
     "xp_in_lair": 15000,
     "proficiency_bonus": 5,
@@ -10737,7 +10737,7 @@
     "immunities": "Poison; Frightened, Poisoned",
     "senses": "Truesight 120 ft.; Passive Perception 11",
     "languages": "Abyssal; telepathy 120 ft.",
-    "challenge_rating": "13",
+    "challenge_rating": 13,
     "xp": 10000,
     "proficiency_bonus": 5,
     "traits": [
@@ -10824,7 +10824,7 @@
     "immunities": "Charmed",
     "senses": "Darkvision 120 ft.; Passive Perception 15",
     "languages": "Abyssal, Common, Infernal, Primordial",
-    "challenge_rating": "5",
+    "challenge_rating": 5,
     "xp": 1800,
     "proficiency_bonus": 3,
     "traits": [
@@ -10911,7 +10911,7 @@
     "immunities": "Fire",
     "senses": "Passive Perception 11",
     "languages": "Understands Abyssal, Common, and Infernal",
-    "challenge_rating": "3",
+    "challenge_rating": 3,
     "xp": 700,
     "proficiency_bonus": 2,
     "traits": [
@@ -10981,7 +10981,7 @@
     "gear": "Breastplate, Rapier",
     "senses": "Passive Perception 12",
     "languages": "Common plus two other languages",
-    "challenge_rating": "1/8",
+    "challenge_rating": 0.125,
     "xp": 25,
     "proficiency_bonus": 2,
     "actions": [
@@ -11043,7 +11043,7 @@
     "immunities": "Lightning, Slashing; Charmed, Deafened,",
     "senses": "Blindsight 60 ft.; Passive Perception 8",
     "languages": "None",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "traits": [
@@ -11114,7 +11114,7 @@
     "gear": "Greatclub, Javelins (3)",
     "senses": "Darkvision 60 ft.; Passive Perception 8",
     "languages": "Common, Giant",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "actions": [
@@ -11174,7 +11174,7 @@
     "resistances": "Cold",
     "senses": "Darkvision 60 ft.; Passive Perception 14",
     "languages": "Common, Giant",
-    "challenge_rating": "7",
+    "challenge_rating": 7,
     "xp": 2900,
     "proficiency_bonus": 3,
     "traits": [
@@ -11260,7 +11260,7 @@
     },
     "senses": "Darkvision 120 ft.; Passive Perception 11",
     "languages": "Otyugh; telepathy 120 ft. (doesn’t allow the",
-    "challenge_rating": "5",
+    "challenge_rating": 5,
     "xp": 1800,
     "proficiency_bonus": 3,
     "actions": [
@@ -11331,7 +11331,7 @@
     "skills_raw": "Perception +5",
     "senses": "Darkvision 60 ft.; Passive Perception 15",
     "languages": "None",
-    "challenge_rating": "3",
+    "challenge_rating": 3,
     "xp": 700,
     "proficiency_bonus": 2,
     "actions": [
@@ -11390,7 +11390,7 @@
     "skills_raw": "Perception +6",
     "senses": "Passive Perception 16",
     "languages": "Understands Celestial, Common, Elvish, and",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "actions": [
@@ -11445,7 +11445,7 @@
     "skills_raw": "Stealth +7",
     "senses": "Darkvision 60 ft.; Passive Perception 10",
     "languages": "None",
-    "challenge_rating": "3",
+    "challenge_rating": 3,
     "xp": 700,
     "proficiency_bonus": 2,
     "traits": [
@@ -11524,7 +11524,7 @@
     "gear": "Daggers (6), Leather Armor",
     "senses": "Passive Perception 11",
     "languages": "Common plus one other language",
-    "challenge_rating": "1",
+    "challenge_rating": 1,
     "xp": 200,
     "proficiency_bonus": 2,
     "actions": [
@@ -11588,7 +11588,7 @@
     "gear": "Pistol, Rapier",
     "senses": "Passive Perception 15",
     "languages": "Common plus one other language",
-    "challenge_rating": "6",
+    "challenge_rating": 6,
     "xp": 2300,
     "proficiency_bonus": 3,
     "actions": [
@@ -11665,7 +11665,7 @@
     "immunities": "Fire, Poison; Poisoned",
     "senses": "Truesight 120 ft.; Passive Perception 20",
     "languages": "Infernal; telepathy 120 ft.",
-    "challenge_rating": "20",
+    "challenge_rating": 20,
     "xp": 25000,
     "proficiency_bonus": 6,
     "traits": [
@@ -11756,7 +11756,7 @@
     "immunities": "Charmed, Exhaustion, Frightened",
     "senses": "Truesight 120 ft.; Passive Perception 21",
     "languages": "All; telepathy 120 ft.",
-    "challenge_rating": "16",
+    "challenge_rating": 16,
     "xp": 15000,
     "proficiency_bonus": 5,
     "traits": [
@@ -11844,7 +11844,7 @@
     "gear": "Chain Shirt, Holy Symbol, Mace",
     "senses": "Passive Perception 12",
     "languages": "Common",
-    "challenge_rating": "1/4",
+    "challenge_rating": 0.25,
     "xp": 50,
     "proficiency_bonus": 2,
     "actions": [
@@ -11914,7 +11914,7 @@
     "gear": "Chain Shirt, Holy Symbol, Mace",
     "senses": "Passive Perception 15",
     "languages": "Common plus one other language",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "actions": [
@@ -11987,7 +11987,7 @@
     "skills_raw": "Perception +5, Stealth +4",
     "senses": "Blindsight 10 ft., Darkvision 60 ft.; Passive Perception 15",
     "languages": "Understands Common and Draconic but can’t",
-    "challenge_rating": "1/4",
+    "challenge_rating": 0.25,
     "xp": 50,
     "proficiency_bonus": 2,
     "traits": [
@@ -12055,7 +12055,7 @@
     },
     "senses": "Blindsight 30 ft., Tremorsense 60 ft.; Passive Perception 9",
     "languages": "None",
-    "challenge_rating": "15",
+    "challenge_rating": 15,
     "xp": 13000,
     "proficiency_bonus": 5,
     "traits": [
@@ -12136,7 +12136,7 @@
     "immunities": "Poison; Poisoned",
     "senses": "Darkvision 120 ft.; Passive Perception 10",
     "languages": "Abyssal, Common",
-    "challenge_rating": "1",
+    "challenge_rating": 1,
     "xp": 200,
     "proficiency_bonus": 2,
     "traits": [
@@ -12215,7 +12215,7 @@
     "immunities": "Charmed, Frightened",
     "senses": "Truesight 60 ft.; Passive Perception 18",
     "languages": "Common, Infernal",
-    "challenge_rating": "13",
+    "challenge_rating": 13,
     "xp": 10000,
     "proficiency_bonus": 5,
     "traits": [
@@ -12293,7 +12293,7 @@
     "immunities": "Fire",
     "senses": "Blindsight 10 ft., Darkvision 60 ft.; Passive Perception 14",
     "languages": "Draconic",
-    "challenge_rating": "4",
+    "challenge_rating": 4,
     "xp": 1100,
     "proficiency_bonus": 2,
     "actions": [
@@ -12357,7 +12357,7 @@
     "immunities": "Fire",
     "senses": "Blindsight 30 ft., Darkvision 120 ft.; Passive Perception 18",
     "languages": "Common, Draconic",
-    "challenge_rating": "10",
+    "challenge_rating": 10,
     "xp": 5900,
     "proficiency_bonus": 4,
     "actions": [
@@ -12421,7 +12421,7 @@
     "immunities": "Fire",
     "senses": "Blindsight 60 ft., Darkvision 120 ft.; Passive Perception 23",
     "languages": "Common, Draconic",
-    "challenge_rating": "17",
+    "challenge_rating": 17,
     "xp": 18000,
     "xp_in_lair": 20000,
     "proficiency_bonus": 6,
@@ -12511,7 +12511,7 @@
     "immunities": "Fire",
     "senses": "Blindsight 60 ft., Darkvision 120 ft.; Passive Perception 26",
     "languages": "Common, Draconic",
-    "challenge_rating": "24",
+    "challenge_rating": 24,
     "xp": 62000,
     "xp_in_lair": 75000,
     "proficiency_bonus": 7,
@@ -12600,7 +12600,7 @@
     "immunities": "Cold, Fire",
     "senses": "Darkvision 60 ft., Tremorsense 60 ft.; Passive Perception 10",
     "languages": "None",
-    "challenge_rating": "11",
+    "challenge_rating": 11,
     "xp": 7200,
     "proficiency_bonus": 4,
     "traits": [
@@ -12667,7 +12667,7 @@
     "skills_raw": "Perception +8",
     "senses": "Passive Perception 18",
     "languages": "None",
-    "challenge_rating": "11",
+    "challenge_rating": 11,
     "xp": 7200,
     "proficiency_bonus": 4,
     "actions": [
@@ -12736,7 +12736,7 @@
     "skills_raw": "Perception +6, Stealth +5",
     "senses": "Darkvision 60 ft.; Passive Perception 16",
     "languages": "None",
-    "challenge_rating": "5",
+    "challenge_rating": 5,
     "xp": 1800,
     "proficiency_bonus": 3,
     "traits": [
@@ -12808,7 +12808,7 @@
     },
     "senses": "Darkvision 60 ft.; Passive Perception 11",
     "languages": "None",
-    "challenge_rating": "1/2",
+    "challenge_rating": 0.5,
     "xp": 100,
     "proficiency_bonus": 2,
     "traits": [
@@ -12888,7 +12888,7 @@
     "resistances": "Acid, Cold",
     "senses": "Darkvision 120 ft.; Passive Perception 15",
     "languages": "Sahuagin",
-    "challenge_rating": "1/2",
+    "challenge_rating": 0.5,
     "xp": 100,
     "proficiency_bonus": 2,
     "traits": [
@@ -12968,7 +12968,7 @@
     "immunities": "Fire",
     "senses": "Darkvision 60 ft.; Passive Perception 10",
     "languages": "Primordial (Ignan)",
-    "challenge_rating": "5",
+    "challenge_rating": 5,
     "xp": 1800,
     "proficiency_bonus": 3,
     "traits": [
@@ -13041,7 +13041,7 @@
     "skills_raw": "Perception +2, Performance +6, Stealth +5",
     "senses": "Passive Perception 12",
     "languages": "Common, Elvish, Sylvan",
-    "challenge_rating": "1/2",
+    "challenge_rating": 0.5,
     "xp": 100,
     "proficiency_bonus": 2,
     "traits": [
@@ -13107,7 +13107,7 @@
     "gear": "Leather Armor, Longbow, Shortsword",
     "senses": "Passive Perception 15",
     "languages": "Common plus one other language",
-    "challenge_rating": "1/2",
+    "challenge_rating": 0.5,
     "xp": 100,
     "proficiency_bonus": 2,
     "actions": [
@@ -13169,7 +13169,7 @@
     },
     "senses": "Darkvision 60 ft.; Passive Perception 11",
     "languages": "Common, Giant, Primordial (Aquan)",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "traits": [
@@ -13249,7 +13249,7 @@
     "immunities": "Necrotic, Poison; Exhaustion, Frightened,",
     "senses": "Darkvision 60 ft.; Passive Perception 10",
     "languages": "None",
-    "challenge_rating": "1/2",
+    "challenge_rating": 0.5,
     "xp": 100,
     "proficiency_bonus": 2,
     "traits": [
@@ -13322,7 +13322,7 @@
     "immunities": "Lightning; Deafened, Exhaustion",
     "senses": "Blindsight 60 ft.; Passive Perception 10",
     "languages": "None",
-    "challenge_rating": "5",
+    "challenge_rating": 5,
     "xp": 1800,
     "proficiency_bonus": 3,
     "traits": [
@@ -13395,7 +13395,7 @@
     "immunities": "Poison; Charmed, Exhaustion, Frightened,",
     "senses": "Blindsight 10 ft., Darkvision 60 ft.; Passive Perception 10",
     "languages": "Understands commands given in any language",
-    "challenge_rating": "7",
+    "challenge_rating": 7,
     "xp": 2900,
     "proficiency_bonus": 3,
     "traits": [
@@ -13475,7 +13475,7 @@
     "immunities": "Cold",
     "senses": "Blindsight 10 ft., Darkvision 60 ft.; Passive Perception 14",
     "languages": "Draconic",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "actions": [
@@ -13543,7 +13543,7 @@
     "immunities": "Cold",
     "senses": "Blindsight 30 ft., Darkvision 120 ft.; Passive Perception 18",
     "languages": "Common, Draconic",
-    "challenge_rating": "9",
+    "challenge_rating": 9,
     "xp": 5000,
     "proficiency_bonus": 4,
     "actions": [
@@ -13611,7 +13611,7 @@
     "immunities": "Cold",
     "senses": "Blindsight 60 ft., Darkvision 120 ft.; Passive Perception 21",
     "languages": "Common, Draconic",
-    "challenge_rating": "16",
+    "challenge_rating": 16,
     "xp": 15000,
     "xp_in_lair": 18000,
     "proficiency_bonus": 5,
@@ -13705,7 +13705,7 @@
     "immunities": "Cold",
     "senses": "Blindsight 60 ft., Darkvision 120 ft.; Passive Perception 26",
     "languages": "Common, Draconic",
-    "challenge_rating": "23",
+    "challenge_rating": 23,
     "xp": 50000,
     "xp_in_lair": 62000,
     "proficiency_bonus": 7,
@@ -13800,7 +13800,7 @@
     "gear": "Shortbow, Shortsword",
     "senses": "Darkvision 60 ft.; Passive Perception 9",
     "languages": "Understands Common plus one other language",
-    "challenge_rating": "1/4",
+    "challenge_rating": 0.25,
     "xp": 50,
     "proficiency_bonus": 2,
     "actions": [
@@ -13860,7 +13860,7 @@
     "immunities": "Poison; Exhaustion, Poisoned",
     "senses": "Darkvision 60 ft.; Passive Perception 9",
     "languages": "None",
-    "challenge_rating": "1/2",
+    "challenge_rating": 0.5,
     "xp": 100,
     "proficiency_bonus": 2,
     "actions": [
@@ -13916,7 +13916,7 @@
     "immunities": "Poison; Exhaustion, Poisoned",
     "senses": "Darkvision 60 ft.; Passive Perception 9",
     "languages": "Understands Abyssal but can’t speak",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "actions": [
@@ -13976,7 +13976,7 @@
     "immunities": "Poison, Radiant; Charmed, Exhaustion,",
     "senses": "Truesight 120 ft.; Passive Perception 24",
     "languages": "All; telepathy 120 ft.",
-    "challenge_rating": "21",
+    "challenge_rating": 21,
     "xp": 33000,
     "proficiency_bonus": 7,
     "traits": [
@@ -14079,7 +14079,7 @@
     "immunities": "Necrotic, Poison; Charmed, Exhaustion,",
     "senses": "Darkvision 60 ft.; Passive Perception 10",
     "languages": "Understands Common plus one other language",
-    "challenge_rating": "1",
+    "challenge_rating": 1,
     "xp": 200,
     "proficiency_bonus": 2,
     "traits": [
@@ -14149,7 +14149,7 @@
     "resistances": "Necrotic, Psychic, Radiant",
     "senses": "Darkvision 60 ft.; Passive Perception 11",
     "languages": "Celestial, Common",
-    "challenge_rating": "1",
+    "challenge_rating": 1,
     "xp": 200,
     "proficiency_bonus": 2,
     "traits": [
@@ -14218,7 +14218,7 @@
     "immunities": "Psychic; Charmed, Frightened",
     "senses": "Truesight 120 ft.; Passive Perception 18",
     "languages": "Celestial, Common",
-    "challenge_rating": "11",
+    "challenge_rating": 11,
     "xp": 7200,
     "xp_in_lair": 8400,
     "proficiency_bonus": 4,
@@ -14309,7 +14309,7 @@
     "immunities": "Psychic; Charmed, Frightened",
     "senses": "Truesight 120 ft.; Passive Perception 22",
     "languages": "Celestial, Common",
-    "challenge_rating": "17",
+    "challenge_rating": 17,
     "xp": 18000,
     "xp_in_lair": 20000,
     "proficiency_bonus": 6,
@@ -14410,7 +14410,7 @@
     "immunities": "Poison; Charmed, Poisoned",
     "senses": "Darkvision 60 ft.; Passive Perception 12",
     "languages": "Abyssal, Common",
-    "challenge_rating": "8",
+    "challenge_rating": 8,
     "xp": 3900,
     "proficiency_bonus": 3,
     "traits": [
@@ -14483,7 +14483,7 @@
     "skills_raw": "Perception +3, Stealth +8",
     "senses": "Passive Perception 13",
     "languages": "Common, Elvish, Sylvan",
-    "challenge_rating": "1/4",
+    "challenge_rating": 0.25,
     "xp": 50,
     "proficiency_bonus": 2,
     "actions": [
@@ -14551,7 +14551,7 @@
     "gear": "Hand Crossbow, Shortsword, Thieves’ Tools",
     "senses": "Passive Perception 16",
     "languages": "Common plus one other language",
-    "challenge_rating": "1",
+    "challenge_rating": 1,
     "xp": 200,
     "proficiency_bonus": 2,
     "actions": [
@@ -14615,7 +14615,7 @@
     },
     "senses": "Darkvision 60 ft.; Passive Perception 9",
     "languages": "None",
-    "challenge_rating": "1/8",
+    "challenge_rating": 0.125,
     "xp": 25,
     "proficiency_bonus": 2,
     "actions": [
@@ -14670,7 +14670,7 @@
     "skills_raw": "Athletics +12, Perception +4, Stealth +5",
     "senses": "Darkvision 60 ft.; Passive Perception 14",
     "languages": "Giant",
-    "challenge_rating": "7",
+    "challenge_rating": 7,
     "xp": 2900,
     "proficiency_bonus": 3,
     "actions": [
@@ -14739,7 +14739,7 @@
     "immunities": "Poison, Psychic; Charmed, Exhaustion,",
     "senses": "Darkvision 120 ft.; Passive Perception 10",
     "languages": "Understands Common plus two other",
-    "challenge_rating": "10",
+    "challenge_rating": 10,
     "xp": 5900,
     "proficiency_bonus": 4,
     "traits": [
@@ -14820,7 +14820,7 @@
     "immunities": "Lightning, Thunder",
     "senses": "Darkvision 120 ft., Truesight 30 ft.; Passive Perception 20",
     "languages": "Common, Giant",
-    "challenge_rating": "13",
+    "challenge_rating": 13,
     "xp": 10000,
     "proficiency_bonus": 5,
     "traits": [
@@ -14898,7 +14898,7 @@
     "resistances": "Cold, Fire, Poison, Psychic",
     "senses": "Darkvision 60 ft.; Passive Perception 15",
     "languages": "Abyssal, Common, Infernal; telepathy 60 ft.",
-    "challenge_rating": "4",
+    "challenge_rating": 4,
     "xp": 1100,
     "proficiency_bonus": 2,
     "traits": [
@@ -14983,7 +14983,7 @@
     "immunities": "Fire, Poison; Charmed, Deafened, Frightened,",
     "senses": "Blindsight 120 ft.; Passive Perception 19",
     "languages": "None",
-    "challenge_rating": "30",
+    "challenge_rating": 30,
     "xp": 155000,
     "proficiency_bonus": 9,
     "traits": [
@@ -15093,7 +15093,7 @@
     "gear": "Heavy Crossbow, Leather Armor, Mace",
     "senses": "Passive Perception 10",
     "languages": "Common",
-    "challenge_rating": "1/2",
+    "challenge_rating": 0.5,
     "xp": 100,
     "proficiency_bonus": 2,
     "traits": [
@@ -15158,7 +15158,7 @@
     "gear": "Chain Mail, Heavy Crossbow, Warhammer",
     "senses": "Passive Perception 10",
     "languages": "Common plus one other language",
-    "challenge_rating": "4",
+    "challenge_rating": 4,
     "xp": 1100,
     "proficiency_bonus": 2,
     "traits": [
@@ -15228,7 +15228,7 @@
     "resistances": "Bludgeoning, Piercing",
     "senses": "Passive Perception 13",
     "languages": "Common, Druidic, Elvish, Sylvan",
-    "challenge_rating": "9",
+    "challenge_rating": 9,
     "xp": 5000,
     "proficiency_bonus": 4,
     "traits": [
@@ -15301,7 +15301,7 @@
     "skills_raw": "Perception +5",
     "senses": "Darkvision 60 ft.; Passive Perception 15",
     "languages": "Giant",
-    "challenge_rating": "5",
+    "challenge_rating": 5,
     "xp": 1800,
     "proficiency_bonus": 3,
     "traits": [
@@ -15375,7 +15375,7 @@
     },
     "senses": "Darkvision 60 ft.; Passive Perception 9",
     "languages": "None",
-    "challenge_rating": "1/2",
+    "challenge_rating": 0.5,
     "xp": 100,
     "proficiency_bonus": 2,
     "traits": [
@@ -15440,7 +15440,7 @@
     "immunities": "Poison; Charmed, Paralyzed, Poisoned",
     "senses": "Darkvision 60 ft.; Passive Perception 13",
     "languages": "Celestial, Elvish, Sylvan; telepathy 120 ft.",
-    "challenge_rating": "5",
+    "challenge_rating": 5,
     "xp": 1800,
     "proficiency_bonus": 3,
     "traits": [
@@ -15537,7 +15537,7 @@
     "gear": "Daggers (10)",
     "senses": "Darkvision 60 ft.; Passive Perception 14",
     "languages": "Common plus one other language",
-    "challenge_rating": "3",
+    "challenge_rating": 3,
     "xp": 700,
     "proficiency_bonus": 2,
     "traits": [
@@ -15609,7 +15609,7 @@
     "resistances": "Necrotic",
     "senses": "Darkvision 60 ft.; Passive Perception 13",
     "languages": "Common plus one other language",
-    "challenge_rating": "5",
+    "challenge_rating": 5,
     "xp": 1800,
     "proficiency_bonus": 3,
     "traits": [
@@ -15709,7 +15709,7 @@
     "resistances": "Necrotic",
     "senses": "Darkvision 120 ft.; Passive Perception 17",
     "languages": "Common plus two other languages",
-    "challenge_rating": "13",
+    "challenge_rating": 13,
     "xp": 10000,
     "xp_in_lair": 11500,
     "proficiency_bonus": 5,
@@ -15833,7 +15833,7 @@
     "immunities": "Poison; Poisoned",
     "senses": "Darkvision 120 ft.; Passive Perception 11",
     "languages": "Abyssal; telepathy 120 ft.",
-    "challenge_rating": "6",
+    "challenge_rating": 6,
     "xp": 2300,
     "proficiency_bonus": 3,
     "traits": [
@@ -15910,7 +15910,7 @@
     "gear": "Chain Shirt, Spear",
     "senses": "Passive Perception 10",
     "languages": "Common",
-    "challenge_rating": "1/8",
+    "challenge_rating": 0.125,
     "xp": 25,
     "proficiency_bonus": 2,
     "traits": [
@@ -15972,7 +15972,7 @@
     "gear": "Greatsword, Heavy Crossbow, Splint Armor",
     "senses": "Passive Perception 12",
     "languages": "Common plus one other language",
-    "challenge_rating": "3",
+    "challenge_rating": 3,
     "xp": 700,
     "proficiency_bonus": 2,
     "actions": [
@@ -16042,7 +16042,7 @@
     "immunities": "Poison; Exhaustion, Grappled, Paralyzed,",
     "senses": "Darkvision 60 ft.; Passive Perception 10",
     "languages": "Primordial (Aquan)",
-    "challenge_rating": "5",
+    "challenge_rating": 5,
     "xp": 1800,
     "proficiency_bonus": 3,
     "traits": [
@@ -16116,7 +16116,7 @@
     "gear": "Handaxes (4)",
     "senses": "Darkvision 60 ft.; Passive Perception 17",
     "languages": "Common (can’t speak in bear form)",
-    "challenge_rating": "5",
+    "challenge_rating": 5,
     "xp": 1800,
     "proficiency_bonus": 3,
     "actions": [
@@ -16198,7 +16198,7 @@
     "gear": "Javelins (6)",
     "senses": "Passive Perception 12",
     "languages": "Common (can’t speak in boar form)",
-    "challenge_rating": "4",
+    "challenge_rating": 4,
     "xp": 1100,
     "proficiency_bonus": 2,
     "actions": [
@@ -16280,7 +16280,7 @@
     "gear": "Hand Crossbow",
     "senses": "Darkvision 60 ft.; Passive Perception 14",
     "languages": "Common (can’t speak in rat form)",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "actions": [
@@ -16354,7 +16354,7 @@
     "gear": "Longbow",
     "senses": "Darkvision 60 ft.; Passive Perception 15",
     "languages": "Common (can’t speak in tiger form)",
-    "challenge_rating": "4",
+    "challenge_rating": 4,
     "xp": 1100,
     "proficiency_bonus": 2,
     "actions": [
@@ -16444,7 +16444,7 @@
     "gear": "Longbow",
     "senses": "Darkvision 60 ft.; Passive Perception 14",
     "languages": "Common (can’t speak in wolf form)",
-    "challenge_rating": "3",
+    "challenge_rating": 3,
     "xp": 700,
     "proficiency_bonus": 2,
     "traits": [
@@ -16532,7 +16532,7 @@
     "immunities": "Cold",
     "senses": "Blindsight 10 ft., Darkvision 60 ft.; Passive Perception 14",
     "languages": "Draconic",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "traits": [
@@ -16602,7 +16602,7 @@
     "immunities": "Cold",
     "senses": "Blindsight 30 ft., Darkvision 120 ft.; Passive Perception 16",
     "languages": "Common, Draconic",
-    "challenge_rating": "6",
+    "challenge_rating": 6,
     "xp": 2300,
     "proficiency_bonus": 3,
     "traits": [
@@ -16672,7 +16672,7 @@
     "immunities": "Cold",
     "senses": "Blindsight 60 ft., Darkvision 120 ft.; Passive Perception 21",
     "languages": "Common, Draconic",
-    "challenge_rating": "13",
+    "challenge_rating": 13,
     "xp": 10000,
     "xp_in_lair": 11500,
     "proficiency_bonus": 5,
@@ -16762,7 +16762,7 @@
     "immunities": "Cold",
     "senses": "Blindsight 60 ft., Darkvision 120 ft.; Passive Perception 23",
     "languages": "Common, Draconic",
-    "challenge_rating": "20",
+    "challenge_rating": 20,
     "xp": 25000,
     "xp_in_lair": 33000,
     "proficiency_bonus": 6,
@@ -16854,7 +16854,7 @@
     "gear": "Studded Leather Armor",
     "senses": "Darkvision 60 ft.; Passive Perception 13",
     "languages": "Common plus one other language",
-    "challenge_rating": "3",
+    "challenge_rating": 3,
     "xp": 700,
     "proficiency_bonus": 2,
     "traits": [
@@ -16928,7 +16928,7 @@
     "immunities": "Lightning, Poison; Exhaustion, Grappled,",
     "senses": "Darkvision 120 ft.; Passive Perception 12",
     "languages": "Common plus one other language",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "traits": [
@@ -17016,7 +17016,7 @@
     "immunities": "Cold",
     "senses": "Passive Perception 15",
     "languages": "Common, Giant",
-    "challenge_rating": "3",
+    "challenge_rating": 3,
     "xp": 700,
     "proficiency_bonus": 2,
     "traits": [
@@ -17081,7 +17081,7 @@
     "skills_raw": "Perception +4",
     "senses": "Darkvision 60 ft.; Passive Perception 14",
     "languages": "Goblin, Worg",
-    "challenge_rating": "1/2",
+    "challenge_rating": 0.5,
     "xp": 100,
     "proficiency_bonus": 2,
     "actions": [
@@ -17137,7 +17137,7 @@
     "immunities": "Necrotic, Poison; Charmed, Exhaustion,",
     "senses": "Darkvision 60 ft.; Passive Perception 12",
     "languages": "Common plus two other languages",
-    "challenge_rating": "5",
+    "challenge_rating": 5,
     "xp": 1800,
     "proficiency_bonus": 3,
     "traits": [
@@ -17210,7 +17210,7 @@
     "skills_raw": "Perception +4",
     "senses": "Darkvision 120 ft.; Passive Perception 14",
     "languages": "None",
-    "challenge_rating": "6",
+    "challenge_rating": 6,
     "xp": 2300,
     "proficiency_bonus": 3,
     "actions": [
@@ -17274,7 +17274,7 @@
     "immunities": "Poison; Paralyzed, Petrified, Poisoned",
     "senses": "Darkvision 60 ft., Tremorsense 60 ft.; Passive Perception 16",
     "languages": "Primordial (Terran)",
-    "challenge_rating": "5",
+    "challenge_rating": 5,
     "xp": 1800,
     "proficiency_bonus": 3,
     "traits": [
@@ -17353,7 +17353,7 @@
     "immunities": "Poison; Exhaustion, Poisoned",
     "senses": "Darkvision 60 ft.; Passive Perception 8",
     "languages": "Understands Common plus one other language",
-    "challenge_rating": "1/4",
+    "challenge_rating": 0.25,
     "xp": 50,
     "proficiency_bonus": 2,
     "traits": [
@@ -17414,7 +17414,7 @@
     "immunities": "Poison; Exhaustion, Poisoned",
     "senses": "Darkvision 60 ft.; Passive Perception 8",
     "languages": "Understands Common and Giant but can’t",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "traits": [
@@ -17475,7 +17475,7 @@
     "skills_raw": "Perception +5",
     "senses": "Passive Perception 15",
     "languages": "None",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "actions": [
@@ -17533,7 +17533,7 @@
     },
     "senses": "Passive Perception 11",
     "languages": "None",
-    "challenge_rating": "3",
+    "challenge_rating": 3,
     "xp": 700,
     "proficiency_bonus": 2,
     "actions": [
@@ -17592,7 +17592,7 @@
     "skills_raw": "Athletics +5, Perception +3",
     "senses": "Passive Perception 13",
     "languages": "None",
-    "challenge_rating": "1/2",
+    "challenge_rating": 0.5,
     "xp": 100,
     "proficiency_bonus": 2,
     "actions": [
@@ -17655,7 +17655,7 @@
     "skills_raw": "Stealth +5",
     "senses": "Passive Perception 12",
     "languages": "None",
-    "challenge_rating": "4",
+    "challenge_rating": 4,
     "xp": 1100,
     "proficiency_bonus": 2,
     "traits": [
@@ -17719,7 +17719,7 @@
     },
     "senses": "Passive Perception 11",
     "languages": "None",
-    "challenge_rating": "0",
+    "challenge_rating": 0,
     "xp": 10,
     "proficiency_bonus": 2,
     "traits": [
@@ -17781,7 +17781,7 @@
     "resistances": "Poison",
     "senses": "Darkvision 30 ft.; Passive Perception 13",
     "languages": "None",
-    "challenge_rating": "0",
+    "challenge_rating": 0,
     "xp": 10,
     "proficiency_bonus": 2,
     "actions": [
@@ -17835,7 +17835,7 @@
     },
     "senses": "Blindsight 60 ft.; Passive Perception 11",
     "languages": "None",
-    "challenge_rating": "0",
+    "challenge_rating": 0,
     "xp": 10,
     "proficiency_bonus": 2,
     "actions": [
@@ -17890,7 +17890,7 @@
     "skills_raw": "Perception +5",
     "senses": "Darkvision 60 ft.; Passive Perception 15",
     "languages": "None",
-    "challenge_rating": "1/2",
+    "challenge_rating": 0.5,
     "xp": 100,
     "proficiency_bonus": 2,
     "actions": [
@@ -17949,7 +17949,7 @@
     "skills_raw": "Perception +6",
     "senses": "Passive Perception 16",
     "languages": "None",
-    "challenge_rating": "1/8",
+    "challenge_rating": 0.125,
     "xp": 25,
     "proficiency_bonus": 2,
     "traits": [
@@ -18009,7 +18009,7 @@
     },
     "senses": "Passive Perception 9",
     "languages": "None",
-    "challenge_rating": "1/4",
+    "challenge_rating": 0.25,
     "xp": 50,
     "proficiency_bonus": 2,
     "traits": [
@@ -18070,7 +18070,7 @@
     "skills_raw": "Perception +3",
     "senses": "Darkvision 60 ft.; Passive Perception 13",
     "languages": "None",
-    "challenge_rating": "1",
+    "challenge_rating": 1,
     "xp": 200,
     "proficiency_bonus": 2,
     "actions": [
@@ -18132,7 +18132,7 @@
     },
     "senses": "Darkvision 60 ft.; Passive Perception 10",
     "languages": "None",
-    "challenge_rating": "1/8",
+    "challenge_rating": 0.125,
     "xp": 25,
     "proficiency_bonus": 2,
     "actions": [
@@ -18187,7 +18187,7 @@
     "skills_raw": "Perception +3, Stealth +4",
     "senses": "Darkvision 60 ft.; Passive Perception 13",
     "languages": "None",
-    "challenge_rating": "0",
+    "challenge_rating": 0,
     "xp": 10,
     "proficiency_bonus": 2,
     "traits": [
@@ -18248,7 +18248,7 @@
     "skills_raw": "Perception +2, Stealth +4",
     "senses": "Blindsight 10 ft.; Passive Perception 12",
     "languages": "None",
-    "challenge_rating": "1/4",
+    "challenge_rating": 0.25,
     "xp": 50,
     "proficiency_bonus": 2,
     "actions": [
@@ -18307,7 +18307,7 @@
     "skills_raw": "Stealth +2",
     "senses": "Blindsight 30 ft.; Passive Perception 9",
     "languages": "None",
-    "challenge_rating": "0",
+    "challenge_rating": 0,
     "xp": 10,
     "proficiency_bonus": 2,
     "traits": [
@@ -18368,7 +18368,7 @@
     "skills_raw": "Stealth +2",
     "senses": "Passive Perception 10",
     "languages": "None",
-    "challenge_rating": "1/2",
+    "challenge_rating": 0.5,
     "xp": 100,
     "proficiency_bonus": 2,
     "traits": [
@@ -18429,7 +18429,7 @@
     "skills_raw": "Perception +4",
     "senses": "Darkvision 60 ft.; Passive Perception 14",
     "languages": "None",
-    "challenge_rating": "0",
+    "challenge_rating": 0,
     "xp": 10,
     "proficiency_bonus": 2,
     "traits": [
@@ -18490,7 +18490,7 @@
     "skills_raw": "Perception +5, Stealth +4",
     "senses": "Darkvision 60 ft.; Passive Perception 15",
     "languages": "None",
-    "challenge_rating": "1",
+    "challenge_rating": 1,
     "xp": 200,
     "proficiency_bonus": 2,
     "traits": [
@@ -18550,7 +18550,7 @@
     },
     "senses": "Passive Perception 10",
     "languages": "None",
-    "challenge_rating": "1/4",
+    "challenge_rating": 0.25,
     "xp": 50,
     "proficiency_bonus": 2,
     "actions": [
@@ -18605,7 +18605,7 @@
     "skills_raw": "Perception +6",
     "senses": "Passive Perception 16",
     "languages": "None",
-    "challenge_rating": "0",
+    "challenge_rating": 0,
     "xp": 10,
     "proficiency_bonus": 2,
     "actions": [
@@ -18659,7 +18659,7 @@
     },
     "senses": "Passive Perception 10",
     "languages": "None",
-    "challenge_rating": "4",
+    "challenge_rating": 4,
     "xp": 1100,
     "proficiency_bonus": 2,
     "actions": [
@@ -18724,7 +18724,7 @@
     "skills_raw": "Perception +2",
     "senses": "Darkvision 60 ft.; Passive Perception 12",
     "languages": "None",
-    "challenge_rating": "1/4",
+    "challenge_rating": 0.25,
     "xp": 50,
     "proficiency_bonus": 2,
     "actions": [
@@ -18778,7 +18778,7 @@
     },
     "senses": "Blindsight 10 ft.; Passive Perception 11",
     "languages": "None",
-    "challenge_rating": "1/8",
+    "challenge_rating": 0.125,
     "xp": 25,
     "proficiency_bonus": 2,
     "traits": [
@@ -18839,7 +18839,7 @@
     "skills_raw": "Perception +1, Stealth +3",
     "senses": "Darkvision 30 ft.; Passive Perception 11",
     "languages": "None",
-    "challenge_rating": "0",
+    "challenge_rating": 0,
     "xp": 10,
     "proficiency_bonus": 2,
     "traits": [
@@ -18904,7 +18904,7 @@
     "skills_raw": "Athletics +9, Perception +4, Survival +4",
     "senses": "Passive Perception 14",
     "languages": "None",
-    "challenge_rating": "7",
+    "challenge_rating": 7,
     "xp": 2900,
     "proficiency_bonus": 3,
     "actions": [
@@ -18974,7 +18974,7 @@
     "resistances": "Poison",
     "senses": "Darkvision 60 ft.; Passive Perception 13",
     "languages": "None",
-    "challenge_rating": "1/4",
+    "challenge_rating": 0.25,
     "xp": 50,
     "proficiency_bonus": 2,
     "actions": [
@@ -19028,7 +19028,7 @@
     },
     "senses": "Blindsight 120 ft.; Passive Perception 11",
     "languages": "None",
-    "challenge_rating": "1/4",
+    "challenge_rating": 0.25,
     "xp": 50,
     "proficiency_bonus": 2,
     "actions": [
@@ -19082,7 +19082,7 @@
     },
     "senses": "Passive Perception 8",
     "languages": "None",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "traits": [
@@ -19142,7 +19142,7 @@
     },
     "senses": "Blindsight 30 ft.; Passive Perception 8",
     "languages": "None",
-    "challenge_rating": "1/4",
+    "challenge_rating": 0.25,
     "xp": 50,
     "proficiency_bonus": 2,
     "actions": [
@@ -19197,7 +19197,7 @@
     "skills_raw": "Perception +2",
     "senses": "Blindsight 10 ft.; Passive Perception 12",
     "languages": "None",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "actions": [
@@ -19260,7 +19260,7 @@
     "skills_raw": "Stealth +3",
     "senses": "Blindsight 30 ft.; Passive Perception 9",
     "languages": "None",
-    "challenge_rating": "1/8",
+    "challenge_rating": 0.125,
     "xp": 25,
     "proficiency_bonus": 2,
     "traits": [
@@ -19321,7 +19321,7 @@
     "skills_raw": "Stealth +5",
     "senses": "Passive Perception 10",
     "languages": "None",
-    "challenge_rating": "5",
+    "challenge_rating": 5,
     "xp": 1800,
     "proficiency_bonus": 3,
     "traits": [
@@ -19391,7 +19391,7 @@
     "resistances": "Necrotic, Radiant",
     "senses": "Passive Perception 16",
     "languages": "Celestial; understands Common and Primordial",
-    "challenge_rating": "1",
+    "challenge_rating": 1,
     "xp": 200,
     "proficiency_bonus": 2,
     "actions": [
@@ -19451,7 +19451,7 @@
     "resistances": "Necrotic, Radiant",
     "senses": "Darkvision 90 ft.; Passive Perception 14",
     "languages": "Celestial; understands Common, Elvish, and",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "actions": [
@@ -19506,7 +19506,7 @@
     "resistances": "Fire",
     "senses": "Blindsight 30 ft.; Passive Perception 8",
     "languages": "None",
-    "challenge_rating": "0",
+    "challenge_rating": 0,
     "xp": 10,
     "proficiency_bonus": 2,
     "traits": [
@@ -19567,7 +19567,7 @@
     "skills_raw": "Perception +2, Stealth +4",
     "senses": "Darkvision 30 ft.; Passive Perception 12",
     "languages": "None",
-    "challenge_rating": "1/4",
+    "challenge_rating": 0.25,
     "xp": 50,
     "proficiency_bonus": 2,
     "traits": [
@@ -19636,7 +19636,7 @@
     "skills_raw": "Perception +3",
     "senses": "Darkvision 60 ft.; Passive Perception 13",
     "languages": "None",
-    "challenge_rating": "1/2",
+    "challenge_rating": 0.5,
     "xp": 100,
     "proficiency_bonus": 2,
     "actions": [
@@ -19691,7 +19691,7 @@
     "skills_raw": "Perception +3",
     "senses": "Darkvision 60 ft.; Passive Perception 13",
     "languages": "None",
-    "challenge_rating": "1",
+    "challenge_rating": 1,
     "xp": 200,
     "proficiency_bonus": 2,
     "actions": [
@@ -19751,7 +19751,7 @@
     },
     "senses": "Darkvision 60 ft.; Passive Perception 10",
     "languages": "None",
-    "challenge_rating": "1/4",
+    "challenge_rating": 0.25,
     "xp": 50,
     "proficiency_bonus": 2,
     "traits": [
@@ -19812,7 +19812,7 @@
     "skills_raw": "Perception +4, Stealth +5",
     "senses": "Darkvision 60 ft.; Passive Perception 14",
     "languages": "None",
-    "challenge_rating": "1",
+    "challenge_rating": 1,
     "xp": 200,
     "proficiency_bonus": 2,
     "traits": [
@@ -19880,7 +19880,7 @@
     "resistances": "Necrotic, Radiant",
     "senses": "Darkvision 120 ft.; Passive Perception 16",
     "languages": "Celestial; understands Common, Elvish, and",
-    "challenge_rating": "1/4",
+    "challenge_rating": 0.25,
     "xp": 50,
     "proficiency_bonus": 2,
     "traits": [
@@ -19945,7 +19945,7 @@
     "skills_raw": "Perception +2",
     "senses": "Darkvision 60 ft.; Passive Perception 12",
     "languages": "None",
-    "challenge_rating": "1/8",
+    "challenge_rating": 0.125,
     "xp": 25,
     "proficiency_bonus": 2,
     "traits": [
@@ -20005,7 +20005,7 @@
     },
     "senses": "Blindsight 60 ft.; Passive Perception 9",
     "languages": "None",
-    "challenge_rating": "3",
+    "challenge_rating": 3,
     "xp": 700,
     "proficiency_bonus": 2,
     "actions": [
@@ -20067,7 +20067,7 @@
     },
     "senses": "Passive Perception 11",
     "languages": "None",
-    "challenge_rating": "1/2",
+    "challenge_rating": 0.5,
     "xp": 100,
     "proficiency_bonus": 2,
     "traits": [
@@ -20134,7 +20134,7 @@
     "skills_raw": "Perception +3",
     "senses": "Blindsight 60 ft.; Passive Perception 13",
     "languages": "None",
-    "challenge_rating": "5",
+    "challenge_rating": 5,
     "xp": 1800,
     "proficiency_bonus": 3,
     "traits": [
@@ -20199,7 +20199,7 @@
     "skills_raw": "Perception +4, Stealth +7",
     "senses": "Darkvision 60 ft.; Passive Perception 14",
     "languages": "None",
-    "challenge_rating": "1",
+    "challenge_rating": 1,
     "xp": 200,
     "proficiency_bonus": 2,
     "traits": [
@@ -20267,7 +20267,7 @@
     },
     "senses": "Darkvision 60 ft.; Passive Perception 10",
     "languages": "None",
-    "challenge_rating": "1",
+    "challenge_rating": 1,
     "xp": 200,
     "proficiency_bonus": 2,
     "traits": [
@@ -20336,7 +20336,7 @@
     "skills_raw": "Perception +2",
     "senses": "Blindsight 10 ft.; Passive Perception 12",
     "languages": "None",
-    "challenge_rating": "1/4",
+    "challenge_rating": 0.25,
     "xp": 50,
     "proficiency_bonus": 2,
     "actions": [
@@ -20392,7 +20392,7 @@
     "resistances": "Necrotic",
     "senses": "Darkvision 60 ft.; Passive Perception 13",
     "languages": "Understands Common but can’t speak",
-    "challenge_rating": "1",
+    "challenge_rating": 1,
     "xp": 200,
     "proficiency_bonus": 2,
     "traits": [
@@ -20452,7 +20452,7 @@
     },
     "senses": "Passive Perception 10",
     "languages": "None",
-    "challenge_rating": "1/2",
+    "challenge_rating": 0.5,
     "xp": 100,
     "proficiency_bonus": 2,
     "traits": [
@@ -20513,7 +20513,7 @@
     "skills_raw": "Acrobatics +5, Perception +3, Stealth +5",
     "senses": "Darkvision 60 ft.; Passive Perception 13",
     "languages": "None",
-    "challenge_rating": "1/8",
+    "challenge_rating": 0.125,
     "xp": 25,
     "proficiency_bonus": 2,
     "actions": [
@@ -20568,7 +20568,7 @@
     "skills_raw": "Perception +3, Stealth +7",
     "senses": "Blindsight 10 ft., Darkvision 60 ft.; Passive Perception 13",
     "languages": "None",
-    "challenge_rating": "1/4",
+    "challenge_rating": 0.25,
     "xp": 50,
     "proficiency_bonus": 2,
     "traits": [
@@ -20629,7 +20629,7 @@
     "skills_raw": "Perception +2",
     "senses": "Darkvision 60 ft.; Passive Perception 12",
     "languages": "None",
-    "challenge_rating": "0",
+    "challenge_rating": 0,
     "xp": 10,
     "proficiency_bonus": 2,
     "actions": [
@@ -20684,7 +20684,7 @@
     "skills_raw": "Perception +6",
     "senses": "Passive Perception 16",
     "languages": "None",
-    "challenge_rating": "0",
+    "challenge_rating": 0,
     "xp": 10,
     "proficiency_bonus": 2,
     "actions": [
@@ -20739,7 +20739,7 @@
     "skills_raw": "Perception +3",
     "senses": "Passive Perception 13",
     "languages": "None",
-    "challenge_rating": "4",
+    "challenge_rating": 4,
     "xp": 1100,
     "proficiency_bonus": 2,
     "traits": [
@@ -20804,7 +20804,7 @@
     "skills_raw": "Perception +2",
     "senses": "Blindsight 60 ft.; Passive Perception 12",
     "languages": "None",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "traits": [
@@ -20865,7 +20865,7 @@
     "skills_raw": "Perception +3",
     "senses": "Darkvision 60 ft.; Passive Perception 13",
     "languages": "None",
-    "challenge_rating": "0",
+    "challenge_rating": 0,
     "xp": 10,
     "proficiency_bonus": 2,
     "traits": [
@@ -20926,7 +20926,7 @@
     "skills_raw": "Perception +5, Stealth +4",
     "senses": "Darkvision 90 ft.; Passive Perception 15",
     "languages": "None",
-    "challenge_rating": "0",
+    "challenge_rating": 0,
     "xp": 10,
     "proficiency_bonus": 2,
     "actions": [
@@ -20981,7 +20981,7 @@
     "skills_raw": "Perception +3, Stealth +4",
     "senses": "Blindsight 120 ft.; Passive Perception 13",
     "languages": "None",
-    "challenge_rating": "3",
+    "challenge_rating": 3,
     "xp": 700,
     "proficiency_bonus": 2,
     "traits": [
@@ -21042,7 +21042,7 @@
     "skills_raw": "Perception +3, Stealth +4",
     "senses": "Darkvision 60 ft.; Passive Perception 13",
     "languages": "None",
-    "challenge_rating": "1",
+    "challenge_rating": 1,
     "xp": 200,
     "proficiency_bonus": 2,
     "traits": [
@@ -21114,7 +21114,7 @@
     },
     "senses": "Darkvision 30 ft.; Passive Perception 9",
     "languages": "None",
-    "challenge_rating": "0",
+    "challenge_rating": 0,
     "xp": 10,
     "proficiency_bonus": 2,
     "traits": [
@@ -21174,7 +21174,7 @@
     },
     "senses": "Passive Perception 10",
     "languages": "None",
-    "challenge_rating": "6",
+    "challenge_rating": 6,
     "xp": 2300,
     "proficiency_bonus": 3,
     "actions": [
@@ -21239,7 +21239,7 @@
     "skills_raw": "Perception +5",
     "senses": "Darkvision 60 ft.; Passive Perception 15",
     "languages": "None",
-    "challenge_rating": "1/8",
+    "challenge_rating": 0.125,
     "xp": 25,
     "proficiency_bonus": 2,
     "actions": [
@@ -21293,7 +21293,7 @@
     },
     "senses": "Passive Perception 10",
     "languages": "None",
-    "challenge_rating": "1/8",
+    "challenge_rating": 0.125,
     "xp": 25,
     "proficiency_bonus": 2,
     "traits": [
@@ -21354,7 +21354,7 @@
     "skills_raw": "Perception +2, Stealth +6",
     "senses": "Darkvision 30 ft.; Passive Perception 12",
     "languages": "None",
-    "challenge_rating": "0",
+    "challenge_rating": 0,
     "xp": 10,
     "proficiency_bonus": 2,
     "traits": [
@@ -21425,7 +21425,7 @@
     "skills_raw": "Perception +5, Stealth +5",
     "senses": "Darkvision 120 ft.; Passive Perception 15",
     "languages": "None",
-    "challenge_rating": "0",
+    "challenge_rating": 0,
     "xp": 10,
     "proficiency_bonus": 2,
     "traits": [
@@ -21486,7 +21486,7 @@
     "skills_raw": "Perception +4, Stealth +7",
     "senses": "Darkvision 60 ft.; Passive Perception 14",
     "languages": "None",
-    "challenge_rating": "1/4",
+    "challenge_rating": 0.25,
     "xp": 50,
     "proficiency_bonus": 2,
     "actions": [
@@ -21546,7 +21546,7 @@
     },
     "senses": "Darkvision 60 ft.; Passive Perception 8",
     "languages": "None",
-    "challenge_rating": "0",
+    "challenge_rating": 0,
     "xp": 10,
     "proficiency_bonus": 2,
     "traits": [
@@ -21607,7 +21607,7 @@
     "skills_raw": "Perception +3, Stealth +4",
     "senses": "Passive Perception 13",
     "languages": "None",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "traits": [
@@ -21669,7 +21669,7 @@
     "resistances": "Cold",
     "senses": "Darkvision 60 ft.; Passive Perception 15",
     "languages": "None",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "actions": [
@@ -21727,7 +21727,7 @@
     },
     "senses": "Passive Perception 10",
     "languages": "None",
-    "challenge_rating": "1/8",
+    "challenge_rating": 0.125,
     "xp": 25,
     "proficiency_bonus": 2,
     "actions": [
@@ -21782,7 +21782,7 @@
     "skills_raw": "Perception +1",
     "senses": "Passive Perception 11",
     "languages": "None",
-    "challenge_rating": "1/4",
+    "challenge_rating": 0.25,
     "xp": 50,
     "proficiency_bonus": 2,
     "traits": [
@@ -21843,7 +21843,7 @@
     "skills_raw": "Perception +2",
     "senses": "Darkvision 30 ft.; Passive Perception 12",
     "languages": "None",
-    "challenge_rating": "0",
+    "challenge_rating": 0,
     "xp": 10,
     "proficiency_bonus": 2,
     "traits": [
@@ -21904,7 +21904,7 @@
     "skills_raw": "Perception +3",
     "senses": "Passive Perception 13",
     "languages": "None",
-    "challenge_rating": "0",
+    "challenge_rating": 0,
     "xp": 10,
     "proficiency_bonus": 2,
     "traits": [
@@ -21965,7 +21965,7 @@
     "skills_raw": "Perception +2",
     "senses": "Blindsight 30 ft.; Passive Perception 12",
     "languages": "None",
-    "challenge_rating": "1/2",
+    "challenge_rating": 0.5,
     "xp": 100,
     "proficiency_bonus": 2,
     "traits": [
@@ -22029,7 +22029,7 @@
     },
     "senses": "Passive Perception 11",
     "languages": "None",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "actions": [
@@ -22083,7 +22083,7 @@
     },
     "senses": "Passive Perception 10",
     "languages": "None",
-    "challenge_rating": "1/4",
+    "challenge_rating": 0.25,
     "xp": 50,
     "proficiency_bonus": 2,
     "actions": [
@@ -22138,7 +22138,7 @@
     "skills_raw": "Perception +5, Stealth +7",
     "senses": "Darkvision 60 ft.; Passive Perception 15",
     "languages": "None",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "traits": [
@@ -22208,7 +22208,7 @@
     },
     "senses": "Blindsight 10 ft.; Passive Perception 9",
     "languages": "None",
-    "challenge_rating": "0",
+    "challenge_rating": 0,
     "xp": 10,
     "proficiency_bonus": 2,
     "actions": [
@@ -22263,7 +22263,7 @@
     "skills_raw": "Perception +2, Stealth +5",
     "senses": "Passive Perception 12",
     "languages": "None",
-    "challenge_rating": "0",
+    "challenge_rating": 0,
     "xp": 0,
     "proficiency_bonus": 2,
     "traits": [
@@ -22324,7 +22324,7 @@
     "skills_raw": "Stealth +4",
     "senses": "Darkvision 30 ft.; Passive Perception 10",
     "languages": "None",
-    "challenge_rating": "0",
+    "challenge_rating": 0,
     "xp": 10,
     "proficiency_bonus": 2,
     "traits": [
@@ -22390,7 +22390,7 @@
     "immunities": "Charmed, Frightened, Grappled, Paralyzed,",
     "senses": "Blindsight 60 ft.; Passive Perception 11",
     "languages": "None",
-    "challenge_rating": "1/4",
+    "challenge_rating": 0.25,
     "xp": 50,
     "proficiency_bonus": 2,
     "traits": [
@@ -22452,7 +22452,7 @@
     "immunities": "Charmed, Frightened, Grappled, Paralyzed,",
     "senses": "Blindsight 30 ft.; Passive Perception 8",
     "languages": "None",
-    "challenge_rating": "1/2",
+    "challenge_rating": 0.5,
     "xp": 100,
     "proficiency_bonus": 2,
     "traits": [
@@ -22518,7 +22518,7 @@
     "immunities": "Charmed, Frightened, Grappled, Paralyzed,",
     "senses": "Darkvision 60 ft.; Passive Perception 8",
     "languages": "None",
-    "challenge_rating": "1",
+    "challenge_rating": 1,
     "xp": 200,
     "proficiency_bonus": 2,
     "traits": [
@@ -22584,7 +22584,7 @@
     "immunities": "Charmed, Frightened, Grappled, Paralyzed,",
     "senses": "Darkvision 30 ft.; Passive Perception 10",
     "languages": "None",
-    "challenge_rating": "1/4",
+    "challenge_rating": 0.25,
     "xp": 50,
     "proficiency_bonus": 2,
     "traits": [
@@ -22647,7 +22647,7 @@
     "immunities": "Charmed, Frightened, Grappled, Paralyzed,",
     "senses": "Passive Perception 15",
     "languages": "None",
-    "challenge_rating": "1/4",
+    "challenge_rating": 0.25,
     "xp": 50,
     "proficiency_bonus": 2,
     "traits": [
@@ -22713,7 +22713,7 @@
     "immunities": "Charmed, Frightened, Grappled, Paralyzed,",
     "senses": "Blindsight 10 ft.; Passive Perception 10",
     "languages": "None",
-    "challenge_rating": "2",
+    "challenge_rating": 2,
     "xp": 450,
     "proficiency_bonus": 2,
     "traits": [
@@ -22774,7 +22774,7 @@
     "skills_raw": "Perception +3, Stealth +7",
     "senses": "Darkvision 60 ft.; Passive Perception 13",
     "languages": "None",
-    "challenge_rating": "1",
+    "challenge_rating": 1,
     "xp": 200,
     "proficiency_bonus": 2,
     "actions": [
@@ -22834,7 +22834,7 @@
     },
     "senses": "Passive Perception 10",
     "languages": "None",
-    "challenge_rating": "5",
+    "challenge_rating": 5,
     "xp": 1800,
     "proficiency_bonus": 3,
     "actions": [
@@ -22893,7 +22893,7 @@
     "skills_raw": "Perception +4",
     "senses": "Passive Perception 14",
     "languages": "None",
-    "challenge_rating": "8",
+    "challenge_rating": 8,
     "xp": 3900,
     "proficiency_bonus": 3,
     "actions": [
@@ -22955,7 +22955,7 @@
     },
     "senses": "Blindsight 10 ft.; Passive Perception 10",
     "languages": "None",
-    "challenge_rating": "1/8",
+    "challenge_rating": 0.125,
     "xp": 25,
     "proficiency_bonus": 2,
     "actions": [
@@ -23010,7 +23010,7 @@
     "skills_raw": "Perception +3",
     "senses": "Passive Perception 13",
     "languages": "None",
-    "challenge_rating": "0",
+    "challenge_rating": 0,
     "xp": 10,
     "proficiency_bonus": 2,
     "traits": [
@@ -23070,7 +23070,7 @@
     },
     "senses": "Passive Perception 11",
     "languages": "None",
-    "challenge_rating": "1/2",
+    "challenge_rating": 0.5,
     "xp": 100,
     "proficiency_bonus": 2,
     "actions": [
@@ -23125,7 +23125,7 @@
     "skills_raw": "Acrobatics +5, Perception +3, Stealth +5",
     "senses": "Darkvision 60 ft.; Passive Perception 13",
     "languages": "None",
-    "challenge_rating": "0",
+    "challenge_rating": 0,
     "xp": 10,
     "proficiency_bonus": 2,
     "actions": [
@@ -23180,7 +23180,7 @@
     "skills_raw": "Perception +5, Stealth +4",
     "senses": "Darkvision 60 ft.; Passive Perception 15",
     "languages": "None",
-    "challenge_rating": "1/4",
+    "challenge_rating": 0.25,
     "xp": 50,
     "proficiency_bonus": 2,
     "traits": [
