@@ -4,14 +4,54 @@ import { useState, type SubmitEvent } from "react";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
+interface AbilityScore {
+  score: number;
+  mod: number;
+  save: number;
+}
+
+interface MonsterFeature {
+  name: string;
+  description: string;
+}
+
+interface MonsterDetail {
+  name: string;
+  size: string;
+  type: string;
+  alignment: string;
+  ac: number;
+  initiative: number;
+  hp: number;
+  hit_dice: string;
+  speed_raw: string;
+  abilities: {
+    str: AbilityScore;
+    dex: AbilityScore;
+    con: AbilityScore;
+    int: AbilityScore;
+    wis: AbilityScore;
+    cha: AbilityScore;
+  };
+  skills_raw?: string;
+  resistances?: string;
+  immunities?: string;
+  senses: string;
+  languages: string;
+  xp_in_lair?: number;
+  challenge_rating: number;
+  xp: number;
+  proficiency_bonus: number;
+  gear?: string;
+  traits?: MonsterFeature[];
+  actions?: MonsterFeature[];
+  bonus_actions?: MonsterFeature[];
+  reactions?: MonsterFeature[];
+}
+
 interface MonsterEntry {
   count: number;
-  monster: {
-    name: string;
-    xp: number;
-    challenge_rating: number;
-    type: string;
-  };
+  monster: MonsterDetail;
 }
 
 interface EncounterGroup {
@@ -36,6 +76,28 @@ const initialForm: FormState = {
   type: "",
   name: "",
 };
+
+const ABILITY_KEYS = ["str", "dex", "con", "int", "wis", "cha"] as const;
+
+function signed(value: number): string {
+  return value >= 0 ? `+${value}` : `${value}`;
+}
+
+function FeatureList({ title, features }: { title: string; features?: MonsterFeature[] }) {
+  if (!features || features.length === 0) return null;
+  return (
+    <div className="mt-3">
+      <h4 className="text-xs font-semibold uppercase tracking-wide text-amber-300/80">{title}</h4>
+      <ul className="mt-1 space-y-1 text-sm text-slate-300">
+        {features.map((feature) => (
+          <li key={feature.name}>
+            <span className="font-medium text-white">{feature.name}.</span> {feature.description}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 export default function HomePage() {
   const [form, setForm] = useState<FormState>(initialForm);
@@ -204,20 +266,119 @@ export default function HomePage() {
               ))}
             </div>
 
-            {encounters
-              .filter((group) => group.difficulty === activeDifficulty)
-              .map((group) => (
-                <div key={group.difficulty} className="mt-6">
+            <div className="mt-8 grid gap-6 sm:grid-cols-3">
+              {encounters.map((group) => (
+                <div key={group.difficulty}>
+                  <h3 className="text-sm font-semibold uppercase tracking-wide text-amber-300">
+                    {group.difficulty}
+                  </h3>
                   {group.encounter.length === 0 ? (
-                    <p className="text-sm text-slate-400">No monsters found for this difficulty.</p>
+                    <p className="mt-2 text-sm text-slate-400">No monsters found.</p>
                   ) : (
-                    <ul className="space-y-1 text-sm text-slate-300">
+                    <ul className="mt-2 space-y-1 text-sm text-slate-300">
                       {group.encounter.map((entry) => (
                         <li key={entry.monster.name}>
                           {entry.count}x {entry.monster.name}
                         </li>
                       ))}
                     </ul>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {encounters && (
+          <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-8 text-center">
+            <h2 className="text-2xl font-semibold capitalize">{activeDifficulty} encounter details</h2>
+
+            {encounters
+              .filter((group) => group.difficulty === activeDifficulty)
+              .map((group) => (
+                <div key={group.difficulty} className="mt-6 space-y-4">
+                  {group.encounter.length === 0 ? (
+                    <p className="text-sm text-slate-400">No monsters found for this difficulty.</p>
+                  ) : (
+                    group.encounter.map((entry) => {
+                      const m = entry.monster;
+                      return (
+                        <div
+                          key={m.name}
+                          className="rounded-xl border border-white/10 bg-slate-900/60 p-5 text-left"
+                        >
+                          <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                            <h3 className="text-lg font-semibold text-amber-300">
+                              {entry.count}x {m.name}
+                            </h3>
+                            <span className="text-xs text-slate-400">
+                              CR {m.challenge_rating} &middot; {m.xp} XP
+                              {m.xp_in_lair !== undefined && ` (${m.xp_in_lair} in lair)`}
+                            </span>
+                          </div>
+                          <p className="mt-1 text-sm capitalize text-slate-400">
+                            {m.size} {m.type}, {m.alignment}
+                          </p>
+
+                          <div className="mt-3 grid grid-cols-2 gap-2 text-sm text-slate-300 sm:grid-cols-4">
+                            <div>AC {m.ac}</div>
+                            <div>
+                              HP {m.hp} ({m.hit_dice})
+                            </div>
+                            <div>Speed {m.speed_raw}</div>
+                            <div>Initiative {signed(m.initiative)}</div>
+                          </div>
+
+                          <div className="mt-3 grid grid-cols-3 gap-2 text-center text-xs sm:grid-cols-6">
+                            {ABILITY_KEYS.map((key) => (
+                              <div key={key} className="rounded-lg border border-white/10 py-1">
+                                <div className="uppercase text-slate-400">{key}</div>
+                                <div className="font-medium text-white">
+                                  {m.abilities[key].score} ({signed(m.abilities[key].mod)})
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+
+                          <div className="mt-3 space-y-1 text-sm text-slate-300">
+                            {m.skills_raw && (
+                              <p>
+                                <span className="text-slate-400">Skills:</span> {m.skills_raw}
+                              </p>
+                            )}
+                            {m.resistances && (
+                              <p>
+                                <span className="text-slate-400">Resistances:</span> {m.resistances}
+                              </p>
+                            )}
+                            {m.immunities && (
+                              <p>
+                                <span className="text-slate-400">Immunities:</span> {m.immunities}
+                              </p>
+                            )}
+                            <p>
+                              <span className="text-slate-400">Senses:</span> {m.senses}
+                            </p>
+                            <p>
+                              <span className="text-slate-400">Languages:</span> {m.languages}
+                            </p>
+                            {m.gear && (
+                              <p>
+                                <span className="text-slate-400">Gear:</span> {m.gear}
+                              </p>
+                            )}
+                            <p>
+                              <span className="text-slate-400">Proficiency Bonus:</span> +{m.proficiency_bonus}
+                            </p>
+                          </div>
+
+                          <FeatureList title="Traits" features={m.traits} />
+                          <FeatureList title="Actions" features={m.actions} />
+                          <FeatureList title="Bonus Actions" features={m.bonus_actions} />
+                          <FeatureList title="Reactions" features={m.reactions} />
+                        </div>
+                      );
+                    })
                   )}
                 </div>
               ))}
