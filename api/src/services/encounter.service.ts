@@ -1,5 +1,5 @@
-import type Monster from "../models/monster.js";
-import { collections } from "./database.service.js";
+import type Monster from "../models/monster.ts";
+import { collections } from "./database.service.ts";
 
 async function generateMonsterSet(monsters: Monster[], encounterXP: number): Promise<Monster[]> {
     let selectedMonsters: any[] = [];
@@ -8,7 +8,7 @@ async function generateMonsterSet(monsters: Monster[], encounterXP: number): Pro
     while (monstersXP < encounterXP) {
         // console.log(`Current monsters XP: ${monstersXP}, Encounter XP limit: ${encounterXP}`);
         // console.log(monsters);
-        const options = monsters.filter((m) => m.xp <= (encounterXP - monstersXP));
+        const options = monsters.filter((m) => m.xp > 0 && m.xp <= (encounterXP - monstersXP));
         if (options.length === 0) break; // No more monsters can be added without exceeding XP
         const selectedMonster = getRandomMonster(options);
         // console.log(`Selected monster: ${selectedMonster.name} (XP: ${selectedMonster.xp})`);

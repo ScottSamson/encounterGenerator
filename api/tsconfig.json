@@ -11,6 +11,8 @@
     "moduleResolution": "nodenext",
     "target": "esnext",
     "esModuleInterop": true,
+    "rewriteRelativeImportExtensions": true,
+    "allowImportingTsExtensions": true,
     // "types": ["node"],
     // For nodejs:
     // "lib": ["esnext"],

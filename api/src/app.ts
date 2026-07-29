@@ -1,12 +1,14 @@
 import express, { type Request, type Response } from 'express';
+import cors from 'cors';
 import { ObjectId } from "mongodb";
-import { collections, connectToDatabase } from "./services/database.service.js";
-import Monster from "./models/monster.js";
-import { generateEncounter, generateEncounters } from "./services/encounter.service.js";
+import { collections, connectToDatabase } from "./services/database.service.ts";
+import Monster from "./models/monster.ts";
+import { generateEncounters } from "./services/encounter.service.ts";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.use(cors());
 // Middleware to parse incoming JSON payloads
 app.use(express.json());
 
