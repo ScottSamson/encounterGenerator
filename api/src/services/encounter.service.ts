@@ -63,7 +63,7 @@ export async function generateEncounters(params?: any) {
     const conditions: any[] = [];
     if (params) {
         if (params.name) {
-            conditions.push({ name: { $regex: params.name } });
+            conditions.push({ name: { $regex: params.name, $options: "i" } });
         }
         if (params.monsterCR !== undefined) {
             conditions.push({ challenge_rating: { $lte: eval(params.monsterCR) } });
@@ -76,7 +76,7 @@ export async function generateEncounters(params?: any) {
             conditions.push({ xp: { $lte: eval(calculatedMonsterXP) } });
         }
         if (params.type) {
-            conditions.push({ type: params.type });
+            conditions.push({ type: { $regex: `^${params.type}$`, $options: "i" } });
         }
     }
     
