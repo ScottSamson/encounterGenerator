@@ -6,9 +6,8 @@ import Features from "./components/Features";
 import EncounterForm from "./components/EncounterForm";
 import EncounterSummary from "./components/EncounterSummary";
 import EncounterDetails from "./components/EncounterDetails";
-import type { EncounterGroup, FormState } from "./types";
-
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "";
+import { useEncounterRequest } from "./useEncounterRequest";
+import type { FormState } from "./types";
 
 const initialForm: FormState = {
   partySize: "4",
@@ -21,21 +20,14 @@ const initialForm: FormState = {
 
 export default function HomePage() {
   const [form, setForm] = useState<FormState>(initialForm);
-  const [encounters, setEncounters] = useState<EncounterGroup[] | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [activeDifficulty, setActiveDifficulty] = useState<string | null>(null);
+  const { state, submit, selectDifficulty } = useEncounterRequest();
 
   function updateField(field: keyof FormState, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }));
   }
 
-  async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
+  function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
-    setEncounters(null);
-    setActiveDifficulty(null);
 
     const params = new URLSearchParams();
     params.set("partySize", form.partySize);
@@ -45,19 +37,7 @@ export default function HomePage() {
     if (form.type) params.set("type", form.type);
     if (form.name) params.set("name", form.name);
 
-    try {
-      const res = await fetch(`${API_BASE}/api/encounters/generate?${params.toString()}`);
-      if (!res.ok) {
-        throw new Error(`Request failed with status ${res.status}`);
-      }
-      const data: EncounterGroup[] = await res.json();
-      setEncounters(data);
-      setActiveDifficulty(data[0]?.difficulty ?? null);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to generate encounters");
-    } finally {
-      setLoading(false);
-    }
+    submit(params);
   }
 
   return (
@@ -65,17 +45,25 @@ export default function HomePage() {
       <Banner />
 
       <section id="start" className="mx-auto max-w-3xl px-6 pb-20">
-        <EncounterForm form={form} onFieldChange={updateField} onSubmit={handleSubmit} loading={loading} error={error} />
+        <EncounterForm
+          form={form}
+          onFieldChange={updateField}
+          onSubmit={handleSubmit}
+          loading={state.status === "loading"}
+          error={state.status === "error" ? state.message : null}
+        />
 
-        {encounters && (
+        {state.status === "success" && (
           <EncounterSummary
-            encounters={encounters}
-            activeDifficulty={activeDifficulty}
-            onSelectDifficulty={setActiveDifficulty}
+            encounters={state.encounters}
+            activeDifficulty={state.activeDifficulty}
+            onSelectDifficulty={selectDifficulty}
           />
         )}
 
-        {encounters && <EncounterDetails encounters={encounters} activeDifficulty={activeDifficulty} />}
+        {state.status === "success" && (
+          <EncounterDetails encounters={state.encounters} activeDifficulty={state.activeDifficulty} />
+        )}
       </section>
 
       <Features />
