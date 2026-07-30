@@ -2,7 +2,7 @@
 
 import { useState, type SubmitEvent } from "react";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "";
 
 interface AbilityScore {
   score: number;

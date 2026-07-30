@@ -7,12 +7,15 @@
   "scripts": {
     "dev": "tsx watch src/app.ts",
     "build": "tsc",
-    "start": "node dist/app.js"
+    "start": "node dist/app.js",
+    "package:lambda": "npm run build && rm -rf lambda-build lambda.zip && mkdir lambda-build && cp -r dist lambda-build/dist && cp package.json package-lock.json lambda-build/ && cd lambda-build && npm pkg delete devDependencies scripts && npm pkg set main=dist/lambda.js && npm ci --omit=dev && cd .. && (cd lambda-build && zip -rq ../lambda.zip .)",
+    "test:lambda-invoke": "tsx scripts/invoke-lambda-local.mjs"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@codegenie/serverless-express": "^4.17.1",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",

@@ -1,5 +1,7 @@
 node_modules/
 dist/
+lambda-build/
 .env
 atlas-credentials.env
 SRD_CC_v5.2.1.pdf
+lambda.zip
