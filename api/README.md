@@ -1,5 +1,26 @@
 # encounterGenerator
 
+## Redeploying (production)
+
+This API runs as an AWS Lambda function behind CloudFront — see the root [README.md](../README.md) for the full initial-setup runbook. Once that's provisioned, redeploying after any change here is:
+
+```bash
+export FUNCTION_NAME=dnd-encounter-generator-api
+
+npm run package:lambda   # rebuilds dist/ and produces lambda.zip
+aws lambda update-function-code --function-name "$FUNCTION_NAME" --zip-file fileb://lambda.zip
+```
+
+No CloudFront invalidation is needed — the `/api/*` behavior uses the `CachingDisabled` managed policy, so every request goes straight to Lambda.
+
+If you rotate the MongoDB connection string or any other env var, regenerate the env file and push the new config instead:
+```bash
+# write /tmp/lambda-env.json yourself from your real .env values first (never commit it)
+aws lambda update-function-configuration --function-name "$FUNCTION_NAME" --environment file:///tmp/lambda-env.json
+```
+
+To test the packaged handler locally before deploying: `npm run test:lambda-invoke` (invokes it in-process with a synthetic Function URL event).
+
 ## TODO
 
 Outstanding cleanup/security items, roughly in priority order:
