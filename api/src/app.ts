@@ -1,6 +1,5 @@
 import express, { type Request, type Response, type NextFunction } from 'express';
 import cors from 'cors';
-import { ObjectId } from "mongodb";
 import { collections, ensureDatabaseConnection } from "./services/database.service.ts";
 import Monster from "./models/monster.ts";
 import { generateEncounters } from "./services/encounter.service.ts";
