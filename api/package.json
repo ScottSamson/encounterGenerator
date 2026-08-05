@@ -9,7 +9,10 @@
     "build": "tsc",
     "start": "node dist/app.js",
     "package:lambda": "npm run build && rm -rf lambda-build lambda.zip && mkdir lambda-build && cp -r dist lambda-build/dist && cp package.json package-lock.json lambda-build/ && cd lambda-build && npm pkg delete devDependencies scripts && npm pkg set main=dist/lambda.js && npm ci --omit=dev && cd .. && (cd lambda-build && zip -rq ../lambda.zip .)",
-    "test:lambda-invoke": "tsx scripts/invoke-lambda-local.mjs"
+    "test:lambda-invoke": "tsx scripts/invoke-lambda-local.mjs",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "typecheck:test": "tsc --noEmit -p test/tsconfig.json"
   },
   "keywords": [],
   "author": "",
@@ -22,9 +25,15 @@
     "mongodb": "^7.5.0"
   },
   "devDependencies": {
+    "@swc/core": "^1.15.47",
+    "@swc/jest": "^0.2.39",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
+    "@types/jest": "^30.0.0",
     "@types/node": "^26.1.1",
+    "@types/supertest": "^7.2.1",
+    "jest": "^30.4.2",
+    "supertest": "^7.2.2",
     "ts-node": "^10.9.2",
     "tsx": "^4.23.1",
     "typescript": "^7.0.2"

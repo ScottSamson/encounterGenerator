@@ -7,7 +7,7 @@ interface MonsterEntry {
     monster: Monster;
 }
 
-async function generateMonsterSet(monsters: Monster[], encounterXP: number): Promise<MonsterEntry[]> {
+export async function generateMonsterSet(monsters: Monster[], encounterXP: number): Promise<MonsterEntry[]> {
     const selectedMonsters: MonsterEntry[] = [];
     let monstersXP = 0;
 
@@ -31,7 +31,7 @@ async function generateMonsterSet(monsters: Monster[], encounterXP: number): Pro
     return selectedMonsters;
 }
 
-function getRandomMonster(arr: Monster[]): Monster {
+export function getRandomMonster(arr: Monster[]): Monster {
     // Callers only invoke this after confirming arr is non-empty (see the options.length
     // check above), so the index is always in range.
     const randomIndex = Math.floor(Math.random() * arr.length);
@@ -41,7 +41,7 @@ function getRandomMonster(arr: Monster[]): Monster {
 const PARTY_SIZE_BOUNDS = { min: 1, max: 20 };
 const PLAYER_LEVEL_BOUNDS = { min: 1, max: 20 };
 
-function parseParams(query: Record<string, unknown> | undefined): Parameters {
+export function parseParams(query: Record<string, unknown> | undefined): Parameters {
     const partySize = eval(String(query?.partySize ?? "1"));
     if (typeof partySize !== "number" || partySize < PARTY_SIZE_BOUNDS.min || partySize > PARTY_SIZE_BOUNDS.max) {
         throw new Error(`partySize must be a number between ${PARTY_SIZE_BOUNDS.min} and ${PARTY_SIZE_BOUNDS.max}`);
