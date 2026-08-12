@@ -1,7 +1,7 @@
 node_modules/
 dist/
 lambda-build/
-api/coverage/
+coverage/
 .env
 atlas-credentials.env
 SRD_CC_v5.2.1.pdf

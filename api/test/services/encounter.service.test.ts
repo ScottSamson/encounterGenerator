@@ -227,9 +227,9 @@ describe("generateEncounters", () => {
     const encounters = await generateEncounters({ partySize: "1", avgPlayerLevel: "1" });
 
     expect(encounters).toEqual([
-      { difficulty: "low", encounter: [{ count: 1, monster: goblin }] },
-      { difficulty: "moderate", encounter: [{ count: 2, monster: goblin }] },
-      { difficulty: "high", encounter: [{ count: 3, monster: goblin }] },
+      { difficulty: "low", xpThreshold: 50, encounter: [{ count: 1, monster: goblin }] },
+      { difficulty: "moderate", xpThreshold: 100, encounter: [{ count: 2, monster: goblin }] },
+      { difficulty: "high", xpThreshold: 150, encounter: [{ count: 3, monster: goblin }] },
     ]);
   });
 
@@ -295,9 +295,9 @@ describe("generateEncounters", () => {
     const encounters = await generateEncounters({ partySize: "1", avgPlayerLevel: "1", inLair: "true" });
 
     expect(encounters).toEqual([
-      { difficulty: "low", encounter: [{ count: 1, monster: noLairData }] },
-      { difficulty: "moderate", encounter: [{ count: 2, monster: noLairData }] },
-      { difficulty: "high", encounter: [{ count: 3, monster: noLairData }] },
+      { difficulty: "low", xpThreshold: 50, encounter: [{ count: 1, monster: noLairData }] },
+      { difficulty: "moderate", xpThreshold: 100, encounter: [{ count: 2, monster: noLairData }] },
+      { difficulty: "high", xpThreshold: 150, encounter: [{ count: 3, monster: noLairData }] },
     ]);
   });
 
@@ -310,9 +310,9 @@ describe("generateEncounters", () => {
     const encounters = await generateEncounters({ partySize: "1", avgPlayerLevel: "1", inLair: "true" });
 
     expect(encounters).toEqual([
-      { difficulty: "low", encounter: [{ count: 1, monster: lairGoblin }] },
-      { difficulty: "moderate", encounter: [{ count: 2, monster: lairGoblin }] },
-      { difficulty: "high", encounter: [{ count: 3, monster: lairGoblin }] },
+      { difficulty: "low", xpThreshold: 50, encounter: [{ count: 1, monster: lairGoblin }] },
+      { difficulty: "moderate", xpThreshold: 100, encounter: [{ count: 2, monster: lairGoblin }] },
+      { difficulty: "high", xpThreshold: 150, encounter: [{ count: 3, monster: lairGoblin }] },
     ]);
   });
 });

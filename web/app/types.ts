@@ -50,6 +50,7 @@ export interface MonsterEntry {
 
 export interface EncounterGroup {
   difficulty: string;
+  xpThreshold: number;
   encounter: MonsterEntry[];
 }
 

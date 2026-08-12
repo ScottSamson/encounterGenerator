@@ -137,10 +137,14 @@ export async function generateEncounters(rawParams?: Record<string, unknown>) {
     const monsters = await monstersCollection.find(query).toArray() as Monster[];
     console.log(`Found ${monsters.length} monsters matching criteria.`);
 
+    const lowThreshold = xpThresholds['2024'].low * params.partySize;
+    const moderateThreshold = xpThresholds['2024'].moderate * params.partySize;
+    const highThreshold = xpThresholds['2024'].high * params.partySize;
+
     const encounters = [];
-    encounters.push({ difficulty: "low", encounter: await generateMonsterSet(monsters, xpThresholds['2024'].low * params.partySize, getXp) });
-    encounters.push({ difficulty: "moderate", encounter: await generateMonsterSet(monsters, xpThresholds['2024'].moderate * params.partySize, getXp) });
-    encounters.push({ difficulty: "high", encounter: await generateMonsterSet(monsters, xpThresholds['2024'].high * params.partySize, getXp) });
+    encounters.push({ difficulty: "low", xpThreshold: lowThreshold, encounter: await generateMonsterSet(monsters, lowThreshold, getXp) });
+    encounters.push({ difficulty: "moderate", xpThreshold: moderateThreshold, encounter: await generateMonsterSet(monsters, moderateThreshold, getXp) });
+    encounters.push({ difficulty: "high", xpThreshold: highThreshold, encounter: await generateMonsterSet(monsters, highThreshold, getXp) });
 
     return encounters;
 }
