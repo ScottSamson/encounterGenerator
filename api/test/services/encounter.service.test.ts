@@ -84,6 +84,27 @@ describe("parseParams", () => {
     expect(params.type).toBeNull();
     expect(params.name).toBeNull();
   });
+
+  it("defaults inLair to false when omitted", () => {
+    const params = parseParams({ partySize: "4", avgPlayerLevel: "1" });
+    expect(params.inLair).toBe(false);
+  });
+
+  it.each(["true", "TRUE", " True "])("parses %j as inLair true", (value) => {
+    const params = parseParams({ partySize: "4", avgPlayerLevel: "1", inLair: value });
+    expect(params.inLair).toBe(true);
+  });
+
+  it("parses 'false' as inLair false", () => {
+    const params = parseParams({ partySize: "4", avgPlayerLevel: "1", inLair: "false" });
+    expect(params.inLair).toBe(false);
+  });
+
+  it("rejects an invalid inLair value", () => {
+    expect(() => parseParams({ partySize: "4", avgPlayerLevel: "1", inLair: "yes" })).toThrow(
+      "inLair must be true or false",
+    );
+  });
 });
 
 describe("getRandomMonster", () => {
@@ -139,6 +160,20 @@ describe("generateMonsterSet", () => {
   it("stops adding monsters once no remaining option fits the leftover budget", async () => {
     const bigMonster = new Monster("Owlbear", 700, 3, "Monstrosity");
     const result = await generateMonsterSet([bigMonster], 100);
+
+    expect(result).toEqual([]);
+  });
+
+  it("uses a custom getXp selector for both filtering and budget math (in-lair mode)", async () => {
+    const lairGoblin = new Monster("Goblin", 999, 0.25, "Humanoid", undefined, 200);
+    const result = await generateMonsterSet([lairGoblin], 200, (m) => m.xp_in_lair ?? 0);
+
+    expect(result).toEqual([{ count: 1, monster: lairGoblin }]);
+  });
+
+  it("excludes monsters missing the selected xp field via the getXp selector", async () => {
+    const noLairData = new Monster("Goblin", 50, 0.25, "Humanoid"); // no xp_in_lair
+    const result = await generateMonsterSet([noLairData], 200, (m) => m.xp_in_lair ?? 0);
 
     expect(result).toEqual([]);
   });
@@ -242,5 +277,42 @@ describe("generateEncounters", () => {
     const query = find.mock.calls[0][0];
     // xp is always present since it's derived from the threshold when monsterXP isn't given
     expect(query.$and).toEqual([{ xp: { $lte: 150 } }]);
+  });
+
+  it("always pre-filters the query on the base xp field, even when inLair is true", async () => {
+    const { find } = setUpCollections([]);
+
+    await generateEncounters({ partySize: "1", avgPlayerLevel: "1", inLair: "true" });
+
+    const query = find.mock.calls[0][0];
+    expect(query.$and).toEqual([{ xp: { $lte: 150 } }]);
+  });
+
+  it("includes monsters with no xp_in_lair when inLair is true, budgeted at their normal xp", async () => {
+    const noLairData = new Monster("Goblin", 50, 0.25, "Humanoid"); // no xp_in_lair
+    setUpCollections([noLairData]);
+
+    const encounters = await generateEncounters({ partySize: "1", avgPlayerLevel: "1", inLair: "true" });
+
+    expect(encounters).toEqual([
+      { difficulty: "low", encounter: [{ count: 1, monster: noLairData }] },
+      { difficulty: "moderate", encounter: [{ count: 2, monster: noLairData }] },
+      { difficulty: "high", encounter: [{ count: 3, monster: noLairData }] },
+    ]);
+  });
+
+  it("uses xp_in_lair (not xp) for budget math when inLair is true", async () => {
+    // xp is deliberately too large to fit any budget, so this only passes if xp_in_lair
+    // (not xp) is actually what's used for the budget math.
+    const lairGoblin = new Monster("Goblin", 999, 0.25, "Humanoid", undefined, 50);
+    setUpCollections([lairGoblin]);
+
+    const encounters = await generateEncounters({ partySize: "1", avgPlayerLevel: "1", inLair: "true" });
+
+    expect(encounters).toEqual([
+      { difficulty: "low", encounter: [{ count: 1, monster: lairGoblin }] },
+      { difficulty: "moderate", encounter: [{ count: 2, monster: lairGoblin }] },
+      { difficulty: "high", encounter: [{ count: 3, monster: lairGoblin }] },
+    ]);
   });
 });

@@ -6,5 +6,6 @@ export default class Parameters {
         public monsterXP: number | null,
         public type: string | null,
         public name: string | null,
+        public inLair: boolean,
     ) {}
 }

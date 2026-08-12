@@ -16,13 +16,14 @@ const initialForm: FormState = {
   monsterXP: "",
   type: "",
   name: "",
+  inLair: false,
 };
 
 export default function HomePage() {
   const [form, setForm] = useState<FormState>(initialForm);
   const { state, submit, selectDifficulty } = useEncounterRequest();
 
-  function updateField(field: keyof FormState, value: string) {
+  function updateField(field: keyof FormState, value: string | boolean) {
     setForm((prev) => ({ ...prev, [field]: value }));
   }
 
@@ -36,6 +37,7 @@ export default function HomePage() {
     if (form.monsterXP) params.set("monsterXP", form.monsterXP);
     if (form.type) params.set("type", form.type);
     if (form.name) params.set("name", form.name);
+    if (form.inLair) params.set("inLair", "true");
 
     submit(params);
   }
@@ -62,7 +64,11 @@ export default function HomePage() {
         )}
 
         {state.status === "success" && (
-          <EncounterDetails encounters={state.encounters} activeDifficulty={state.activeDifficulty} />
+          <EncounterDetails
+            encounters={state.encounters}
+            activeDifficulty={state.activeDifficulty}
+            inLair={state.inLair}
+          />
         )}
       </section>
 

@@ -4,7 +4,7 @@ import FormField from "./FormField";
 
 interface EncounterFormProps {
   form: FormState;
-  onFieldChange: (field: keyof FormState, value: string) => void;
+  onFieldChange: (field: keyof FormState, value: string | boolean) => void;
   onSubmit: (e: SubmitEvent<HTMLFormElement>) => void;
   loading: boolean;
   error: string | null;
@@ -66,6 +66,16 @@ export default function EncounterForm({ form, onFieldChange, onSubmit, loading, 
           value={form.name}
           onChange={(value) => onFieldChange("name", value)}
         />
+
+        <label className="flex items-center gap-3 text-sm text-slate-300 sm:col-span-2">
+          <input
+            type="checkbox"
+            checked={form.inLair ?? false}
+            onChange={(e) => onFieldChange("inLair", e.target.checked)}
+            className="h-4 w-4 rounded border-white/15 bg-slate-900 accent-amber-500"
+          />
+          Encounter takes place in the monster&apos;s lair
+        </label>
 
         <div className="sm:col-span-2">
           <button

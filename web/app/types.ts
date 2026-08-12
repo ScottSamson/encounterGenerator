@@ -60,4 +60,5 @@ export interface FormState {
   monsterXP: string;
   type: string;
   name: string;
+  inLair: boolean;
 }

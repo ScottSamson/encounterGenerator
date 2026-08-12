@@ -7,17 +7,21 @@ interface MonsterEntry {
     monster: Monster;
 }
 
-export async function generateMonsterSet(monsters: Monster[], encounterXP: number): Promise<MonsterEntry[]> {
+export async function generateMonsterSet(
+    monsters: Monster[],
+    encounterXP: number,
+    getXp: (monster: Monster) => number = (monster) => monster.xp,
+): Promise<MonsterEntry[]> {
     const selectedMonsters: MonsterEntry[] = [];
     let monstersXP = 0;
 
     while (monstersXP < encounterXP) {
         // console.log(`Current monsters XP: ${monstersXP}, Encounter XP limit: ${encounterXP}`);
         // console.log(monsters);
-        const options = monsters.filter((m) => m.xp > 0 && m.xp <= (encounterXP - monstersXP));
+        const options = monsters.filter((m) => getXp(m) > 0 && getXp(m) <= (encounterXP - monstersXP));
         if (options.length === 0) break; // No more monsters can be added without exceeding XP
         const selectedMonster = getRandomMonster(options);
-        // console.log(`Selected monster: ${selectedMonster.name} (XP: ${selectedMonster.xp})`);
+        // console.log(`Selected monster: ${selectedMonster.name} (XP: ${getXp(selectedMonster)})`);
         const existingMonster = selectedMonsters.find((entry) => entry.monster.name === selectedMonster.name);
         if (existingMonster) {
             // If the selected monster is already in the encounter, increment the count instead of adding a new entry
@@ -25,7 +29,7 @@ export async function generateMonsterSet(monsters: Monster[], encounterXP: numbe
         } else {
             selectedMonsters.push({ count: 1, monster: selectedMonster });
         }
-        monstersXP += selectedMonster.xp;
+        monstersXP += getXp(selectedMonster);
     }
 
     return selectedMonsters;
@@ -70,8 +74,20 @@ export function parseParams(query: Record<string, unknown> | undefined): Paramet
 
     const type = typeof query?.type === "string" && query.type.length > 0 ? query.type : null;
     const name = typeof query?.name === "string" && query.name.length > 0 ? query.name : null;
+    const inLair = parseBoolean(query?.inLair, "inLair");
 
-    return new Parameters(partySize, avgPlayerLevel, monsterCR, monsterXP, type, name);
+    return new Parameters(partySize, avgPlayerLevel, monsterCR, monsterXP, type, name, inLair);
+}
+
+function parseBoolean(value: unknown, fieldName: string): boolean {
+    if (value === undefined) return false;
+    if (typeof value !== "string") {
+        throw new Error(`${fieldName} must be true or false`);
+    }
+    const normalized = value.trim().toLowerCase();
+    if (normalized === "true") return true;
+    if (normalized === "false") return false;
+    throw new Error(`${fieldName} must be true or false`);
 }
 
 export async function generateEncounters(rawParams?: Record<string, unknown>) {
@@ -92,6 +108,12 @@ export async function generateEncounters(rawParams?: Record<string, unknown>) {
     }
     console.log(xpThresholds);
 
+    // In-lair encounters prefer each monster's separate lair XP value (per D&D encounter-
+    // building rules, lair actions make a monster more dangerous, worth more effective
+    // XP), falling back to its normal xp when it has no recorded lair XP — monsters
+    // without one are still included, just budgeted at their normal XP.
+    const getXp = params.inLair ? (m: Monster) => m.xp_in_lair ?? m.xp : (m: Monster) => m.xp;
+
     const conditions: Record<string, unknown>[] = [];
     if (params.name) {
         conditions.push({ name: { $regex: params.name, $options: "i" } });
@@ -101,6 +123,10 @@ export async function generateEncounters(rawParams?: Record<string, unknown>) {
     }
     const monsterXP = params.monsterXP ?? xpThresholds['2024'].high * params.partySize;
     console.log(`Calculated monsterXP: ${monsterXP}`);
+    // Always pre-filter on the base xp field, not xp_in_lair: xp_in_lair is never lower
+    // than xp for any monster in this dataset, so this is guaranteed to include every
+    // monster whose effective (getXp) value could fit the budget, in-lair or not — the
+    // real affordability check happens per-monster in generateMonsterSet via getXp.
     conditions.push({ xp: { $lte: monsterXP } });
     if (params.type) {
         conditions.push({ type: { $regex: `^${params.type}$`, $options: "i" } });
@@ -112,9 +138,9 @@ export async function generateEncounters(rawParams?: Record<string, unknown>) {
     console.log(`Found ${monsters.length} monsters matching criteria.`);
 
     const encounters = [];
-    encounters.push({ difficulty: "low", encounter: await generateMonsterSet(monsters, xpThresholds['2024'].low * params.partySize) });
-    encounters.push({ difficulty: "moderate", encounter: await generateMonsterSet(monsters, xpThresholds['2024'].moderate * params.partySize) });
-    encounters.push({ difficulty: "high", encounter: await generateMonsterSet(monsters, xpThresholds['2024'].high * params.partySize) });
+    encounters.push({ difficulty: "low", encounter: await generateMonsterSet(monsters, xpThresholds['2024'].low * params.partySize, getXp) });
+    encounters.push({ difficulty: "moderate", encounter: await generateMonsterSet(monsters, xpThresholds['2024'].moderate * params.partySize, getXp) });
+    encounters.push({ difficulty: "high", encounter: await generateMonsterSet(monsters, xpThresholds['2024'].high * params.partySize, getXp) });
 
     return encounters;
 }
