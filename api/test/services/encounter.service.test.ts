@@ -4,6 +4,7 @@ import {
   generateEncounters,
   generateMonsterSet,
   getRandomMonster,
+  isFuzzyMatch,
   parseParams,
 } from "../../src/services/encounter.service.ts";
 
@@ -131,6 +132,32 @@ describe("getRandomMonster", () => {
   });
 });
 
+describe("isFuzzyMatch", () => {
+  it("matches an exact substring", () => {
+    expect(isFuzzyMatch("owl", "Owlbear")).toBe(true);
+  });
+
+  it("matches non-contiguous characters in order (true fuzzy matching)", () => {
+    expect(isFuzzyMatch("olbr", "Owlbear")).toBe(true);
+  });
+
+  it("is case-insensitive", () => {
+    expect(isFuzzyMatch("OWLBEAR", "owlbear")).toBe(true);
+  });
+
+  it("rejects out-of-order characters", () => {
+    expect(isFuzzyMatch("raebwlo", "Owlbear")).toBe(false);
+  });
+
+  it("rejects characters not present in the target at all", () => {
+    expect(isFuzzyMatch("owlz", "Owlbear")).toBe(false);
+  });
+
+  it("matches an empty query against anything", () => {
+    expect(isFuzzyMatch("", "Owlbear")).toBe(true);
+  });
+});
+
 describe("generateMonsterSet", () => {
   it("returns an empty set when given no monsters", async () => {
     const result = await generateMonsterSet([], 100);
@@ -233,13 +260,23 @@ describe("generateEncounters", () => {
     ]);
   });
 
-  it("includes a name filter in the monster query when provided", async () => {
+  it("does not include name in the Mongo query — fuzzy matching happens in-memory instead", async () => {
     const { find } = setUpCollections([]);
 
     await generateEncounters({ partySize: "1", avgPlayerLevel: "1", name: "Gob" });
 
     const query = find.mock.calls[0][0];
-    expect(query.$and).toContainEqual({ name: { $regex: "Gob", $options: "i" } });
+    expect(query.$and.some((condition: object) => "name" in condition)).toBe(false);
+  });
+
+  it("fuzzy-filters fetched monsters by name, excluding non-matches", async () => {
+    const goblin = new Monster("Goblin", 50, 0.25, "Humanoid");
+    const owlbear = new Monster("Owlbear", 50, 0.25, "Monstrosity");
+    setUpCollections([goblin, owlbear]);
+
+    const encounters = await generateEncounters({ partySize: "1", avgPlayerLevel: "1", name: "gbln" });
+
+    expect(encounters[0]!.encounter).toEqual([{ count: 1, monster: goblin }]);
   });
 
   it("includes a challenge_rating filter when monsterCR is provided", async () => {
@@ -251,13 +288,23 @@ describe("generateEncounters", () => {
     expect(query.$and).toContainEqual({ challenge_rating: { $lte: 0.5 } });
   });
 
-  it("includes a type filter when type is provided", async () => {
+  it("does not include type in the Mongo query — fuzzy matching happens in-memory instead", async () => {
     const { find } = setUpCollections([]);
 
     await generateEncounters({ partySize: "1", avgPlayerLevel: "1", type: "Humanoid" });
 
     const query = find.mock.calls[0][0];
-    expect(query.$and).toContainEqual({ type: { $regex: "^Humanoid$", $options: "i" } });
+    expect(query.$and.some((condition: object) => "type" in condition)).toBe(false);
+  });
+
+  it("fuzzy-filters fetched monsters by type, excluding non-matches", async () => {
+    const goblin = new Monster("Goblin", 50, 0.25, "Humanoid");
+    const owlbear = new Monster("Owlbear", 50, 0.25, "Monstrosity");
+    setUpCollections([goblin, owlbear]);
+
+    const encounters = await generateEncounters({ partySize: "1", avgPlayerLevel: "1", type: "humanid" });
+
+    expect(encounters[0]!.encounter).toEqual([{ count: 1, monster: goblin }]);
   });
 
   it("uses the monsterXP override instead of the computed threshold when provided", async () => {

@@ -42,6 +42,22 @@ export function getRandomMonster(arr: Monster[]): Monster {
     return arr[randomIndex]!;
 }
 
+// Fuzzy match: every character of `query` must appear in `target`, in order, but not
+// necessarily contiguously (e.g. "olbr" matches "Owlbear") — the same technique used by
+// fuzzy finders like VS Code's Quick Open. This is a superset of plain substring
+// matching, so exact/partial name searches keep working exactly as before.
+export function isFuzzyMatch(query: string, target: string): boolean {
+    const q = query.toLowerCase();
+    const t = target.toLowerCase();
+    let qIndex = 0;
+    for (let tIndex = 0; tIndex < t.length && qIndex < q.length; tIndex++) {
+        if (t[tIndex] === q[qIndex]) {
+            qIndex++;
+        }
+    }
+    return qIndex === q.length;
+}
+
 const PARTY_SIZE_BOUNDS = { min: 1, max: 20 };
 const PLAYER_LEVEL_BOUNDS = { min: 1, max: 20 };
 
@@ -115,9 +131,6 @@ export async function generateEncounters(rawParams?: Record<string, unknown>) {
     const getXp = params.inLair ? (m: Monster) => m.xp_in_lair ?? m.xp : (m: Monster) => m.xp;
 
     const conditions: Record<string, unknown>[] = [];
-    if (params.name) {
-        conditions.push({ name: { $regex: params.name, $options: "i" } });
-    }
     if (params.monsterCR !== null) {
         conditions.push({ challenge_rating: { $lte: params.monsterCR } });
     }
@@ -128,13 +141,19 @@ export async function generateEncounters(rawParams?: Record<string, unknown>) {
     // monster whose effective (getXp) value could fit the budget, in-lair or not — the
     // real affordability check happens per-monster in generateMonsterSet via getXp.
     conditions.push({ xp: { $lte: monsterXP } });
-    if (params.type) {
-        conditions.push({ type: { $regex: `^${params.type}$`, $options: "i" } });
-    }
 
     const query = conditions.length ? { $and: conditions } : {};
     console.log("Querying monsters with:", query);
-    const monsters = await monstersCollection.find(query).toArray() as Monster[];
+    let monsters = await monstersCollection.find(query).toArray() as Monster[];
+    // Name and type search are both fuzzy (see isFuzzyMatch), which isn't expressible as
+    // a Mongo query, so they're applied in-memory after the rest of the filters have
+    // narrowed the set.
+    if (params.name) {
+        monsters = monsters.filter((m) => isFuzzyMatch(params.name as string, m.name));
+    }
+    if (params.type) {
+        monsters = monsters.filter((m) => isFuzzyMatch(params.type as string, m.type));
+    }
     console.log(`Found ${monsters.length} monsters matching criteria.`);
 
     const lowThreshold = xpThresholds['2024'].low * params.partySize;
