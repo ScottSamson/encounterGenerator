@@ -14,12 +14,12 @@ const initialForm: FormState = {
   avgPlayerLevel: "1",
   monsterCR: "",
   monsterXP: "",
-  type: "",
+  type: [],
   name: "",
   inLair: false,
-  vulnerabilities: "",
-  resistances: "",
-  immunities: "",
+  vulnerabilities: [],
+  resistances: [],
+  immunities: [],
   senses: "",
   attacks: "",
   traits: "",
@@ -30,7 +30,7 @@ const initialForm: FormState = {
   initiative: "",
   acMin: "",
   acMax: "",
-  size: "",
+  size: [],
   speed: "",
 };
 
@@ -38,7 +38,7 @@ export default function HomePage() {
   const [form, setForm] = useState<FormState>(initialForm);
   const { state, submit, selectDifficulty } = useEncounterRequest();
 
-  function updateField(field: keyof FormState, value: string | boolean) {
+  function updateField(field: keyof FormState, value: string | boolean | string[]) {
     setForm((prev) => ({ ...prev, [field]: value }));
   }
 
@@ -50,12 +50,12 @@ export default function HomePage() {
     params.set("avgPlayerLevel", form.avgPlayerLevel);
     if (form.monsterCR) params.set("monsterCR", form.monsterCR);
     if (form.monsterXP) params.set("monsterXP", form.monsterXP);
-    if (form.type) params.set("type", form.type);
+    if (form.type.length > 0) params.set("type", form.type.join(","));
     if (form.name) params.set("name", form.name);
     if (form.inLair) params.set("inLair", "true");
-    if (form.vulnerabilities) params.set("vulnerabilities", form.vulnerabilities);
-    if (form.resistances) params.set("resistances", form.resistances);
-    if (form.immunities) params.set("immunities", form.immunities);
+    if (form.vulnerabilities.length > 0) params.set("vulnerabilities", form.vulnerabilities.join(","));
+    if (form.resistances.length > 0) params.set("resistances", form.resistances.join(","));
+    if (form.immunities.length > 0) params.set("immunities", form.immunities.join(","));
     if (form.senses) params.set("senses", form.senses);
     if (form.attacks) params.set("attacks", form.attacks);
     if (form.traits) params.set("traits", form.traits);
@@ -66,7 +66,7 @@ export default function HomePage() {
     if (form.initiative) params.set("initiative", form.initiative);
     if (form.acMin) params.set("acMin", form.acMin);
     if (form.acMax) params.set("acMax", form.acMax);
-    if (form.size) params.set("size", form.size);
+    if (form.size.length > 0) params.set("size", form.size.join(","));
     if (form.speed) params.set("speed", form.speed);
 
     submit(params);

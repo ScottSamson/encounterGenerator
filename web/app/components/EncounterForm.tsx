@@ -1,11 +1,13 @@
 import type { SubmitEvent } from "react";
+import { DAMAGE_TYPES, IMMUNITY_OPTIONS, MONSTER_SIZES, MONSTER_TYPES } from "../constants";
 import type { FormState } from "../types";
 import FormField from "./FormField";
 import RangeField from "./RangeField";
+import MultiSelectDropdown from "./MultiSelectDropdown";
 
 interface EncounterFormProps {
   form: FormState;
-  onFieldChange: (field: keyof FormState, value: string | boolean) => void;
+  onFieldChange: (field: keyof FormState, value: string | boolean | string[]) => void;
   onSubmit: (e: SubmitEvent<HTMLFormElement>) => void;
   loading: boolean;
   error: string | null;
@@ -52,11 +54,10 @@ export default function EncounterForm({ form, onFieldChange, onSubmit, loading, 
           onChange={(value) => onFieldChange("monsterXP", value)}
         />
 
-        <FormField
+        <MultiSelectDropdown
           label="Monster type"
-          type="text"
-          placeholder="e.g. humanoid"
-          value={form.type}
+          options={MONSTER_TYPES}
+          selected={form.type}
           onChange={(value) => onFieldChange("type", value)}
         />
 
@@ -68,27 +69,24 @@ export default function EncounterForm({ form, onFieldChange, onSubmit, loading, 
           onChange={(value) => onFieldChange("name", value)}
         />
 
-        <FormField
+        <MultiSelectDropdown
           label="Vulnerabilities"
-          type="text"
-          placeholder="e.g. fire"
-          value={form.vulnerabilities}
+          options={DAMAGE_TYPES}
+          selected={form.vulnerabilities}
           onChange={(value) => onFieldChange("vulnerabilities", value)}
         />
 
-        <FormField
+        <MultiSelectDropdown
           label="Resistances"
-          type="text"
-          placeholder="e.g. cold"
-          value={form.resistances}
+          options={DAMAGE_TYPES}
+          selected={form.resistances}
           onChange={(value) => onFieldChange("resistances", value)}
         />
 
-        <FormField
+        <MultiSelectDropdown
           label="Immunities"
-          type="text"
-          placeholder="e.g. poison"
-          value={form.immunities}
+          options={IMMUNITY_OPTIONS}
+          selected={form.immunities}
           onChange={(value) => onFieldChange("immunities", value)}
         />
 
@@ -154,11 +152,10 @@ export default function EncounterForm({ form, onFieldChange, onSubmit, loading, 
           onMaxChange={(value) => onFieldChange("acMax", value)}
         />
 
-        <FormField
+        <MultiSelectDropdown
           label="Size"
-          type="text"
-          placeholder="e.g. small"
-          value={form.size}
+          options={MONSTER_SIZES}
+          selected={form.size}
           onChange={(value) => onFieldChange("size", value)}
         />
 

@@ -80,6 +80,18 @@ function parseOptionalNumber(value: unknown, fieldName: string, { allowNegative 
     return n;
 }
 
+// Parses a comma-separated multi-select value (e.g. "Small,Medium") into a list of
+// trimmed, non-empty options — used for filters offered as multi-select dropdowns in the
+// UI, matched with OR semantics (a monster matches if it matches ANY selected option).
+function parseMultiValue(value: unknown): string[] | null {
+    if (typeof value !== "string" || value.length === 0) return null;
+    const values = value
+        .split(",")
+        .map((v) => v.trim())
+        .filter((v) => v.length > 0);
+    return values.length > 0 ? values : null;
+}
+
 // Parses a {min, max} pair of query params for a ranged numeric filter (e.g. hpMin/hpMax)
 // and rejects an inverted range (min greater than max) up front, rather than silently
 // producing a query that can never match anything.
@@ -124,14 +136,12 @@ export function parseParams(query: Record<string, unknown> | undefined): Paramet
         }
     }
 
-    const type = typeof query?.type === "string" && query.type.length > 0 ? query.type : null;
+    const type = parseMultiValue(query?.type);
     const name = typeof query?.name === "string" && query.name.length > 0 ? query.name : null;
     const inLair = parseBoolean(query?.inLair, "inLair");
-    const vulnerabilities =
-        typeof query?.vulnerabilities === "string" && query.vulnerabilities.length > 0 ? query.vulnerabilities : null;
-    const resistances =
-        typeof query?.resistances === "string" && query.resistances.length > 0 ? query.resistances : null;
-    const immunities = typeof query?.immunities === "string" && query.immunities.length > 0 ? query.immunities : null;
+    const vulnerabilities = parseMultiValue(query?.vulnerabilities);
+    const resistances = parseMultiValue(query?.resistances);
+    const immunities = parseMultiValue(query?.immunities);
     const senses = typeof query?.senses === "string" && query.senses.length > 0 ? query.senses : null;
     const attacks = typeof query?.attacks === "string" && query.attacks.length > 0 ? query.attacks : null;
     const traits = typeof query?.traits === "string" && query.traits.length > 0 ? query.traits : null;
@@ -145,7 +155,7 @@ export function parseParams(query: Record<string, unknown> | undefined): Paramet
     const { min: hpMin, max: hpMax } = parseOptionalRange(query, "hpMin", "hpMax", "hp");
     const { min: acMin, max: acMax } = parseOptionalRange(query, "acMin", "acMax", "ac");
     const initiative = parseOptionalNumber(query?.initiative, "initiative", { allowNegative: true });
-    const size = typeof query?.size === "string" && query.size.length > 0 ? query.size : null;
+    const size = parseMultiValue(query?.size);
     const speed = typeof query?.speed === "string" && query.speed.length > 0 ? query.speed : null;
 
     return new Parameters({
@@ -253,21 +263,21 @@ export async function generateEncounters(rawParams?: Record<string, unknown>) {
         monsters = monsters.filter((m) => isFuzzyMatch(params.name as string, m.name));
     }
     if (params.type) {
-        monsters = monsters.filter((m) => isFuzzyMatch(params.type as string, m.type));
+        monsters = monsters.filter((m) => params.type!.some((t) => isFuzzyMatch(t, m.type)));
     }
     if (params.vulnerabilities) {
         monsters = monsters.filter(
-            (m) => m.vulnerabilities !== undefined && isFuzzyMatch(params.vulnerabilities as string, m.vulnerabilities),
+            (m) => m.vulnerabilities !== undefined && params.vulnerabilities!.some((v) => isFuzzyMatch(v, m.vulnerabilities as string)),
         );
     }
     if (params.resistances) {
         monsters = monsters.filter(
-            (m) => m.resistances !== undefined && isFuzzyMatch(params.resistances as string, m.resistances),
+            (m) => m.resistances !== undefined && params.resistances!.some((r) => isFuzzyMatch(r, m.resistances as string)),
         );
     }
     if (params.immunities) {
         monsters = monsters.filter(
-            (m) => m.immunities !== undefined && isFuzzyMatch(params.immunities as string, m.immunities),
+            (m) => m.immunities !== undefined && params.immunities!.some((i) => isFuzzyMatch(i, m.immunities as string)),
         );
     }
     if (params.senses) {
@@ -280,7 +290,7 @@ export async function generateEncounters(rawParams?: Record<string, unknown>) {
         monsters = monsters.filter((m) => (m.traits ?? []).some((trait) => isFuzzyMatch(params.traits as string, trait.name)));
     }
     if (params.size) {
-        monsters = monsters.filter((m) => m.size !== undefined && isFuzzyMatch(params.size as string, m.size));
+        monsters = monsters.filter((m) => m.size !== undefined && params.size!.some((s) => isFuzzyMatch(s, m.size as string)));
     }
     if (params.speed) {
         monsters = monsters.filter((m) => m.speed_raw !== undefined && isFuzzyMatch(params.speed as string, m.speed_raw));

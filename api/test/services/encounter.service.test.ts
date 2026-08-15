@@ -34,8 +34,27 @@ describe("parseParams", () => {
     expect(params.avgPlayerLevel).toBe(5);
     expect(params.monsterCR).toBe(0.5);
     expect(params.monsterXP).toBe(400);
-    expect(params.type).toBe("Humanoid");
+    expect(params.type).toEqual(["Humanoid"]);
     expect(params.name).toBe("Goblin");
+  });
+
+  it("parses a comma-separated type/size into a list (multi-select filters)", () => {
+    const params = parseParams({ partySize: "4", avgPlayerLevel: "1", type: "Humanoid, Beast", size: "Small,Medium" });
+    expect(params.type).toEqual(["Humanoid", "Beast"]);
+    expect(params.size).toEqual(["Small", "Medium"]);
+  });
+
+  it("parses a comma-separated vulnerabilities/resistances/immunities into a list (multi-select filters)", () => {
+    const params = parseParams({
+      partySize: "4",
+      avgPlayerLevel: "1",
+      vulnerabilities: "Fire, Cold",
+      resistances: "Acid,Poison",
+      immunities: "Charmed, Frightened",
+    });
+    expect(params.vulnerabilities).toEqual(["Fire", "Cold"]);
+    expect(params.resistances).toEqual(["Acid", "Poison"]);
+    expect(params.immunities).toEqual(["Charmed", "Frightened"]);
   });
 
   it("defaults partySize to 1 when omitted", () => {
@@ -105,9 +124,9 @@ describe("parseParams", () => {
       traits: "Amphibious",
     });
 
-    expect(params.vulnerabilities).toBe("Fire");
-    expect(params.resistances).toBe("Cold");
-    expect(params.immunities).toBe("Poison");
+    expect(params.vulnerabilities).toEqual(["Fire"]);
+    expect(params.resistances).toEqual(["Cold"]);
+    expect(params.immunities).toEqual(["Poison"]);
     expect(params.senses).toBe("Darkvision");
     expect(params.attacks).toBe("Bite");
     expect(params.traits).toBe("Amphibious");
@@ -176,7 +195,7 @@ describe("parseParams", () => {
     expect(params.initiative).toBe(-1);
     expect(params.acMin).toBe(12);
     expect(params.acMax).toBe(15);
-    expect(params.size).toBe("Small");
+    expect(params.size).toEqual(["Small"]);
     expect(params.speed).toBe("30 ft.");
   });
 
@@ -420,6 +439,35 @@ describe("generateEncounters", () => {
     expect(encounters[0]!.encounter).toEqual([{ count: 1, monster: goblin }]);
   });
 
+  it("matches a monster against ANY selected type when multiple are given (OR semantics)", async () => {
+    // xp=25 each with a 50-xp low-difficulty budget forces exactly two picks, so a
+    // deterministic Math.random (alternating index 0, then index 1) reliably yields one
+    // of each remaining (non-Ooze) monster instead of leaving it up to chance.
+    const goblin = new Monster("Goblin", 25, 0.25, "Humanoid");
+    const owlbear = new Monster("Owlbear", 25, 0.25, "Monstrosity");
+    const ooze = new Monster("Gray Ooze", 25, 0.25, "Ooze");
+    setUpCollections([goblin, owlbear, ooze]);
+
+    const originalRandom = Math.random;
+    let call = 0;
+    Math.random = () => (call++ % 2 === 0 ? 0 : 0.99);
+
+    try {
+      const encounters = await generateEncounters({ partySize: "1", avgPlayerLevel: "1", type: "Humanoid,Monstrosity" });
+      const lowEncounter = encounters[0]!.encounter;
+
+      expect(lowEncounter).toEqual(
+        expect.arrayContaining([
+          { count: 1, monster: goblin },
+          { count: 1, monster: owlbear },
+        ]),
+      );
+      expect(lowEncounter).not.toContainEqual(expect.objectContaining({ monster: ooze }));
+    } finally {
+      Math.random = originalRandom;
+    }
+  });
+
   it("fuzzy-filters fetched monsters by vulnerabilities, excluding monsters with no vulnerabilities field", async () => {
     const flammable = new Monster("Scarecrow", 50, 0.25, "Plant", undefined, undefined, "Fire");
     const notFlammable = new Monster("Golem", 50, 0.25, "Construct"); // no vulnerabilities
@@ -428,6 +476,19 @@ describe("generateEncounters", () => {
     const encounters = await generateEncounters({ partySize: "1", avgPlayerLevel: "1", vulnerabilities: "fre" });
 
     expect(encounters[0]!.encounter).toEqual([{ count: 1, monster: flammable }]);
+  });
+
+  it("matches a monster against ANY selected vulnerability when multiple are given (OR semantics)", async () => {
+    const flammable = makeMonster({ name: "Scarecrow", vulnerabilities: "Fire" });
+    const coldVulnerable = makeMonster({ name: "Fire Elemental", vulnerabilities: "Cold" });
+    const neither = makeMonster({ name: "Golem" }); // no vulnerabilities
+    setUpCollections([flammable, coldVulnerable, neither]);
+
+    const encounters = await generateEncounters({ partySize: "1", avgPlayerLevel: "1", vulnerabilities: "Fire,Cold" });
+    const anyEncountered = encounters.flatMap((g) => g.encounter.map((e) => e.monster.name));
+
+    expect(anyEncountered).not.toContain("Golem");
+    expect(anyEncountered.every((name) => name === "Scarecrow" || name === "Fire Elemental")).toBe(true);
   });
 
   it("fuzzy-filters fetched monsters by resistances, excluding monsters with no resistances field", async () => {

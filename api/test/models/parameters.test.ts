@@ -5,12 +5,12 @@ const FULL_INPUT = {
   avgPlayerLevel: 5,
   monsterCR: 0.5,
   monsterXP: 400,
-  type: "Humanoid",
+  type: ["Humanoid"],
   name: "Goblin",
   inLair: true,
-  vulnerabilities: "Fire",
-  resistances: "Cold",
-  immunities: "Poison",
+  vulnerabilities: ["Fire"],
+  resistances: ["Cold"],
+  immunities: ["Poison"],
   senses: "Darkvision 60 ft.",
   attacks: "Bite",
   traits: "Amphibious",
@@ -21,7 +21,7 @@ const FULL_INPUT = {
   initiative: 3,
   acMin: 12,
   acMax: 15,
-  size: "Small",
+  size: ["Small"],
   speed: "30 ft.",
 };
 
@@ -58,12 +58,12 @@ describe("Parameters", () => {
     expect(params.avgPlayerLevel).toBe(5);
     expect(params.monsterCR).toBe(0.5);
     expect(params.monsterXP).toBe(400);
-    expect(params.type).toBe("Humanoid");
+    expect(params.type).toEqual(["Humanoid"]);
     expect(params.name).toBe("Goblin");
     expect(params.inLair).toBe(true);
-    expect(params.vulnerabilities).toBe("Fire");
-    expect(params.resistances).toBe("Cold");
-    expect(params.immunities).toBe("Poison");
+    expect(params.vulnerabilities).toEqual(["Fire"]);
+    expect(params.resistances).toEqual(["Cold"]);
+    expect(params.immunities).toEqual(["Poison"]);
     expect(params.senses).toBe("Darkvision 60 ft.");
     expect(params.attacks).toBe("Bite");
     expect(params.traits).toBe("Amphibious");
@@ -74,7 +74,7 @@ describe("Parameters", () => {
     expect(params.initiative).toBe(3);
     expect(params.acMin).toBe(12);
     expect(params.acMax).toBe(15);
-    expect(params.size).toBe("Small");
+    expect(params.size).toEqual(["Small"]);
     expect(params.speed).toBe("30 ft.");
   });
 

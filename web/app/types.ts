@@ -60,12 +60,12 @@ export interface FormState {
   avgPlayerLevel: string;
   monsterCR: string;
   monsterXP: string;
-  type: string;
+  type: string[];
   name: string;
   inLair: boolean;
-  vulnerabilities: string;
-  resistances: string;
-  immunities: string;
+  vulnerabilities: string[];
+  resistances: string[];
+  immunities: string[];
   senses: string;
   attacks: string;
   traits: string;
@@ -76,6 +76,6 @@ export interface FormState {
   initiative: string;
   acMin: string;
   acMax: string;
-  size: string;
+  size: string[];
   speed: string;
 }

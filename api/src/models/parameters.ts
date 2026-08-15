@@ -3,12 +3,12 @@ export interface ParametersInput {
     avgPlayerLevel: number;
     monsterCR: number | null;
     monsterXP: number | null;
-    type: string | null;
+    type: string[] | null;
     name: string | null;
     inLair: boolean;
-    vulnerabilities: string | null;
-    resistances: string | null;
-    immunities: string | null;
+    vulnerabilities: string[] | null;
+    resistances: string[] | null;
+    immunities: string[] | null;
     senses: string | null;
     attacks: string | null;
     traits: string | null;
@@ -19,7 +19,7 @@ export interface ParametersInput {
     initiative: number | null;
     acMin: number | null;
     acMax: number | null;
-    size: string | null;
+    size: string[] | null;
     speed: string | null;
 }
 
@@ -28,12 +28,12 @@ export default class Parameters {
     public avgPlayerLevel: number;
     public monsterCR: number | null;
     public monsterXP: number | null;
-    public type: string | null;
+    public type: string[] | null;
     public name: string | null;
     public inLair: boolean;
-    public vulnerabilities: string | null;
-    public resistances: string | null;
-    public immunities: string | null;
+    public vulnerabilities: string[] | null;
+    public resistances: string[] | null;
+    public immunities: string[] | null;
     public senses: string | null;
     public attacks: string | null;
     public traits: string | null;
@@ -44,7 +44,7 @@ export default class Parameters {
     public initiative: number | null;
     public acMin: number | null;
     public acMax: number | null;
-    public size: string | null;
+    public size: string[] | null;
     public speed: string | null;
 
     constructor(input: ParametersInput) {
