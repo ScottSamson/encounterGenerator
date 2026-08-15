@@ -61,6 +61,42 @@ export function isFuzzyMatch(query: string, target: string): boolean {
 const PARTY_SIZE_BOUNDS = { min: 1, max: 20 };
 const PLAYER_LEVEL_BOUNDS = { min: 1, max: 20 };
 
+// Safe numeric parser (no eval) for the newer numeric filters below — deliberately not
+// following the eval()-based pattern used by the older fields further down, since that
+// pattern is a known, tracked issue (see README TODOs), not one to extend to new code.
+function parseOptionalNumber(value: unknown, fieldName: string, { allowNegative = false }: { allowNegative?: boolean } = {}): number | null {
+    if (value === undefined) return null;
+    if (typeof value !== "string") {
+        throw new Error(`${fieldName} must be a number`);
+    }
+    const trimmed = value.trim();
+    if (!/^-?\d+(\.\d+)?$/.test(trimmed)) {
+        throw new Error(`${fieldName} must be a number`);
+    }
+    const n = Number(trimmed);
+    if (!allowNegative && n < 0) {
+        throw new Error(`${fieldName} must be a non-negative number`);
+    }
+    return n;
+}
+
+// Parses a {min, max} pair of query params for a ranged numeric filter (e.g. hpMin/hpMax)
+// and rejects an inverted range (min greater than max) up front, rather than silently
+// producing a query that can never match anything.
+function parseOptionalRange(
+    query: Record<string, unknown> | undefined,
+    minKey: string,
+    maxKey: string,
+    fieldLabel: string,
+): { min: number | null; max: number | null } {
+    const min = parseOptionalNumber(query?.[minKey], `${fieldLabel} minimum`);
+    const max = parseOptionalNumber(query?.[maxKey], `${fieldLabel} maximum`);
+    if (min !== null && max !== null && min > max) {
+        throw new Error(`${fieldLabel} minimum must not be greater than ${fieldLabel} maximum`);
+    }
+    return { min, max };
+}
+
 export function parseParams(query: Record<string, unknown> | undefined): Parameters {
     const partySize = eval(String(query?.partySize ?? "1"));
     if (typeof partySize !== "number" || partySize < PARTY_SIZE_BOUNDS.min || partySize > PARTY_SIZE_BOUNDS.max) {
@@ -91,8 +127,51 @@ export function parseParams(query: Record<string, unknown> | undefined): Paramet
     const type = typeof query?.type === "string" && query.type.length > 0 ? query.type : null;
     const name = typeof query?.name === "string" && query.name.length > 0 ? query.name : null;
     const inLair = parseBoolean(query?.inLair, "inLair");
+    const vulnerabilities =
+        typeof query?.vulnerabilities === "string" && query.vulnerabilities.length > 0 ? query.vulnerabilities : null;
+    const resistances =
+        typeof query?.resistances === "string" && query.resistances.length > 0 ? query.resistances : null;
+    const immunities = typeof query?.immunities === "string" && query.immunities.length > 0 ? query.immunities : null;
+    const senses = typeof query?.senses === "string" && query.senses.length > 0 ? query.senses : null;
+    const attacks = typeof query?.attacks === "string" && query.attacks.length > 0 ? query.attacks : null;
+    const traits = typeof query?.traits === "string" && query.traits.length > 0 ? query.traits : null;
 
-    return new Parameters(partySize, avgPlayerLevel, monsterCR, monsterXP, type, name, inLair);
+    const { min: proficiencyBonusMin, max: proficiencyBonusMax } = parseOptionalRange(
+        query,
+        "proficiencyBonusMin",
+        "proficiencyBonusMax",
+        "proficiencyBonus",
+    );
+    const { min: hpMin, max: hpMax } = parseOptionalRange(query, "hpMin", "hpMax", "hp");
+    const { min: acMin, max: acMax } = parseOptionalRange(query, "acMin", "acMax", "ac");
+    const initiative = parseOptionalNumber(query?.initiative, "initiative", { allowNegative: true });
+    const size = typeof query?.size === "string" && query.size.length > 0 ? query.size : null;
+    const speed = typeof query?.speed === "string" && query.speed.length > 0 ? query.speed : null;
+
+    return new Parameters({
+        partySize,
+        avgPlayerLevel,
+        monsterCR,
+        monsterXP,
+        type,
+        name,
+        inLair,
+        vulnerabilities,
+        resistances,
+        immunities,
+        senses,
+        attacks,
+        traits,
+        proficiencyBonusMin,
+        proficiencyBonusMax,
+        hpMin,
+        hpMax,
+        initiative,
+        acMin,
+        acMax,
+        size,
+        speed,
+    });
 }
 
 function parseBoolean(value: unknown, fieldName: string): boolean {
@@ -141,18 +220,70 @@ export async function generateEncounters(rawParams?: Record<string, unknown>) {
     // monster whose effective (getXp) value could fit the budget, in-lair or not — the
     // real affordability check happens per-monster in generateMonsterSet via getXp.
     conditions.push({ xp: { $lte: monsterXP } });
+    if (params.proficiencyBonusMin !== null) {
+        conditions.push({ proficiency_bonus: { $gte: params.proficiencyBonusMin } });
+    }
+    if (params.proficiencyBonusMax !== null) {
+        conditions.push({ proficiency_bonus: { $lte: params.proficiencyBonusMax } });
+    }
+    if (params.hpMin !== null) {
+        conditions.push({ hp: { $gte: params.hpMin } });
+    }
+    if (params.hpMax !== null) {
+        conditions.push({ hp: { $lte: params.hpMax } });
+    }
+    if (params.initiative !== null) {
+        conditions.push({ initiative: { $lte: params.initiative } });
+    }
+    if (params.acMin !== null) {
+        conditions.push({ ac: { $gte: params.acMin } });
+    }
+    if (params.acMax !== null) {
+        conditions.push({ ac: { $lte: params.acMax } });
+    }
 
     const query = conditions.length ? { $and: conditions } : {};
     console.log("Querying monsters with:", query);
     let monsters = await monstersCollection.find(query).toArray() as Monster[];
-    // Name and type search are both fuzzy (see isFuzzyMatch), which isn't expressible as
-    // a Mongo query, so they're applied in-memory after the rest of the filters have
-    // narrowed the set.
+    // All text search fields are fuzzy (see isFuzzyMatch), which isn't expressible as a
+    // Mongo query, so they're applied in-memory after the rest of the filters have
+    // narrowed the set. A monster missing the field entirely never matches (e.g.
+    // searching "fire" under vulnerabilities excludes monsters with no vulnerabilities).
     if (params.name) {
         monsters = monsters.filter((m) => isFuzzyMatch(params.name as string, m.name));
     }
     if (params.type) {
         monsters = monsters.filter((m) => isFuzzyMatch(params.type as string, m.type));
+    }
+    if (params.vulnerabilities) {
+        monsters = monsters.filter(
+            (m) => m.vulnerabilities !== undefined && isFuzzyMatch(params.vulnerabilities as string, m.vulnerabilities),
+        );
+    }
+    if (params.resistances) {
+        monsters = monsters.filter(
+            (m) => m.resistances !== undefined && isFuzzyMatch(params.resistances as string, m.resistances),
+        );
+    }
+    if (params.immunities) {
+        monsters = monsters.filter(
+            (m) => m.immunities !== undefined && isFuzzyMatch(params.immunities as string, m.immunities),
+        );
+    }
+    if (params.senses) {
+        monsters = monsters.filter((m) => m.senses !== undefined && isFuzzyMatch(params.senses as string, m.senses));
+    }
+    if (params.attacks) {
+        monsters = monsters.filter((m) => (m.actions ?? []).some((action) => isFuzzyMatch(params.attacks as string, action.name)));
+    }
+    if (params.traits) {
+        monsters = monsters.filter((m) => (m.traits ?? []).some((trait) => isFuzzyMatch(params.traits as string, trait.name)));
+    }
+    if (params.size) {
+        monsters = monsters.filter((m) => m.size !== undefined && isFuzzyMatch(params.size as string, m.size));
+    }
+    if (params.speed) {
+        monsters = monsters.filter((m) => m.speed_raw !== undefined && isFuzzyMatch(params.speed as string, m.speed_raw));
     }
     console.log(`Found ${monsters.length} monsters matching criteria.`);
 

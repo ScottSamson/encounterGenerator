@@ -1,6 +1,7 @@
 import type { SubmitEvent } from "react";
 import type { FormState } from "../types";
 import FormField from "./FormField";
+import RangeField from "./RangeField";
 
 interface EncounterFormProps {
   form: FormState;
@@ -65,6 +66,108 @@ export default function EncounterForm({ form, onFieldChange, onSubmit, loading, 
           placeholder="Optional search"
           value={form.name}
           onChange={(value) => onFieldChange("name", value)}
+        />
+
+        <FormField
+          label="Vulnerabilities"
+          type="text"
+          placeholder="e.g. fire"
+          value={form.vulnerabilities}
+          onChange={(value) => onFieldChange("vulnerabilities", value)}
+        />
+
+        <FormField
+          label="Resistances"
+          type="text"
+          placeholder="e.g. cold"
+          value={form.resistances}
+          onChange={(value) => onFieldChange("resistances", value)}
+        />
+
+        <FormField
+          label="Immunities"
+          type="text"
+          placeholder="e.g. poison"
+          value={form.immunities}
+          onChange={(value) => onFieldChange("immunities", value)}
+        />
+
+        <FormField
+          label="Senses"
+          type="text"
+          placeholder="e.g. darkvision"
+          value={form.senses}
+          onChange={(value) => onFieldChange("senses", value)}
+        />
+
+        <FormField
+          label="Attacks"
+          type="text"
+          placeholder="e.g. bite"
+          value={form.attacks}
+          onChange={(value) => onFieldChange("attacks", value)}
+        />
+
+        <FormField
+          label="Traits"
+          type="text"
+          placeholder="e.g. amphibious"
+          value={form.traits}
+          onChange={(value) => onFieldChange("traits", value)}
+        />
+
+        <RangeField
+          label="Proficiency bonus"
+          type="number"
+          min={0}
+          minValue={form.proficiencyBonusMin}
+          maxValue={form.proficiencyBonusMax}
+          onMinChange={(value) => onFieldChange("proficiencyBonusMin", value)}
+          onMaxChange={(value) => onFieldChange("proficiencyBonusMax", value)}
+        />
+
+        <RangeField
+          label="HP"
+          type="number"
+          min={0}
+          minValue={form.hpMin}
+          maxValue={form.hpMax}
+          onMinChange={(value) => onFieldChange("hpMin", value)}
+          onMaxChange={(value) => onFieldChange("hpMax", value)}
+        />
+
+        <FormField
+          label="Max initiative"
+          type="number"
+          placeholder="Optional"
+          value={form.initiative}
+          onChange={(value) => onFieldChange("initiative", value)}
+        />
+
+        <RangeField
+          label="AC"
+          type="number"
+          min={0}
+          minValue={form.acMin}
+          maxValue={form.acMax}
+          onMinChange={(value) => onFieldChange("acMin", value)}
+          onMaxChange={(value) => onFieldChange("acMax", value)}
+        />
+
+        <FormField
+          label="Size"
+          type="text"
+          placeholder="e.g. small"
+          value={form.size}
+          onChange={(value) => onFieldChange("size", value)}
+        />
+
+        <FormField
+          label="Speed"
+          type="text"
+          placeholder="e.g. fly"
+          value={form.speed}
+          onChange={(value) => onFieldChange("speed", value)}
         />
 
         <label className="flex items-center gap-3 text-sm text-slate-300 sm:col-span-2">

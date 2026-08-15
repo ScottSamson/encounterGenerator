@@ -12,6 +12,13 @@ jest.mock("../../src/services/database.service.ts", () => ({
   collections: {},
 }));
 
+// Readable construction for the many-optional-field Monster class — start from sane
+// defaults (xp=50 fits the low/moderate/high test budgets used below) and override only
+// what a given test cares about, instead of a long run of positional `undefined`s.
+function makeMonster(overrides: Partial<Monster> = {}): Monster {
+  return Object.assign(new Monster("Test Monster", 50, 0.25, "Beast"), overrides);
+}
+
 describe("parseParams", () => {
   it("parses a fully specified, valid query", () => {
     const params = parseParams({
@@ -86,6 +93,46 @@ describe("parseParams", () => {
     expect(params.name).toBeNull();
   });
 
+  it("parses vulnerabilities, resistances, immunities, senses, attacks, and traits when provided", () => {
+    const params = parseParams({
+      partySize: "4",
+      avgPlayerLevel: "1",
+      vulnerabilities: "Fire",
+      resistances: "Cold",
+      immunities: "Poison",
+      senses: "Darkvision",
+      attacks: "Bite",
+      traits: "Amphibious",
+    });
+
+    expect(params.vulnerabilities).toBe("Fire");
+    expect(params.resistances).toBe("Cold");
+    expect(params.immunities).toBe("Poison");
+    expect(params.senses).toBe("Darkvision");
+    expect(params.attacks).toBe("Bite");
+    expect(params.traits).toBe("Amphibious");
+  });
+
+  it("treats missing or empty vulnerabilities/resistances/immunities/senses/attacks/traits as absent (null)", () => {
+    const params = parseParams({
+      partySize: "4",
+      avgPlayerLevel: "1",
+      vulnerabilities: "",
+      resistances: "",
+      immunities: "",
+      senses: "",
+      attacks: "",
+      traits: "",
+    });
+
+    expect(params.vulnerabilities).toBeNull();
+    expect(params.resistances).toBeNull();
+    expect(params.immunities).toBeNull();
+    expect(params.senses).toBeNull();
+    expect(params.attacks).toBeNull();
+    expect(params.traits).toBeNull();
+  });
+
   it("defaults inLair to false when omitted", () => {
     const params = parseParams({ partySize: "4", avgPlayerLevel: "1" });
     expect(params.inLair).toBe(false);
@@ -105,6 +152,72 @@ describe("parseParams", () => {
     expect(() => parseParams({ partySize: "4", avgPlayerLevel: "1", inLair: "yes" })).toThrow(
       "inLair must be true or false",
     );
+  });
+
+  it("parses proficiencyBonus/hp/ac min+max, initiative, size, and speed when provided", () => {
+    const params = parseParams({
+      partySize: "4",
+      avgPlayerLevel: "1",
+      proficiencyBonusMin: "1",
+      proficiencyBonusMax: "2",
+      hpMin: "5",
+      hpMax: "10",
+      initiative: "-1",
+      acMin: "12",
+      acMax: "15",
+      size: "Small",
+      speed: "30 ft.",
+    });
+
+    expect(params.proficiencyBonusMin).toBe(1);
+    expect(params.proficiencyBonusMax).toBe(2);
+    expect(params.hpMin).toBe(5);
+    expect(params.hpMax).toBe(10);
+    expect(params.initiative).toBe(-1);
+    expect(params.acMin).toBe(12);
+    expect(params.acMax).toBe(15);
+    expect(params.size).toBe("Small");
+    expect(params.speed).toBe("30 ft.");
+  });
+
+  it("treats missing proficiencyBonus/hp/ac min+max, initiative, size, and speed as absent (null)", () => {
+    const params = parseParams({ partySize: "4", avgPlayerLevel: "1" });
+
+    expect(params.proficiencyBonusMin).toBeNull();
+    expect(params.proficiencyBonusMax).toBeNull();
+    expect(params.hpMin).toBeNull();
+    expect(params.hpMax).toBeNull();
+    expect(params.initiative).toBeNull();
+    expect(params.acMin).toBeNull();
+    expect(params.acMax).toBeNull();
+    expect(params.size).toBeNull();
+    expect(params.speed).toBeNull();
+  });
+
+  it.each(["proficiencyBonusMin", "proficiencyBonusMax", "hpMin", "hpMax", "acMin", "acMax"])(
+    "rejects a negative %s",
+    (field) => {
+      expect(() => parseParams({ partySize: "4", avgPlayerLevel: "1", [field]: "-1" })).toThrow(/must be a non-negative number/);
+    },
+  );
+
+  it("allows a negative initiative", () => {
+    const params = parseParams({ partySize: "4", avgPlayerLevel: "1", initiative: "-5" });
+    expect(params.initiative).toBe(-5);
+  });
+
+  it.each(["proficiencyBonusMin", "hpMin", "initiative", "acMin"])("rejects a non-numeric %s", (field) => {
+    expect(() => parseParams({ partySize: "4", avgPlayerLevel: "1", [field]: "abc" })).toThrow(/must be a number/);
+  });
+
+  it.each([
+    ["proficiencyBonusMin", "proficiencyBonusMax"],
+    ["hpMin", "hpMax"],
+    ["acMin", "acMax"],
+  ])("rejects an inverted range where %s is greater than %s", (minField, maxField) => {
+    expect(() =>
+      parseParams({ partySize: "4", avgPlayerLevel: "1", [minField]: "10", [maxField]: "5" }),
+    ).toThrow("minimum must not be greater than");
   });
 });
 
@@ -305,6 +418,149 @@ describe("generateEncounters", () => {
     const encounters = await generateEncounters({ partySize: "1", avgPlayerLevel: "1", type: "humanid" });
 
     expect(encounters[0]!.encounter).toEqual([{ count: 1, monster: goblin }]);
+  });
+
+  it("fuzzy-filters fetched monsters by vulnerabilities, excluding monsters with no vulnerabilities field", async () => {
+    const flammable = new Monster("Scarecrow", 50, 0.25, "Plant", undefined, undefined, "Fire");
+    const notFlammable = new Monster("Golem", 50, 0.25, "Construct"); // no vulnerabilities
+    setUpCollections([flammable, notFlammable]);
+
+    const encounters = await generateEncounters({ partySize: "1", avgPlayerLevel: "1", vulnerabilities: "fre" });
+
+    expect(encounters[0]!.encounter).toEqual([{ count: 1, monster: flammable }]);
+  });
+
+  it("fuzzy-filters fetched monsters by resistances, excluding monsters with no resistances field", async () => {
+    const coldResistant = makeMonster({ name: "Yeti", resistances: "Cold" });
+    const notResistant = makeMonster({ name: "Goblin" }); // no resistances
+    setUpCollections([coldResistant, notResistant]);
+
+    const encounters = await generateEncounters({ partySize: "1", avgPlayerLevel: "1", resistances: "cld" });
+
+    expect(encounters[0]!.encounter).toEqual([{ count: 1, monster: coldResistant }]);
+  });
+
+  it("fuzzy-filters fetched monsters by immunities, excluding monsters with no immunities field", async () => {
+    const immune = new Monster("Golem", 50, 0.25, "Construct", undefined, undefined, undefined, "Poison");
+    const notImmune = new Monster("Goblin", 50, 0.25, "Humanoid"); // no immunities
+    setUpCollections([immune, notImmune]);
+
+    const encounters = await generateEncounters({ partySize: "1", avgPlayerLevel: "1", immunities: "posn" });
+
+    expect(encounters[0]!.encounter).toEqual([{ count: 1, monster: immune }]);
+  });
+
+  it("fuzzy-filters fetched monsters by senses, excluding monsters with no senses field", async () => {
+    const seer = new Monster(
+      "Bat",
+      50,
+      0.25,
+      "Beast",
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      "Darkvision 60 ft.",
+    );
+    const blind = new Monster("Goblin", 50, 0.25, "Humanoid"); // no senses
+    setUpCollections([seer, blind]);
+
+    const encounters = await generateEncounters({ partySize: "1", avgPlayerLevel: "1", senses: "drkvsn" });
+
+    expect(encounters[0]!.encounter).toEqual([{ count: 1, monster: seer }]);
+  });
+
+  it("fuzzy-filters fetched monsters by attack (action) name, excluding monsters with no matching action", async () => {
+    const biter = new Monster(
+      "Wolf",
+      50,
+      0.25,
+      "Beast",
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      [{ name: "Bite", description: "The wolf bites." }],
+    );
+    const nonBiter = new Monster(
+      "Owlbear",
+      50,
+      0.25,
+      "Monstrosity",
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      [{ name: "Claw", description: "The owlbear claws." }],
+    );
+    setUpCollections([biter, nonBiter]);
+
+    const encounters = await generateEncounters({ partySize: "1", avgPlayerLevel: "1", attacks: "bte" });
+
+    expect(encounters[0]!.encounter).toEqual([{ count: 1, monster: biter }]);
+  });
+
+  it("fuzzy-filters fetched monsters by trait name, excluding monsters with no matching trait", async () => {
+    const amphibious = makeMonster({
+      name: "Crocodile",
+      traits: [{ name: "Amphibious", description: "The crocodile can breathe air and water." }],
+    });
+    const landOnly = makeMonster({
+      name: "Goblin",
+      traits: [{ name: "Nimble Escape", description: "The goblin can Disengage or Hide as a bonus action." }],
+    });
+    setUpCollections([amphibious, landOnly]);
+
+    const encounters = await generateEncounters({ partySize: "1", avgPlayerLevel: "1", traits: "amphb" });
+
+    expect(encounters[0]!.encounter).toEqual([{ count: 1, monster: amphibious }]);
+  });
+
+  it("includes proficiencyBonus/hp/ac min+max and initiative ceiling in the Mongo query when provided", async () => {
+    const { find } = setUpCollections([]);
+
+    await generateEncounters({
+      partySize: "1",
+      avgPlayerLevel: "1",
+      proficiencyBonusMin: "1",
+      proficiencyBonusMax: "2",
+      hpMin: "5",
+      hpMax: "20",
+      initiative: "3",
+      acMin: "10",
+      acMax: "15",
+    });
+
+    const query = find.mock.calls[0][0];
+    expect(query.$and).toContainEqual({ proficiency_bonus: { $gte: 1 } });
+    expect(query.$and).toContainEqual({ proficiency_bonus: { $lte: 2 } });
+    expect(query.$and).toContainEqual({ hp: { $gte: 5 } });
+    expect(query.$and).toContainEqual({ hp: { $lte: 20 } });
+    expect(query.$and).toContainEqual({ initiative: { $lte: 3 } });
+    expect(query.$and).toContainEqual({ ac: { $gte: 10 } });
+    expect(query.$and).toContainEqual({ ac: { $lte: 15 } });
+  });
+
+  it("fuzzy-filters fetched monsters by size, excluding monsters with no size field", async () => {
+    const small = makeMonster({ name: "Goblin", size: "Small" });
+    const sizeless = makeMonster({ name: "Ooze" }); // no size
+    setUpCollections([small, sizeless]);
+
+    const encounters = await generateEncounters({ partySize: "1", avgPlayerLevel: "1", size: "smll" });
+
+    expect(encounters[0]!.encounter).toEqual([{ count: 1, monster: small }]);
+  });
+
+  it("fuzzy-filters fetched monsters by speed, excluding monsters with no speed_raw field", async () => {
+    const flyer = makeMonster({ name: "Giant Bat", speed_raw: "10 ft., Fly 60 ft." });
+    const grounded = makeMonster({ name: "Goblin" }); // no speed_raw
+    setUpCollections([flyer, grounded]);
+
+    const encounters = await generateEncounters({ partySize: "1", avgPlayerLevel: "1", speed: "fly" });
+
+    expect(encounters[0]!.encounter).toEqual([{ count: 1, monster: flyer }]);
   });
 
   it("uses the monsterXP override instead of the computed threshold when provided", async () => {

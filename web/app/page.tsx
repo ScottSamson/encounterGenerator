@@ -17,6 +17,21 @@ const initialForm: FormState = {
   type: "",
   name: "",
   inLair: false,
+  vulnerabilities: "",
+  resistances: "",
+  immunities: "",
+  senses: "",
+  attacks: "",
+  traits: "",
+  proficiencyBonusMin: "",
+  proficiencyBonusMax: "",
+  hpMin: "",
+  hpMax: "",
+  initiative: "",
+  acMin: "",
+  acMax: "",
+  size: "",
+  speed: "",
 };
 
 export default function HomePage() {
@@ -38,6 +53,21 @@ export default function HomePage() {
     if (form.type) params.set("type", form.type);
     if (form.name) params.set("name", form.name);
     if (form.inLair) params.set("inLair", "true");
+    if (form.vulnerabilities) params.set("vulnerabilities", form.vulnerabilities);
+    if (form.resistances) params.set("resistances", form.resistances);
+    if (form.immunities) params.set("immunities", form.immunities);
+    if (form.senses) params.set("senses", form.senses);
+    if (form.attacks) params.set("attacks", form.attacks);
+    if (form.traits) params.set("traits", form.traits);
+    if (form.proficiencyBonusMin) params.set("proficiencyBonusMin", form.proficiencyBonusMin);
+    if (form.proficiencyBonusMax) params.set("proficiencyBonusMax", form.proficiencyBonusMax);
+    if (form.hpMin) params.set("hpMin", form.hpMin);
+    if (form.hpMax) params.set("hpMax", form.hpMax);
+    if (form.initiative) params.set("initiative", form.initiative);
+    if (form.acMin) params.set("acMin", form.acMin);
+    if (form.acMax) params.set("acMax", form.acMax);
+    if (form.size) params.set("size", form.size);
+    if (form.speed) params.set("speed", form.speed);
 
     submit(params);
   }
