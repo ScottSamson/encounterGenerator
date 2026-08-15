@@ -176,6 +176,15 @@ export default function EncounterForm({ form, onFieldChange, onSubmit, loading, 
           onChange={(value) => onFieldChange("maxMonsterProfiles", value)}
         />
 
+        <FormField
+          label="Max total monsters"
+          type="number"
+          min={1}
+          placeholder="Optional — cap total creature count"
+          value={form.maxTotalMonsters}
+          onChange={(value) => onFieldChange("maxTotalMonsters", value)}
+        />
+
         <label className="flex items-center gap-3 text-sm text-slate-300 sm:col-span-2">
           <input
             type="checkbox"

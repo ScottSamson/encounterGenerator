@@ -12,11 +12,17 @@ export async function generateMonsterSet(
     encounterXP: number,
     getXp: (monster: Monster) => number = (monster) => monster.xp,
     maxMonsterProfiles: number | null = null,
+    maxTotalMonsters: number | null = null,
 ): Promise<MonsterEntry[]> {
     const selectedMonsters: MonsterEntry[] = [];
     let monstersXP = 0;
+    let totalMonsterCount = 0;
 
     while (monstersXP < encounterXP) {
+        // Unlike the distinct-profile cap below, there's no fallback pool to fall back to
+        // here — once the total creature count hits the cap, the encounter simply stops
+        // growing, even if that leaves the XP budget unfilled.
+        if (maxTotalMonsters !== null && totalMonsterCount >= maxTotalMonsters) break;
         // console.log(`Current monsters XP: ${monstersXP}, Encounter XP limit: ${encounterXP}`);
         // console.log(monsters);
         let options = monsters.filter((m) => getXp(m) > 0 && getXp(m) <= (encounterXP - monstersXP));
@@ -28,7 +34,12 @@ export async function generateMonsterSet(
             options = options.filter((m) => selectedNames.has(m.name));
         }
         if (options.length === 0) break; // No more monsters can be added without exceeding XP
-        const selectedMonster = getRandomMonster(options);
+        // On the last pick allowed by maxTotalMonsters, a uniform-random choice could land
+        // on a monster far below the remaining budget even when a closer-fitting option is
+        // available — so bias toward the highest-XP option instead, to land as close to the
+        // threshold as the pool allows rather than leaving it randomly short.
+        const isLastAllowedPick = maxTotalMonsters !== null && totalMonsterCount === maxTotalMonsters - 1;
+        const selectedMonster = isLastAllowedPick ? getClosestToBudgetMonster(options, getXp) : getRandomMonster(options);
         // console.log(`Selected monster: ${selectedMonster.name} (XP: ${getXp(selectedMonster)})`);
         const existingMonster = selectedMonsters.find((entry) => entry.monster.name === selectedMonster.name);
         if (existingMonster) {
@@ -38,9 +49,19 @@ export async function generateMonsterSet(
             selectedMonsters.push({ count: 1, monster: selectedMonster });
         }
         monstersXP += getXp(selectedMonster);
+        totalMonsterCount++;
     }
 
     return selectedMonsters;
+}
+
+// Picks the highest-XP monster in `arr` (ties broken randomly) — used when a cap forces
+// this to be the final pick, so the encounter lands as close to the XP budget as the
+// available pool allows instead of a uniform-random pick that could be far under.
+export function getClosestToBudgetMonster(arr: Monster[], getXp: (monster: Monster) => number): Monster {
+    const maxXp = Math.max(...arr.map(getXp));
+    const closest = arr.filter((m) => getXp(m) === maxXp);
+    return getRandomMonster(closest);
 }
 
 export function getRandomMonster(arr: Monster[]): Monster {
@@ -171,6 +192,11 @@ export function parseParams(query: Record<string, unknown> | undefined): Paramet
         throw new Error("maxMonsterProfiles must be at least 1");
     }
 
+    const maxTotalMonsters = parseOptionalNumber(query?.maxTotalMonsters, "maxTotalMonsters");
+    if (maxTotalMonsters !== null && maxTotalMonsters < 1) {
+        throw new Error("maxTotalMonsters must be at least 1");
+    }
+
     return new Parameters({
         partySize,
         avgPlayerLevel,
@@ -195,6 +221,7 @@ export function parseParams(query: Record<string, unknown> | undefined): Paramet
         size,
         speed,
         maxMonsterProfiles,
+        maxTotalMonsters,
     });
 }
 
@@ -316,9 +343,9 @@ export async function generateEncounters(rawParams?: Record<string, unknown>) {
     const highThreshold = xpThresholds['2024'].high * params.partySize;
 
     const encounters = [];
-    encounters.push({ difficulty: "low", xpThreshold: lowThreshold, encounter: await generateMonsterSet(monsters, lowThreshold, getXp, params.maxMonsterProfiles) });
-    encounters.push({ difficulty: "moderate", xpThreshold: moderateThreshold, encounter: await generateMonsterSet(monsters, moderateThreshold, getXp, params.maxMonsterProfiles) });
-    encounters.push({ difficulty: "high", xpThreshold: highThreshold, encounter: await generateMonsterSet(monsters, highThreshold, getXp, params.maxMonsterProfiles) });
+    encounters.push({ difficulty: "low", xpThreshold: lowThreshold, encounter: await generateMonsterSet(monsters, lowThreshold, getXp, params.maxMonsterProfiles, params.maxTotalMonsters) });
+    encounters.push({ difficulty: "moderate", xpThreshold: moderateThreshold, encounter: await generateMonsterSet(monsters, moderateThreshold, getXp, params.maxMonsterProfiles, params.maxTotalMonsters) });
+    encounters.push({ difficulty: "high", xpThreshold: highThreshold, encounter: await generateMonsterSet(monsters, highThreshold, getXp, params.maxMonsterProfiles, params.maxTotalMonsters) });
 
     return encounters;
 }

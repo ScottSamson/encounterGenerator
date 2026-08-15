@@ -79,4 +79,5 @@ export interface FormState {
   size: string[];
   speed: string;
   maxMonsterProfiles: string;
+  maxTotalMonsters: string;
 }

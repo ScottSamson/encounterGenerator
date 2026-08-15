@@ -33,6 +33,7 @@ const initialForm: FormState = {
   size: [],
   speed: "",
   maxMonsterProfiles: "",
+  maxTotalMonsters: "",
 };
 
 export default function HomePage() {
@@ -70,6 +71,7 @@ export default function HomePage() {
     if (form.size.length > 0) params.set("size", form.size.join(","));
     if (form.speed) params.set("speed", form.speed);
     if (form.maxMonsterProfiles) params.set("maxMonsterProfiles", form.maxMonsterProfiles);
+    if (form.maxTotalMonsters) params.set("maxTotalMonsters", form.maxTotalMonsters);
 
     submit(params);
   }

@@ -60,6 +60,22 @@ describe("parseParams", () => {
     );
   });
 
+  it("parses maxTotalMonsters when provided", () => {
+    const params = parseParams({ partySize: "4", avgPlayerLevel: "1", maxTotalMonsters: "5" });
+    expect(params.maxTotalMonsters).toBe(5);
+  });
+
+  it("defaults maxTotalMonsters to null when omitted", () => {
+    const params = parseParams({ partySize: "4", avgPlayerLevel: "1" });
+    expect(params.maxTotalMonsters).toBeNull();
+  });
+
+  it("rejects a maxTotalMonsters below 1", () => {
+    expect(() => parseParams({ partySize: "4", avgPlayerLevel: "1", maxTotalMonsters: "0" })).toThrow(
+      "maxTotalMonsters must be at least 1",
+    );
+  });
+
   it("parses a comma-separated vulnerabilities/resistances/immunities into a list (multi-select filters)", () => {
     const params = parseParams({
       partySize: "4",
@@ -386,6 +402,47 @@ describe("generateMonsterSet", () => {
     const result = await generateMonsterSet([goblin], 150, (m) => m.xp, null);
     expect(result).toEqual([{ count: 3, monster: goblin }]);
   });
+
+  it("caps the total monster count, stopping short of the XP budget if necessary", async () => {
+    const goblin = new Monster("Goblin", 50, 0.25, "Humanoid");
+    // Budget would normally fit 3 goblins (150 XP); cap it at 2 individual creatures.
+    const result = await generateMonsterSet([goblin], 150, (m) => m.xp, null, 2);
+
+    expect(result).toEqual([{ count: 2, monster: goblin }]);
+  });
+
+  it("total-monster cap counts individuals across all profiles, not per-profile", async () => {
+    const goblin = new Monster("Goblin", 50, 0.25, "Humanoid");
+    const bandit = new Monster("Bandit", 50, 0.125, "Humanoid");
+    const randomSpy = jest.spyOn(Math, "random");
+    // Alternate goblin/bandit picks; cap of 3 total creatures should stop after 3 picks
+    // even though the 150 XP budget would otherwise fit more.
+    randomSpy.mockReturnValueOnce(0).mockReturnValueOnce(0.6).mockReturnValueOnce(0);
+
+    const result = await generateMonsterSet([goblin, bandit], 150, (m) => m.xp, null, 3);
+
+    randomSpy.mockRestore();
+    const totalCount = result.reduce((sum, entry) => sum + entry.count, 0);
+    expect(totalCount).toBe(3);
+  });
+
+  it("with no total-monster cap set (null), behaves exactly as before", async () => {
+    const goblin = new Monster("Goblin", 50, 0.25, "Humanoid");
+    const result = await generateMonsterSet([goblin], 150, (m) => m.xp, null, null);
+    expect(result).toEqual([{ count: 3, monster: goblin }]);
+  });
+
+  it("with maxTotalMonsters=1, picks the highest-XP option that fits instead of a random one, to land close to the budget", async () => {
+    const weakling = new Monster("Rat", 10, 0, "Beast");
+    const closeFit = new Monster("Owlbear", 140, 3, "Monstrosity");
+    // If selection were uniform-random here, this would flake ~50% of the time toward the
+    // weakling; the "always closest" behavior makes this deterministic without mocking
+    // Math.random.
+    for (let i = 0; i < 5; i++) {
+      const result = await generateMonsterSet([weakling, closeFit], 150, (m) => m.xp, null, 1);
+      expect(result).toEqual([{ count: 1, monster: closeFit }]);
+    }
+  });
 });
 
 describe("generateEncounters", () => {
@@ -452,6 +509,18 @@ describe("generateEncounters", () => {
     for (const { encounter } of encounters) {
       const distinctNames = new Set(encounter.map((entry) => entry.monster.name));
       expect(distinctNames.size).toBeLessThanOrEqual(1);
+    }
+  });
+
+  it("passes maxTotalMonsters through to cap the total creature count in the generated encounters", async () => {
+    const goblin = new Monster("Goblin", 50, 0.25, "Humanoid");
+    setUpCollections([goblin]);
+
+    const encounters = await generateEncounters({ partySize: "1", avgPlayerLevel: "1", maxTotalMonsters: "1" });
+
+    for (const { encounter } of encounters) {
+      const totalCount = encounter.reduce((sum, entry) => sum + entry.count, 0);
+      expect(totalCount).toBeLessThanOrEqual(1);
     }
   });
 
