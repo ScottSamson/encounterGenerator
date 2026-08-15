@@ -11,6 +11,7 @@ export async function generateMonsterSet(
     monsters: Monster[],
     encounterXP: number,
     getXp: (monster: Monster) => number = (monster) => monster.xp,
+    maxMonsterProfiles: number | null = null,
 ): Promise<MonsterEntry[]> {
     const selectedMonsters: MonsterEntry[] = [];
     let monstersXP = 0;
@@ -18,7 +19,14 @@ export async function generateMonsterSet(
     while (monstersXP < encounterXP) {
         // console.log(`Current monsters XP: ${monstersXP}, Encounter XP limit: ${encounterXP}`);
         // console.log(monsters);
-        const options = monsters.filter((m) => getXp(m) > 0 && getXp(m) <= (encounterXP - monstersXP));
+        let options = monsters.filter((m) => getXp(m) > 0 && getXp(m) <= (encounterXP - monstersXP));
+        // Once the distinct-profile cap is reached, restrict further picks to monsters
+        // already selected (by name/stat block) so the count keeps climbing toward the XP
+        // budget without introducing another stat block for the DM to track.
+        if (maxMonsterProfiles !== null && selectedMonsters.length >= maxMonsterProfiles) {
+            const selectedNames = new Set(selectedMonsters.map((entry) => entry.monster.name));
+            options = options.filter((m) => selectedNames.has(m.name));
+        }
         if (options.length === 0) break; // No more monsters can be added without exceeding XP
         const selectedMonster = getRandomMonster(options);
         // console.log(`Selected monster: ${selectedMonster.name} (XP: ${getXp(selectedMonster)})`);
@@ -158,6 +166,11 @@ export function parseParams(query: Record<string, unknown> | undefined): Paramet
     const size = parseMultiValue(query?.size);
     const speed = typeof query?.speed === "string" && query.speed.length > 0 ? query.speed : null;
 
+    const maxMonsterProfiles = parseOptionalNumber(query?.maxMonsterProfiles, "maxMonsterProfiles");
+    if (maxMonsterProfiles !== null && maxMonsterProfiles < 1) {
+        throw new Error("maxMonsterProfiles must be at least 1");
+    }
+
     return new Parameters({
         partySize,
         avgPlayerLevel,
@@ -181,6 +194,7 @@ export function parseParams(query: Record<string, unknown> | undefined): Paramet
         acMax,
         size,
         speed,
+        maxMonsterProfiles,
     });
 }
 
@@ -302,9 +316,9 @@ export async function generateEncounters(rawParams?: Record<string, unknown>) {
     const highThreshold = xpThresholds['2024'].high * params.partySize;
 
     const encounters = [];
-    encounters.push({ difficulty: "low", xpThreshold: lowThreshold, encounter: await generateMonsterSet(monsters, lowThreshold, getXp) });
-    encounters.push({ difficulty: "moderate", xpThreshold: moderateThreshold, encounter: await generateMonsterSet(monsters, moderateThreshold, getXp) });
-    encounters.push({ difficulty: "high", xpThreshold: highThreshold, encounter: await generateMonsterSet(monsters, highThreshold, getXp) });
+    encounters.push({ difficulty: "low", xpThreshold: lowThreshold, encounter: await generateMonsterSet(monsters, lowThreshold, getXp, params.maxMonsterProfiles) });
+    encounters.push({ difficulty: "moderate", xpThreshold: moderateThreshold, encounter: await generateMonsterSet(monsters, moderateThreshold, getXp, params.maxMonsterProfiles) });
+    encounters.push({ difficulty: "high", xpThreshold: highThreshold, encounter: await generateMonsterSet(monsters, highThreshold, getXp, params.maxMonsterProfiles) });
 
     return encounters;
 }

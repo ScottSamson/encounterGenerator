@@ -32,6 +32,7 @@ const initialForm: FormState = {
   acMax: "",
   size: [],
   speed: "",
+  maxMonsterProfiles: "",
 };
 
 export default function HomePage() {
@@ -68,6 +69,7 @@ export default function HomePage() {
     if (form.acMax) params.set("acMax", form.acMax);
     if (form.size.length > 0) params.set("size", form.size.join(","));
     if (form.speed) params.set("speed", form.speed);
+    if (form.maxMonsterProfiles) params.set("maxMonsterProfiles", form.maxMonsterProfiles);
 
     submit(params);
   }

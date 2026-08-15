@@ -21,6 +21,7 @@ export interface ParametersInput {
     acMax: number | null;
     size: string[] | null;
     speed: string | null;
+    maxMonsterProfiles: number | null;
 }
 
 export default class Parameters {
@@ -46,6 +47,7 @@ export default class Parameters {
     public acMax: number | null;
     public size: string[] | null;
     public speed: string | null;
+    public maxMonsterProfiles: number | null;
 
     constructor(input: ParametersInput) {
         this.partySize = input.partySize;
@@ -70,5 +72,6 @@ export default class Parameters {
         this.acMax = input.acMax;
         this.size = input.size;
         this.speed = input.speed;
+        this.maxMonsterProfiles = input.maxMonsterProfiles;
     }
 }

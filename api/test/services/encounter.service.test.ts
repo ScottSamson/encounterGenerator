@@ -44,6 +44,22 @@ describe("parseParams", () => {
     expect(params.size).toEqual(["Small", "Medium"]);
   });
 
+  it("parses maxMonsterProfiles when provided", () => {
+    const params = parseParams({ partySize: "4", avgPlayerLevel: "1", maxMonsterProfiles: "2" });
+    expect(params.maxMonsterProfiles).toBe(2);
+  });
+
+  it("defaults maxMonsterProfiles to null when omitted", () => {
+    const params = parseParams({ partySize: "4", avgPlayerLevel: "1" });
+    expect(params.maxMonsterProfiles).toBeNull();
+  });
+
+  it("rejects a maxMonsterProfiles below 1", () => {
+    expect(() => parseParams({ partySize: "4", avgPlayerLevel: "1", maxMonsterProfiles: "0" })).toThrow(
+      "maxMonsterProfiles must be at least 1",
+    );
+  });
+
   it("parses a comma-separated vulnerabilities/resistances/immunities into a list (multi-select filters)", () => {
     const params = parseParams({
       partySize: "4",
@@ -336,6 +352,40 @@ describe("generateMonsterSet", () => {
 
     expect(result).toEqual([]);
   });
+
+  it("caps distinct monster profiles: keeps filling the budget with repeats of an already-selected monster instead of introducing a new one", async () => {
+    const goblin = new Monster("Goblin", 50, 0.25, "Humanoid");
+    const bandit = new Monster("Bandit", 50, 0.125, "Humanoid");
+    const result = await generateMonsterSet([goblin, bandit], 150, (m) => m.xp, 1);
+
+    expect(result).toHaveLength(1);
+    expect(result[0]!.count).toBe(3);
+  });
+
+  it("allows multiple distinct profiles up to the cap, then locks in", async () => {
+    // Force determinism: alternate the "random" pick so both goblin and bandit get
+    // selected before the cap of 2 is reached, then confirm no third profile appears.
+    const goblin = new Monster("Goblin", 50, 0.25, "Humanoid");
+    const bandit = new Monster("Bandit", 50, 0.125, "Humanoid");
+    const ogre = new Monster("Ogre", 50, 2, "Giant");
+    const randomSpy = jest.spyOn(Math, "random");
+    // options order on first call: [goblin, bandit, ogre] -> pick index 0 (goblin)
+    // options order on second call: [goblin, bandit, ogre] -> pick index 1 (bandit)
+    // after cap reached (2 profiles), options restricted to [goblin, bandit] -> pick index 0
+    randomSpy.mockReturnValueOnce(0).mockReturnValueOnce(0.4).mockReturnValue(0);
+
+    const result = await generateMonsterSet([goblin, bandit, ogre], 150, (m) => m.xp, 2);
+
+    randomSpy.mockRestore();
+    expect(result.map((entry) => entry.monster.name).sort()).toEqual(["Bandit", "Goblin"]);
+    expect(result.some((entry) => entry.monster.name === "Ogre")).toBe(false);
+  });
+
+  it("with no cap set (null), behaves exactly as before", async () => {
+    const goblin = new Monster("Goblin", 50, 0.25, "Humanoid");
+    const result = await generateMonsterSet([goblin], 150, (m) => m.xp, null);
+    expect(result).toEqual([{ count: 3, monster: goblin }]);
+  });
 });
 
 describe("generateEncounters", () => {
@@ -390,6 +440,19 @@ describe("generateEncounters", () => {
       { difficulty: "moderate", xpThreshold: 100, encounter: [{ count: 2, monster: goblin }] },
       { difficulty: "high", xpThreshold: 150, encounter: [{ count: 3, monster: goblin }] },
     ]);
+  });
+
+  it("passes maxMonsterProfiles through to cap distinct stat blocks in the generated encounters", async () => {
+    const goblin = new Monster("Goblin", 50, 0.25, "Humanoid");
+    const bandit = new Monster("Bandit", 50, 0.125, "Humanoid");
+    setUpCollections([goblin, bandit]);
+
+    const encounters = await generateEncounters({ partySize: "1", avgPlayerLevel: "1", maxMonsterProfiles: "1" });
+
+    for (const { encounter } of encounters) {
+      const distinctNames = new Set(encounter.map((entry) => entry.monster.name));
+      expect(distinctNames.size).toBeLessThanOrEqual(1);
+    }
   });
 
   it("does not include name in the Mongo query — fuzzy matching happens in-memory instead", async () => {

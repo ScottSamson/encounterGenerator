@@ -78,4 +78,5 @@ export interface FormState {
   acMax: string;
   size: string[];
   speed: string;
+  maxMonsterProfiles: string;
 }
