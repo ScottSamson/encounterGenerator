@@ -103,6 +103,8 @@ export class EncounterGeneratorApiStack extends cdk.Stack {
     // Least-privilege policy for calling the Function URL with SigV4 (Postman, awscurl,
     // a future backend caller). Attach to whichever user/role needs it, e.g.
     //   aws iam attach-user-policy --user-name <you> --policy-arn <InvokeUrlPolicyArn>
+    // No `lambda:FunctionUrlAuthType` condition — the live InvokeFunctionUrl request
+    // does not reliably carry that context key, so a StringEquals on it denies the call.
     const invokeUrlPolicy = new iam.ManagedPolicy(this, "InvokeUrlPolicy", {
       managedPolicyName: `${fnName}-invoke-url`,
       description: `Invoke the ${fnName} Function URL (SigV4 / AWS_IAM auth)`,
@@ -110,9 +112,6 @@ export class EncounterGeneratorApiStack extends cdk.Stack {
         new iam.PolicyStatement({
           actions: ["lambda:InvokeFunctionUrl"],
           resources: [fn.functionArn],
-          conditions: {
-            StringEquals: { "lambda:FunctionUrlAuthType": "AWS_IAM" },
-          },
         }),
       ],
     });
