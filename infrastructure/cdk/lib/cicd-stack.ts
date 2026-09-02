@@ -7,9 +7,18 @@ export interface EncounterGeneratorCicdStackProps extends cdk.StackProps {
   readonly githubRepo: string;
   /** Create the GitHub OIDC provider. Set false if the account already has one. */
   readonly createOidcProvider?: boolean;
+  /**
+   * OIDC `sub` claims allowed to assume the deploy role. Defaults to the two deploy
+   * environments plus the two deploy branches, so the role is assumable whether or not
+   * GitHub attaches the `environment:` form of the claim to a given run. All entries are
+   * still scoped to this one repo. Tighten to just `:environment:prod` etc. once the
+   * pipeline is proven.
+   */
+  readonly githubSubjectClaims?: string[];
 }
 
 const GITHUB_OIDC_DOMAIN = "token.actions.githubusercontent.com";
+const WEB_IDENTITY_ACTION = "sts:AssumeRoleWithWebIdentity";
 
 // GitHub OIDC provider + the IAM role the deploy workflows assume. Deployed once,
 // manually, by an admin with local credentials. The workflows only need to assume the
@@ -35,20 +44,30 @@ export class EncounterGeneratorCicdStack extends cdk.Stack {
           ),
         );
 
-    const subjects = [
+    const subjectClaims = props.githubSubjectClaims ?? [
       `repo:${githubOwner}/${githubRepo}:environment:stage`,
       `repo:${githubOwner}/${githubRepo}:environment:prod`,
+      `repo:${githubOwner}/${githubRepo}:ref:refs/heads/development`,
+      `repo:${githubOwner}/${githubRepo}:ref:refs/heads/main`,
     ];
+
+    // Built explicitly (not via WebIdentityPrincipal) so the trust policy action and
+    // conditions are unambiguous in `cdk synth` and in the deployed role.
+    const trustPrincipal = new iam.FederatedPrincipal(
+      provider.openIdConnectProviderArn,
+      {
+        StringEquals: { [`${GITHUB_OIDC_DOMAIN}:aud`]: "sts.amazonaws.com" },
+        StringLike: { [`${GITHUB_OIDC_DOMAIN}:sub`]: subjectClaims },
+      },
+      WEB_IDENTITY_ACTION,
+    );
 
     const deployRole = new iam.Role(this, "DeployRole", {
       roleName: "github-deploy-encounter-generator-api",
       description:
         "Assumed by GitHub Actions (OIDC) to deploy the encounter-generator API stacks via CDK",
       maxSessionDuration: cdk.Duration.hours(1),
-      assumedBy: new iam.WebIdentityPrincipal(provider.openIdConnectProviderArn, {
-        StringEquals: { [`${GITHUB_OIDC_DOMAIN}:aud`]: "sts.amazonaws.com" },
-        StringLike: { [`${GITHUB_OIDC_DOMAIN}:sub`]: subjects },
-      }),
+      assumedBy: trustPrincipal,
     });
 
     deployRole.addToPolicy(
@@ -69,6 +88,9 @@ export class EncounterGeneratorCicdStack extends cdk.Stack {
     new cdk.CfnOutput(this, "DeployRoleArn", {
       value: deployRole.roleArn,
       description: "Set this as the GitHub repo variable AWS_DEPLOY_ROLE_ARN",
+    });
+    new cdk.CfnOutput(this, "OidcProviderArn", {
+      value: provider.openIdConnectProviderArn,
     });
   }
 }
