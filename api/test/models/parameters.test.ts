@@ -23,6 +23,8 @@ const FULL_INPUT = {
   acMax: 15,
   size: ["Small"],
   speed: "30 ft.",
+  maxMonsterProfiles: 3,
+  maxTotalMonsters: 8,
 };
 
 const NULL_INPUT = {
@@ -48,6 +50,8 @@ const NULL_INPUT = {
   acMax: null,
   size: null,
   speed: null,
+  maxMonsterProfiles: null,
+  maxTotalMonsters: null,
 };
 
 describe("Parameters", () => {
@@ -76,6 +80,8 @@ describe("Parameters", () => {
     expect(params.acMax).toBe(15);
     expect(params.size).toEqual(["Small"]);
     expect(params.speed).toBe("30 ft.");
+    expect(params.maxMonsterProfiles).toBe(3);
+    expect(params.maxTotalMonsters).toBe(8);
   });
 
   it("allows the optional-in-practice fields to be null", () => {
@@ -101,5 +107,7 @@ describe("Parameters", () => {
     expect(params.acMax).toBeNull();
     expect(params.size).toBeNull();
     expect(params.speed).toBeNull();
+    expect(params.maxMonsterProfiles).toBeNull();
+    expect(params.maxTotalMonsters).toBeNull();
   });
 });
