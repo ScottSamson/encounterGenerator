@@ -9,15 +9,11 @@
       "Action": "sts:AssumeRoleWithWebIdentity",
       "Condition": {
         "StringEquals": {
-          "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
+          "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
+          "token.actions.githubusercontent.com:repository": "ScottSamson/encounterGenerator"
         },
         "StringLike": {
-          "token.actions.githubusercontent.com:sub": [
-            "repo:ScottSamson/encounterGenerator:environment:stage",
-            "repo:ScottSamson/encounterGenerator:environment:prod",
-            "repo:ScottSamson/encounterGenerator:ref:refs/heads/development",
-            "repo:ScottSamson/encounterGenerator:ref:refs/heads/main"
-          ]
+          "token.actions.githubusercontent.com:sub": "repo:ScottSamson@5559136/encounterGenerator@1314211234:*"
         }
       }
     }
