@@ -5,6 +5,9 @@ import * as ec2 from "aws-cdk-lib/aws-ec2";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as iam from "aws-cdk-lib/aws-iam";
 import * as logs from "aws-cdk-lib/aws-logs";
+import * as events from "aws-cdk-lib/aws-events";
+import * as targets from "aws-cdk-lib/aws-events-targets";
+import * as cr from "aws-cdk-lib/custom-resources";
 
 export type ApiEnvName = "stage" | "prod";
 
@@ -25,10 +28,11 @@ export class EncounterGeneratorApiStack extends cdk.Stack {
 
     // Dedicated VPC, public subnets only, no NAT gateways -> no hourly cost.
     //
-    // NOTE: a Lambda ENI in a public subnet still gets no public IP and therefore no
-    // route to the internet, so this does NOT give the function egress to MongoDB Atlas.
-    // Outbound connectivity (NAT gateway or a VPC endpoint / PrivateLink path) is a
-    // deliberate later step — see infrastructure/cdk/README.md.
+    // Outbound internet (for SSM Parameter Store + MongoDB Atlas) comes from an Elastic
+    // IP associated directly to the Lambda's Hyperplane ENI, further down. That requires
+    // the function to sit in a single public subnet so there is exactly one ENI / one
+    // egress IP. See infrastructure/cdk/README.md for the caveats (unsupported by AWS,
+    // ENI reclamation on long idle -> the daily keep-warm rule below).
     const vpc = new ec2.Vpc(this, "ApiVpc", {
       maxAzs: 2,
       natGateways: 0,
@@ -36,6 +40,7 @@ export class EncounterGeneratorApiStack extends cdk.Stack {
         { name: "public", subnetType: ec2.SubnetType.PUBLIC, cidrMask: 24 },
       ],
     });
+    const egressSubnet = vpc.publicSubnets[0]!;
 
     const lambdaSg = new ec2.SecurityGroup(this, "LambdaSg", {
       vpc,
@@ -59,7 +64,7 @@ export class EncounterGeneratorApiStack extends cdk.Stack {
       memorySize: 256,
       logGroup,
       vpc,
-      vpcSubnets: { subnetType: ec2.SubnetType.PUBLIC },
+      vpcSubnets: { subnets: [egressSubnet] },
       securityGroups: [lambdaSg],
       allowPublicSubnet: true,
       environment: {
@@ -96,6 +101,59 @@ export class EncounterGeneratorApiStack extends cdk.Stack {
       }),
     );
 
+    // --- Static outbound IP: Elastic IP attached to the Lambda's Hyperplane ENI -------
+    // Gives the function internet egress (SSM, MongoDB Atlas) from a fixed address that
+    // Atlas Network Access can allowlist, without a NAT gateway. Unsupported by AWS and
+    // brittle across ENI changes — see README.
+    const egressEip = new ec2.CfnEIP(this, "EgressEip", {
+      domain: "vpc",
+      tags: [{ key: "Name", value: `${fnName}-egress` }],
+    });
+
+    // The ENI is created by CloudFormation while deploying the function, so its id is not
+    // known at synth time. Look it up after the function exists, filtering on the exact
+    // subnet + security group so we get this function's single ENI.
+    const eniSdkCall: cr.AwsSdkCall = {
+      service: "EC2",
+      action: "describeNetworkInterfaces",
+      parameters: {
+        Filters: [
+          { Name: "interface-type", Values: ["lambda"] },
+          { Name: "group-id", Values: [lambdaSg.securityGroupId] },
+          { Name: "subnet-id", Values: [egressSubnet.subnetId] },
+        ],
+      },
+      // Re-resolve on every deploy; if the ENI id changed the association is replaced.
+      physicalResourceId: cr.PhysicalResourceId.fromResponse("NetworkInterfaces.0.NetworkInterfaceId"),
+    };
+    const eniLookup = new cr.AwsCustomResource(this, "LambdaEniLookup", {
+      onCreate: eniSdkCall,
+      onUpdate: eniSdkCall,
+      installLatestAwsSdk: false,
+      policy: cr.AwsCustomResourcePolicy.fromSdkCalls({
+        resources: cr.AwsCustomResourcePolicy.ANY_RESOURCE,
+      }),
+    });
+    eniLookup.node.addDependency(fn);
+
+    new ec2.CfnEIPAssociation(this, "EgressEipAssoc", {
+      allocationId: egressEip.attrAllocationId,
+      networkInterfaceId: eniLookup.getResponseField("NetworkInterfaces.0.NetworkInterfaceId"),
+    });
+
+    // Keep-warm: one invocation/day so a long idle period can't get the Hyperplane ENI
+    // (and thus the EIP association) reclaimed. Short-circuited in lambda.ts before it
+    // reaches Express.
+    new events.Rule(this, "KeepWarmRule", {
+      ruleName: `${fnName}-keepwarm`,
+      schedule: events.Schedule.rate(cdk.Duration.days(1)),
+      targets: [
+        new targets.LambdaFunction(fn, {
+          event: events.RuleTargetInput.fromObject({ warmer: true }),
+        }),
+      ],
+    });
+
     // IAM-authed for now (matches the current CloudFront-OAC model). Nothing calls it
     // until the Cloudflare-hosted web front-end is wired up.
     const fnUrl = fn.addFunctionUrl({ authType: lambda.FunctionUrlAuthType.AWS_IAM });
@@ -119,6 +177,10 @@ export class EncounterGeneratorApiStack extends cdk.Stack {
     new cdk.CfnOutput(this, "FunctionName", { value: fn.functionName });
     new cdk.CfnOutput(this, "FunctionUrl", { value: fnUrl.url });
     new cdk.CfnOutput(this, "InvokeUrlPolicyArn", { value: invokeUrlPolicy.managedPolicyArn });
+    new cdk.CfnOutput(this, "EgressStaticIp", {
+      value: egressEip.ref,
+      description: "Add this to MongoDB Atlas Network Access as <ip>/32",
+    });
     new cdk.CfnOutput(this, "VpcId", { value: vpc.vpcId });
     new cdk.CfnOutput(this, "LambdaSecurityGroupId", { value: lambdaSg.securityGroupId });
   }
