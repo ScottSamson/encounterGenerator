@@ -3,6 +3,7 @@
 import { useState, type SubmitEvent } from "react";
 import Banner from "./components/Banner";
 import Features from "./components/Features";
+import Footer from "./components/Footer";
 import EncounterForm from "./components/EncounterForm";
 import EncounterSummary from "./components/EncounterSummary";
 import EncounterDetails from "./components/EncounterDetails";
@@ -107,6 +108,8 @@ export default function HomePage() {
       </section>
 
       <Features />
+
+      <Footer />
     </main>
   );
 }

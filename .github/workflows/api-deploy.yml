@@ -1,0 +1,62 @@
+name: api-deploy
+
+# development -> stage, main -> prod. The environment name is derived from the branch,
+# so the "prod" GitHub Environment's Required-reviewers gate pauses this job before any
+# deploy to prod.
+on:
+  push:
+    branches: [development, main]
+    paths:
+      - 'api/**'
+      - 'infrastructure/cdk/**'
+      - '.github/workflows/wf-api-checks.yml'
+      - '.github/workflows/api-deploy.yml'
+
+concurrency:
+  group: api-deploy-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  checks:
+    uses: ./.github/workflows/wf-api-checks.yml
+
+  deploy:
+    needs: checks
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref_name == 'main' && 'prod' || 'stage' }}
+    permissions:
+      id-token: write
+      contents: read
+    env:
+      ENV_NAME: ${{ github.ref_name == 'main' && 'prod' || 'stage' }}
+      STACK: EncounterGeneratorApiStack-${{ github.ref_name == 'main' && 'prod' || 'stage' }}
+      AWS_REGION: us-west-2
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            api/package-lock.json
+            infrastructure/cdk/package-lock.json
+
+      - name: Package Lambda zip
+        working-directory: api
+        run: |
+          npm ci
+          npm run package:lambda
+
+      - name: Install CDK deps
+        working-directory: infrastructure/cdk
+        run: npm ci
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: CDK deploy (${{ env.ENV_NAME }})
+        working-directory: infrastructure/cdk
+        run: npx cdk deploy "$STACK" --require-approval never

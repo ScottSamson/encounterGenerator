@@ -1,0 +1,14 @@
+name: api-ci
+
+on:
+  pull_request:
+    branches: [development, main]
+    paths:
+      - 'api/**'
+      - 'infrastructure/cdk/**'
+      - '.github/workflows/wf-api-checks.yml'
+      - '.github/workflows/api-ci.yml'
+
+jobs:
+  checks:
+    uses: ./.github/workflows/wf-api-checks.yml

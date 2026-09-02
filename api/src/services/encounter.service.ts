@@ -254,7 +254,7 @@ export async function generateEncounters(rawParams?: Record<string, unknown>) {
     }
     console.log(xpThresholds);
 
-    // In-lair encounters prefer each monster's separate lair XP value (per D&D encounter-
+    // In-lair encounters prefer each monster's separate lair XP value (per encounter-
     // building rules, lair actions make a monster more dangerous, worth more effective
     // XP), falling back to its normal xp when it has no recorded lair XP — monsters
     // without one are still included, just budgeted at their normal XP.
