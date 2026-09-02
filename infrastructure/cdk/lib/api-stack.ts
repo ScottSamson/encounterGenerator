@@ -110,7 +110,7 @@ export class EncounterGeneratorApiStack extends cdk.Stack {
       description: `Invoke the ${fnName} Function URL (SigV4 / AWS_IAM auth)`,
       statements: [
         new iam.PolicyStatement({
-          actions: ["lambda:InvokeFunctionUrl"],
+          actions: ["lambda:InvokeFunctionUrl", "lambda:InvokeFunction"],
           resources: [fn.functionArn],
         }),
       ],
