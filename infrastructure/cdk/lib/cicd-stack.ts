@@ -5,14 +5,23 @@ import * as iam from "aws-cdk-lib/aws-iam";
 export interface EncounterGeneratorCicdStackProps extends cdk.StackProps {
   readonly githubOwner: string;
   readonly githubRepo: string;
+  /**
+   * Immutable numeric IDs GitHub embeds in this account's customised OIDC `sub` claim
+   * (`repo:<owner>@<ownerId>/<repo>@<repoId>:...`). Found via CloudTrail on a failed
+   * AssumeRoleWithWebIdentity, or `gh api /repos/<owner>/<repo> --jq '.id, .owner.id'`.
+   */
+  readonly githubOwnerId: string;
+  readonly githubRepoId: string;
   /** Create the GitHub OIDC provider. Set false if the account already has one. */
   readonly createOidcProvider?: boolean;
   /**
-   * OIDC `sub` claims allowed to assume the deploy role. Defaults to the two deploy
-   * environments plus the two deploy branches, so the role is assumable whether or not
-   * GitHub attaches the `environment:` form of the claim to a given run. All entries are
-   * still scoped to this one repo. Tighten to just `:environment:prod` etc. once the
-   * pipeline is proven.
+   * Optional extra tightening: OIDC `sub` claims allowed to assume the deploy role,
+   * ANDed with the `repository` check below. Leave unset to allow any workflow in the
+   * repo (prod is still protected by the GitHub Environment reviewer gate).
+   *
+   * NOTE: this account customises the `sub` claim to carry immutable numeric IDs, e.g.
+   * `repo:ScottSamson@5559136/encounterGenerator@1314211234:environment:prod` — match
+   * that exact shape, not the plain `repo:owner/name:...` form.
    */
   readonly githubSubjectClaims?: string[];
 }
@@ -28,7 +37,11 @@ export class EncounterGeneratorCicdStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: EncounterGeneratorCicdStackProps) {
     super(scope, id, props);
 
-    const { githubOwner, githubRepo, createOidcProvider = true } = props;
+    const { githubOwner, githubRepo, githubOwnerId, githubRepoId, createOidcProvider = true } = props;
+
+    // This account customises the OIDC `sub` claim to carry immutable numeric IDs, e.g.
+    // `repo:ScottSamson@5559136/encounterGenerator@1314211234:environment:stage`.
+    const repoSubjectPrefix = `repo:${githubOwner}@${githubOwnerId}/${githubRepo}@${githubRepoId}`;
 
     const provider = createOidcProvider
       ? new iam.OpenIdConnectProvider(this, "GitHubOidc", {
@@ -44,22 +57,24 @@ export class EncounterGeneratorCicdStack extends cdk.Stack {
           ),
         );
 
-    // Any workflow in THIS repo (still not assumable by other repos or forks — their
-    // `sub` is prefixed with their own `repo:owner/name:`). Prod is protected by the
-    // GitHub Environment reviewer gate, not this claim. Tighten to the explicit
-    // environment/ref list via `githubSubjectClaims` once the pipeline is green.
-    const subjectClaims = props.githubSubjectClaims ?? [
-      `repo:${githubOwner}/${githubRepo}:*`,
-    ];
+    // AWS requires a non-wildcard `sub` (or `job_workflow_ref`) condition, so we can't
+    // gate on `repository` alone. Default: any workflow in this repo (prod is protected
+    // by the GitHub Environment reviewer gate). Override `githubSubjectClaims` to pin
+    // specific environments/branches — full `sub` strings, ID-augmented form.
+    const subjectClaims = props.githubSubjectClaims ?? [`${repoSubjectPrefix}:*`];
+    const conditions: Record<string, Record<string, string | string[]>> = {
+      StringEquals: {
+        [`${GITHUB_OIDC_DOMAIN}:aud`]: "sts.amazonaws.com",
+        [`${GITHUB_OIDC_DOMAIN}:repository`]: `${githubOwner}/${githubRepo}`,
+      },
+      StringLike: { [`${GITHUB_OIDC_DOMAIN}:sub`]: subjectClaims },
+    };
 
     // Built explicitly (not via WebIdentityPrincipal) so the trust policy action and
     // conditions are unambiguous in `cdk synth` and in the deployed role.
     const trustPrincipal = new iam.FederatedPrincipal(
       provider.openIdConnectProviderArn,
-      {
-        StringEquals: { [`${GITHUB_OIDC_DOMAIN}:aud`]: "sts.amazonaws.com" },
-        StringLike: { [`${GITHUB_OIDC_DOMAIN}:sub`]: subjectClaims },
-      },
+      conditions,
       WEB_IDENTITY_ACTION,
     );
 
