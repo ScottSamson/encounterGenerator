@@ -6,4 +6,15 @@ import app from "./app.ts";
 // reflects the actual runtime export, not a workaround for our code.
 const configure = serverlessExpressPkg as unknown as (params: { app: typeof app }) => (...args: any[]) => any;
 
-export const handler = configure({ app });
+const serverlessHandler = configure({ app });
+
+// The infra schedules a once-a-day EventBridge ping (`{ warmer: true }`) purely to keep
+// the VPC Hyperplane ENI — and therefore the Elastic IP association that gives this
+// function its static outbound IP — from being reclaimed during long idle periods. It is
+// not an HTTP event, so it must never reach serverless-express.
+export const handler = (event: any, context: any) => {
+  if (event && event.warmer === true) {
+    return Promise.resolve({ warmed: true });
+  }
+  return serverlessHandler(event, context);
+};
