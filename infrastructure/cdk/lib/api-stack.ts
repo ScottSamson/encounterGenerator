@@ -5,9 +5,6 @@ import * as ec2 from "aws-cdk-lib/aws-ec2";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as iam from "aws-cdk-lib/aws-iam";
 import * as logs from "aws-cdk-lib/aws-logs";
-import * as events from "aws-cdk-lib/aws-events";
-import * as targets from "aws-cdk-lib/aws-events-targets";
-import * as cr from "aws-cdk-lib/custom-resources";
 
 export type ApiEnvName = "stage" | "prod";
 
@@ -26,21 +23,49 @@ export class EncounterGeneratorApiStack extends cdk.Stack {
     const ssmPrefix = `/encounter-generator/${envName}/api`;
     const fnName = `encounter-generator-api-${envName}`;
 
-    // Dedicated VPC, public subnets only, no NAT gateways -> no hourly cost.
+    // Dedicated VPC: public subnets for the NAT instance, private subnets for the Lambda.
     //
-    // Outbound internet (for SSM Parameter Store + MongoDB Atlas) comes from an Elastic
-    // IP associated directly to the Lambda's Hyperplane ENI, further down. That requires
-    // the function to sit in a single public subnet so there is exactly one ENI / one
-    // egress IP. See infrastructure/cdk/README.md for the caveats (unsupported by AWS,
-    // ENI reclamation on long idle -> the daily keep-warm rule below).
+    // Outbound internet (SSM Parameter Store + MongoDB Atlas) goes Lambda -> private
+    // subnet route -> a single t4g.nano NAT instance in a public subnet -> IGW. An
+    // Elastic IP is pinned to that instance so Atlas Network Access can allowlist one
+    // fixed address per environment. One NAT instance instead of a NAT gateway (~$32/mo
+    // -> ~$4/mo). Single-AZ egress: if the NAT instance is down, the API has no DB
+    // connectivity. Stage's NAT can be stopped when idle — see infrastructure/cdk/README.md.
+    const natProvider = ec2.NatProvider.instanceV2({
+      instanceType: ec2.InstanceType.of(ec2.InstanceClass.T4G, ec2.InstanceSize.NANO),
+      machineImage: ec2.MachineImage.latestAmazonLinux2023({
+        cpuType: ec2.AmazonLinuxCpuType.ARM_64,
+      }),
+      defaultAllowedTraffic: ec2.NatTrafficDirection.OUTBOUND_ONLY,
+    });
+
     const vpc = new ec2.Vpc(this, "ApiVpc", {
       maxAzs: 2,
-      natGateways: 0,
+      natGateways: 1,
+      natGatewayProvider: natProvider,
       subnetConfiguration: [
         { name: "public", subnetType: ec2.SubnetType.PUBLIC, cidrMask: 24 },
+        { name: "private", subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS, cidrMask: 24 },
       ],
     });
-    const egressSubnet = vpc.publicSubnets[0]!;
+
+    // Let every subnet in the VPC route out through the NAT instance.
+    natProvider.securityGroup.addIngressRule(
+      ec2.Peer.ipv4(vpc.vpcCidrBlock),
+      ec2.Port.allTraffic(),
+      "VPC egress via NAT instance",
+    );
+
+    // Fixed egress address to allowlist in MongoDB Atlas (per environment).
+    const natEip = new ec2.CfnEIP(this, "NatEip", {
+      domain: "vpc",
+      tags: [{ key: "Name", value: `${fnName}-nat` }],
+    });
+    const natInstanceId = natProvider.configuredGateways[0]!.gatewayId;
+    new ec2.CfnEIPAssociation(this, "NatEipAssoc", {
+      allocationId: natEip.attrAllocationId,
+      instanceId: natInstanceId,
+    });
 
     const lambdaSg = new ec2.SecurityGroup(this, "LambdaSg", {
       vpc,
@@ -64,9 +89,8 @@ export class EncounterGeneratorApiStack extends cdk.Stack {
       memorySize: 256,
       logGroup,
       vpc,
-      vpcSubnets: { subnets: [egressSubnet] },
+      vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS },
       securityGroups: [lambdaSg],
-      allowPublicSubnet: true,
       environment: {
         SSM_PARAM_PREFIX: ssmPrefix,
         NODE_OPTIONS: "--enable-source-maps",
@@ -101,68 +125,15 @@ export class EncounterGeneratorApiStack extends cdk.Stack {
       }),
     );
 
-    // --- Static outbound IP: Elastic IP attached to the Lambda's Hyperplane ENI -------
-    // Gives the function internet egress (SSM, MongoDB Atlas) from a fixed address that
-    // Atlas Network Access can allowlist, without a NAT gateway. Unsupported by AWS and
-    // brittle across ENI changes — see README.
-    const egressEip = new ec2.CfnEIP(this, "EgressEip", {
-      domain: "vpc",
-      tags: [{ key: "Name", value: `${fnName}-egress` }],
-    });
-
-    // The ENI is created by CloudFormation while deploying the function, so its id is not
-    // known at synth time. Look it up after the function exists, filtering on the exact
-    // subnet + security group so we get this function's single ENI.
-    const eniSdkCall: cr.AwsSdkCall = {
-      service: "EC2",
-      action: "describeNetworkInterfaces",
-      parameters: {
-        Filters: [
-          { Name: "interface-type", Values: ["lambda"] },
-          { Name: "group-id", Values: [lambdaSg.securityGroupId] },
-          { Name: "subnet-id", Values: [egressSubnet.subnetId] },
-        ],
-      },
-      // Re-resolve on every deploy; if the ENI id changed the association is replaced.
-      physicalResourceId: cr.PhysicalResourceId.fromResponse("NetworkInterfaces.0.NetworkInterfaceId"),
-    };
-    const eniLookup = new cr.AwsCustomResource(this, "LambdaEniLookup", {
-      onCreate: eniSdkCall,
-      onUpdate: eniSdkCall,
-      installLatestAwsSdk: false,
-      policy: cr.AwsCustomResourcePolicy.fromSdkCalls({
-        resources: cr.AwsCustomResourcePolicy.ANY_RESOURCE,
-      }),
-    });
-    eniLookup.node.addDependency(fn);
-
-    new ec2.CfnEIPAssociation(this, "EgressEipAssoc", {
-      allocationId: egressEip.attrAllocationId,
-      networkInterfaceId: eniLookup.getResponseField("NetworkInterfaces.0.NetworkInterfaceId"),
-    });
-
-    // Keep-warm: one invocation/day so a long idle period can't get the Hyperplane ENI
-    // (and thus the EIP association) reclaimed. Short-circuited in lambda.ts before it
-    // reaches Express.
-    new events.Rule(this, "KeepWarmRule", {
-      ruleName: `${fnName}-keepwarm`,
-      schedule: events.Schedule.rate(cdk.Duration.days(1)),
-      targets: [
-        new targets.LambdaFunction(fn, {
-          event: events.RuleTargetInput.fromObject({ warmer: true }),
-        }),
-      ],
-    });
-
     // IAM-authed for now (matches the current CloudFront-OAC model). Nothing calls it
     // until the Cloudflare-hosted web front-end is wired up.
     const fnUrl = fn.addFunctionUrl({ authType: lambda.FunctionUrlAuthType.AWS_IAM });
 
-    // Least-privilege policy for calling the Function URL with SigV4 (Postman, awscurl,
-    // a future backend caller). Attach to whichever user/role needs it, e.g.
+    // Policy for calling the Function URL with SigV4 (Postman, awscurl, a future backend
+    // caller). Attach to whichever user/role needs it, e.g.
     //   aws iam attach-user-policy --user-name <you> --policy-arn <InvokeUrlPolicyArn>
-    // No `lambda:FunctionUrlAuthType` condition — the live InvokeFunctionUrl request
-    // does not reliably carry that context key, so a StringEquals on it denies the call.
+    // Function URLs created after October 2025 require BOTH lambda:InvokeFunctionUrl and
+    // lambda:InvokeFunction in the caller's identity policy — docs: lambda/latest/dg/urls-auth.html.
     const invokeUrlPolicy = new iam.ManagedPolicy(this, "InvokeUrlPolicy", {
       managedPolicyName: `${fnName}-invoke-url`,
       description: `Invoke the ${fnName} Function URL (SigV4 / AWS_IAM auth)`,
@@ -178,8 +149,12 @@ export class EncounterGeneratorApiStack extends cdk.Stack {
     new cdk.CfnOutput(this, "FunctionUrl", { value: fnUrl.url });
     new cdk.CfnOutput(this, "InvokeUrlPolicyArn", { value: invokeUrlPolicy.managedPolicyArn });
     new cdk.CfnOutput(this, "EgressStaticIp", {
-      value: egressEip.ref,
+      value: natEip.ref,
       description: "Add this to MongoDB Atlas Network Access as <ip>/32",
+    });
+    new cdk.CfnOutput(this, "NatInstanceId", {
+      value: natInstanceId,
+      description: "Stop/start to toggle this environment's outbound egress (see README)",
     });
     new cdk.CfnOutput(this, "VpcId", { value: vpc.vpcId });
     new cdk.CfnOutput(this, "LambdaSecurityGroupId", { value: lambdaSg.securityGroupId });
