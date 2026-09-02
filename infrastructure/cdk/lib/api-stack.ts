@@ -100,8 +100,26 @@ export class EncounterGeneratorApiStack extends cdk.Stack {
     // until the Cloudflare-hosted web front-end is wired up.
     const fnUrl = fn.addFunctionUrl({ authType: lambda.FunctionUrlAuthType.AWS_IAM });
 
+    // Least-privilege policy for calling the Function URL with SigV4 (Postman, awscurl,
+    // a future backend caller). Attach to whichever user/role needs it, e.g.
+    //   aws iam attach-user-policy --user-name <you> --policy-arn <InvokeUrlPolicyArn>
+    const invokeUrlPolicy = new iam.ManagedPolicy(this, "InvokeUrlPolicy", {
+      managedPolicyName: `${fnName}-invoke-url`,
+      description: `Invoke the ${fnName} Function URL (SigV4 / AWS_IAM auth)`,
+      statements: [
+        new iam.PolicyStatement({
+          actions: ["lambda:InvokeFunctionUrl"],
+          resources: [fn.functionArn],
+          conditions: {
+            StringEquals: { "lambda:FunctionUrlAuthType": "AWS_IAM" },
+          },
+        }),
+      ],
+    });
+
     new cdk.CfnOutput(this, "FunctionName", { value: fn.functionName });
     new cdk.CfnOutput(this, "FunctionUrl", { value: fnUrl.url });
+    new cdk.CfnOutput(this, "InvokeUrlPolicyArn", { value: invokeUrlPolicy.managedPolicyArn });
     new cdk.CfnOutput(this, "VpcId", { value: vpc.vpcId });
     new cdk.CfnOutput(this, "LambdaSecurityGroupId", { value: lambdaSg.securityGroupId });
   }
