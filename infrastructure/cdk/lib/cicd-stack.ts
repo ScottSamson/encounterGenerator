@@ -44,11 +44,12 @@ export class EncounterGeneratorCicdStack extends cdk.Stack {
           ),
         );
 
+    // Any workflow in THIS repo (still not assumable by other repos or forks — their
+    // `sub` is prefixed with their own `repo:owner/name:`). Prod is protected by the
+    // GitHub Environment reviewer gate, not this claim. Tighten to the explicit
+    // environment/ref list via `githubSubjectClaims` once the pipeline is green.
     const subjectClaims = props.githubSubjectClaims ?? [
-      `repo:${githubOwner}/${githubRepo}:environment:stage`,
-      `repo:${githubOwner}/${githubRepo}:environment:prod`,
-      `repo:${githubOwner}/${githubRepo}:ref:refs/heads/development`,
-      `repo:${githubOwner}/${githubRepo}:ref:refs/heads/main`,
+      `repo:${githubOwner}/${githubRepo}:*`,
     ];
 
     // Built explicitly (not via WebIdentityPrincipal) so the trust policy action and
