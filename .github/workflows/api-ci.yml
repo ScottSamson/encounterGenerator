@@ -12,3 +12,4 @@ on:
 jobs:
   checks:
     uses: ./.github/workflows/wf-api-checks.yml
+    secrets: inherit
