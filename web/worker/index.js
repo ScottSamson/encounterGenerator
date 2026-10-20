@@ -10,7 +10,6 @@
 //   LAMBDA_ORIGIN           - the Function URL for that environment (plain var)
 //   AWS_ACCESS_KEY_ID       - IAM user access key id (secret)
 //   AWS_SECRET_ACCESS_KEY   - its secret (secret)
-//   AWS_SESSION_TOKEN       - only if you use temporary STS credentials (optional secret)
 
 const SERVICE = "lambda";
 
@@ -53,7 +52,6 @@ async function proxy(request, env) {
       service: SERVICE,
       accessKeyId: env.AWS_ACCESS_KEY_ID,
       secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
-      sessionToken: env.AWS_SESSION_TOKEN,
     });
   } catch (err) {
     return json({ error: "Signing failed", details: String(err && err.message || err) }, 500);
@@ -152,7 +150,6 @@ async function signRequest({
   service,
   accessKeyId,
   secretAccessKey,
-  sessionToken,
 }) {
   const amzDate = new Date().toISOString().replace(/[:-]/g, "").replace(/\.\d{3}/, "");
   const dateStamp = amzDate.slice(0, 8);
@@ -164,7 +161,6 @@ async function signRequest({
     "x-amz-date": amzDate,
   };
   if (contentType) headers["content-type"] = contentType;
-  if (sessionToken) headers["x-amz-security-token"] = sessionToken;
 
   const sortedNames = Object.keys(headers).sort();
   const signedHeaderList = sortedNames.join(";");
