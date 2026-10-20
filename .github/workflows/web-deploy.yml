@@ -8,14 +8,16 @@ name: web-deploy
 #   main        -> `wrangler deploy`: live at eg-web.<subdomain>.workers.dev
 #   development -> `wrangler versions upload --preview-alias stage`: uploaded but NOT
 #                  deployed, reachable only at stage-eg-web.<subdomain>.workers.dev
-# The stage version carries its own LAMBDA_ORIGIN and AWS keys (--var / --secrets-file), so
-# stage traffic never touches the prod Lambda and production traffic is unaffected.
+# Each deploy passes its own LAMBDA_ORIGIN (--var), so stage and prod hit different Lambdas.
+#
+# The AWS keys are NOT managed here. They are Worker secrets set once in Cloudflare
+# (eg-web -> Settings -> Variables and Secrets: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
+# and shared by stage and prod. Deploys never delete secrets. Any *plain* variable set only
+# in the dashboard is removed on deploy, so keep plain vars in wrangler.jsonc or --var.
 #
 # Per-environment configuration (Settings -> Environments -> stage / prod):
 #   secret CLOUDFLARE_API_TOKEN       - token from the "Edit Cloudflare Workers" template
 #   secret CLOUDFLARE_ACCOUNT_ID
-#   secret AWS_ACCESS_KEY_ID          - IAM user allowed to invoke THIS environment's Lambda
-#   secret AWS_SECRET_ACCESS_KEY
 #   var    LAMBDA_ORIGIN              - this environment's Function URL (CDK output FunctionUrl)
 #   var    SITE_URL                   - smoke test target, no trailing slash:
 #                                       stage: https://stage-eg-web.<subdomain>.workers.dev
@@ -53,27 +55,12 @@ jobs:
           name: web-out
           path: web/out
 
-      # Worker secrets come from the GitHub Environment, so there is nothing to set by hand
-      # in Cloudflare. Runner secrets are masked in logs; the file is deleted afterwards.
-      - name: Write secrets file
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Check LAMBDA_ORIGIN is set
         run: |
-          # An empty value would be uploaded as an empty secret and override a good one,
-          # then fail at runtime with "Missing AWS_ACCESS_KEY_ID". Fail the deploy instead.
-          for name in AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY; do
-            if [ -z "${!name}" ]; then
-              echo "::error::Environment secret $name is empty or not set for this environment" >&2
-              exit 1
-            fi
-          done
           if [ -z "${{ vars.LAMBDA_ORIGIN }}" ]; then
             echo "::error::Environment variable LAMBDA_ORIGIN is not set for this environment" >&2
             exit 1
           fi
-          jq -n --arg id "$AWS_ACCESS_KEY_ID" --arg secret "$AWS_SECRET_ACCESS_KEY" \
-            '{AWS_ACCESS_KEY_ID: $id, AWS_SECRET_ACCESS_KEY: $secret}' > "$RUNNER_TEMP/worker-secrets.json"
 
       - name: Deploy (prod)
         if: github.ref_name == 'main'
@@ -82,7 +69,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: web
-          command: deploy --var LAMBDA_ORIGIN:${{ vars.LAMBDA_ORIGIN }} --secrets-file ${{ runner.temp }}/worker-secrets.json --message "${{ github.sha }}"
+          command: deploy --var LAMBDA_ORIGIN:${{ vars.LAMBDA_ORIGIN }} --message "${{ github.sha }}"
 
       - name: Upload version (stage)
         if: github.ref_name != 'main'
@@ -91,11 +78,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: web
-          command: versions upload --preview-alias stage --var LAMBDA_ORIGIN:${{ vars.LAMBDA_ORIGIN }} --secrets-file ${{ runner.temp }}/worker-secrets.json --message "${{ github.sha }}"
-
-      - name: Remove secrets file
-        if: always()
-        run: rm -f "$RUNNER_TEMP/worker-secrets.json"
+          command: versions upload --preview-alias stage --var LAMBDA_ORIGIN:${{ vars.LAMBDA_ORIGIN }} --message "${{ github.sha }}"
 
       - name: Smoke test (site + API proxy)
         env:
