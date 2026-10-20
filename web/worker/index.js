@@ -34,10 +34,6 @@ async function proxy(request, env) {
   const origin = env.LAMBDA_ORIGIN.replace(/\/+$/, "");
   const region = regionFromLambdaUrl(origin);
 
-  if (!env.AWS_ACCESS_KEY_ID || !env.AWS_SECRET_ACCESS_KEY) {
-    return json({ error: "Missing AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY secrets" }, 500);
-  }
-
   const targetUrl = new URL(incomingUrl.pathname + incomingUrl.search, origin);
 
   // Buffer the body so it can be hashed for the signature. Payloads on this API are
