@@ -1,0 +1,38 @@
+name: web-checks
+
+# Reusable job: lint and static-export build. No cloud credentials. Called by web-ci.yml
+# (on PRs) and as the pre-deploy gate in web-deploy.yml. Uploads the exported site so the
+# deploy job ships exactly what was checked.
+on:
+  workflow_call:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Web - install
+        working-directory: web
+        run: npm ci
+
+      - name: Web - lint
+        working-directory: web
+        run: npm run lint
+
+      - name: Web - build (static export to web/out)
+        working-directory: web
+        run: npm run build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: web-out
+          path: web/out
+          if-no-files-found: error
+          retention-days: 7
