@@ -1,74 +1,81 @@
-// Cloudflare Worker: reverse proxy to the Lambda Function URL.
+// Cloudflare Worker: serves the static site (Workers Static Assets) and reverse-proxies
+// /api/* to the Lambda Function URL.
 //
 // The Function URL uses AWS_IAM auth, so every forwarded request is SigV4-signed here
-// (service "lambda"). Set these as encrypted Worker secrets:
-//   AWS_ACCESS_KEY_ID       - the lambda_proxy IAM user's access key id
-//   AWS_SECRET_ACCESS_KEY   - its secret
-//   AWS_SESSION_TOKEN       - only if you use temporary STS credentials (optional)
-// Optional plain var:
-//   LAMBDA_ORIGIN           - overrides the hard-coded origin below (per-env workers)
+// (service "lambda"). wrangler.jsonc sends only /api/* to this script
+// (assets.run_worker_first); everything else is served straight from the assets.
+//
+// Per-environment values are supplied by the deploy workflow (web-deploy.yml) from the
+// GitHub Environment, not stored in the repo:
+//   LAMBDA_ORIGIN           - the Function URL for that environment (plain var)
+//   AWS_ACCESS_KEY_ID       - IAM user access key id (secret)
+//   AWS_SECRET_ACCESS_KEY   - its secret (secret)
+//   AWS_SESSION_TOKEN       - only if you use temporary STS credentials (optional secret)
 
-const DEFAULT_LAMBDA_ORIGIN =
-  "https://ph7rp3hfchg5ygcd6rb3v4pnyi0mwesy.lambda-url.us-west-2.on.aws";
 const SERVICE = "lambda";
 
-export default {
+const worker = {
   async fetch(request, env) {
-    const incomingUrl = new URL(request.url);
-
-    // Only API paths are proxied to the Lambda. Everything else (the static site) passes
-    // straight through to the origin. Ideally the Worker's route is also scoped to
-    // `/api/*` so it never sees non-API requests at all.
-    if (!incomingUrl.pathname.startsWith("/api/")) {
-      return fetch(request);
+    if (!new URL(request.url).pathname.startsWith("/api/")) {
+      return env.ASSETS.fetch(request);
     }
-
-    const origin = (env.LAMBDA_ORIGIN || DEFAULT_LAMBDA_ORIGIN).replace(/\/+$/, "");
-    const region = regionFromLambdaUrl(origin);
-
-    if (!env.AWS_ACCESS_KEY_ID || !env.AWS_SECRET_ACCESS_KEY) {
-      return json({ error: "Worker missing AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY secrets" }, 500);
-    }
-
-    const targetUrl = new URL(incomingUrl.pathname + incomingUrl.search, origin);
-
-    // Buffer the body so it can be hashed for the signature. Payloads on this API are
-    // small; GET/HEAD have none.
-    const hasBody = !["GET", "HEAD"].includes(request.method);
-    const bodyBytes = hasBody ? new Uint8Array(await request.arrayBuffer()) : undefined;
-    const contentType = hasBody ? request.headers.get("content-type") : null;
-
-    let signedHeaders;
-    try {
-      signedHeaders = await signRequest({
-        method: request.method,
-        url: targetUrl,
-        body: bodyBytes,
-        contentType,
-        region,
-        service: SERVICE,
-        accessKeyId: env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
-        sessionToken: env.AWS_SESSION_TOKEN,
-      });
-    } catch (err) {
-      return json({ error: "Signing failed", details: String(err && err.message || err) }, 500);
-    }
-
-    try {
-      const upstream = await fetch(targetUrl.toString(), {
-        method: request.method,
-        headers: signedHeaders, // only the signed set is forwarded
-        body: bodyBytes,
-        redirect: "manual",
-      });
-      // Re-wrap so the response headers are mutable (Cloudflare can add its own).
-      return new Response(upstream.body, upstream);
-    } catch (error) {
-      return json({ error: "Gateway Error", details: String(error && error.message || error) }, 502);
-    }
+    return proxy(request, env);
   },
 };
+
+export default worker;
+
+async function proxy(request, env) {
+  const incomingUrl = new URL(request.url);
+
+  if (!env.LAMBDA_ORIGIN) {
+    return json({ error: "Missing LAMBDA_ORIGIN variable" }, 500);
+  }
+  const origin = env.LAMBDA_ORIGIN.replace(/\/+$/, "");
+  const region = regionFromLambdaUrl(origin);
+
+  if (!env.AWS_ACCESS_KEY_ID || !env.AWS_SECRET_ACCESS_KEY) {
+    return json({ error: "Missing AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY secrets" }, 500);
+  }
+
+  const targetUrl = new URL(incomingUrl.pathname + incomingUrl.search, origin);
+
+  // Buffer the body so it can be hashed for the signature. Payloads on this API are
+  // small; GET/HEAD have none.
+  const hasBody = !["GET", "HEAD"].includes(request.method);
+  const bodyBytes = hasBody ? new Uint8Array(await request.arrayBuffer()) : undefined;
+  const contentType = hasBody ? request.headers.get("content-type") : null;
+
+  let signedHeaders;
+  try {
+    signedHeaders = await signRequest({
+      method: request.method,
+      url: targetUrl,
+      body: bodyBytes,
+      contentType,
+      region,
+      service: SERVICE,
+      accessKeyId: env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
+      sessionToken: env.AWS_SESSION_TOKEN,
+    });
+  } catch (err) {
+    return json({ error: "Signing failed", details: String(err && err.message || err) }, 500);
+  }
+
+  try {
+    const upstream = await fetch(targetUrl.toString(), {
+      method: request.method,
+      headers: signedHeaders, // only the signed set is forwarded
+      body: bodyBytes,
+      redirect: "manual",
+    });
+    // Re-wrap so the response headers are mutable (Cloudflare can add its own).
+    return new Response(upstream.body, upstream);
+  } catch (error) {
+    return json({ error: "Gateway Error", details: String(error && error.message || error) }, 502);
+  }
+}
 
 // --- helpers ----------------------------------------------------------------
 
