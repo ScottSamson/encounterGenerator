@@ -11,3 +11,4 @@ on:
 jobs:
   checks:
     uses: ./.github/workflows/wf-web-checks.yml
+    secrets: inherit
