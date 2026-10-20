@@ -33,9 +33,17 @@ export class EncounterGeneratorApiStack extends cdk.Stack {
     // connectivity. Stage's NAT can be stopped when idle — see infrastructure/cdk/README.md.
     const natProvider = ec2.NatProvider.instanceV2({
       instanceType: ec2.InstanceType.of(ec2.InstanceClass.T4G, ec2.InstanceSize.NANO),
-      machineImage: ec2.MachineImage.latestAmazonLinux2023({
-        cpuType: ec2.AmazonLinuxCpuType.ARM_64,
+      // fck-nat AMI (https://fck-nat.dev): NAT is preconfigured, nothing is installed at
+      // boot. The stock AL2023 image + `yum install iptables-services` got OOM-killed on a
+      // t4g.nano (512 MB), leaving a NAT with no masquerade rule. Pinned by ID, not looked
+      // up, so synth works in CI without AWS credentials. Refresh with:
+      //   aws ec2 describe-images --region us-west-2 --owners 568608671756 \
+      //     --filters "Name=name,Values=fck-nat-al2023-*-arm64-ebs"
+      machineImage: new ec2.GenericLinuxImage({
+        "us-west-2": "ami-0d1db1251d2b64626", // fck-nat-al2023-hvm-1.4.0-20260701-arm64-ebs
       }),
+      // Empty user data: without this CDK appends its default iptables install commands.
+      userData: ec2.UserData.forLinux(),
       defaultAllowedTraffic: ec2.NatTrafficDirection.OUTBOUND_ONLY,
     });
 
