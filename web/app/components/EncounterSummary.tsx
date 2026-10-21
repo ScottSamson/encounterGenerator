@@ -28,24 +28,30 @@ export default function EncounterSummary({ encounters, activeDifficulty, onSelec
       </div>
 
       <div className="mt-8 grid gap-6 sm:grid-cols-3">
-        {encounters.map((group) => (
-          <div key={group.difficulty}>
-            <h3 className="text-sm font-semibold uppercase tracking-wide text-amber-300">
-              {group.difficulty}
-            </h3>
-            {group.encounter.length === 0 ? (
-              <p className="mt-2 text-sm text-slate-400">No monsters found.</p>
-            ) : (
-              <ul className="mt-2 space-y-1 text-sm text-slate-300">
-                {group.encounter.map((entry) => (
-                  <li key={entry.monster.name}>
-                    {entry.count}x {entry.monster.name}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        ))}
+        {encounters.map((group, index) => {
+          const lowerBound = index === 0 ? 0 : encounters[index - 1]!.xpThreshold + 1;
+          return (
+            <div key={group.difficulty}>
+              <h3 className="text-sm font-semibold uppercase tracking-wide text-amber-300">
+                {group.difficulty}
+              </h3>
+              <p className="text-xs text-slate-500">
+                {lowerBound.toLocaleString()}–{group.xpThreshold.toLocaleString()} XP
+              </p>
+              {group.encounter.length === 0 ? (
+                <p className="mt-2 text-sm text-slate-400">No monsters found.</p>
+              ) : (
+                <ul className="mt-2 space-y-1 text-sm text-slate-300">
+                  {group.encounter.map((entry) => (
+                    <li key={entry.monster.name}>
+                      {entry.count}x {entry.monster.name}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

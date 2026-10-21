@@ -13,10 +13,9 @@
     "esModuleInterop": true,
     "rewriteRelativeImportExtensions": true,
     "allowImportingTsExtensions": true,
-    // "types": ["node"],
+    "types": ["node"],
     // For nodejs:
     // "lib": ["esnext"],
-    // "types": ["node"],
     // and npm install -D @types/node
 
     // Other Outputs
@@ -44,5 +43,6 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
-  }
+  },
+  "exclude": ["test", "dist", "node_modules", "lambda-build"]
 }

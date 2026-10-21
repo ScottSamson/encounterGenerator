@@ -7,11 +7,11 @@ type State =
   | { status: "idle" }
   | { status: "loading" }
   | { status: "error"; message: string }
-  | { status: "success"; encounters: EncounterGroup[]; activeDifficulty: string | null };
+  | { status: "success"; encounters: EncounterGroup[]; activeDifficulty: string | null; inLair: boolean };
 
 type Action =
   | { type: "submit" }
-  | { type: "success"; encounters: EncounterGroup[] }
+  | { type: "success"; encounters: EncounterGroup[]; inLair: boolean }
   | { type: "error"; message: string }
   | { type: "selectDifficulty"; difficulty: string };
 
@@ -24,6 +24,7 @@ function reducer(state: State, action: Action): State {
         status: "success",
         encounters: action.encounters,
         activeDifficulty: action.encounters[0]?.difficulty ?? null,
+        inLair: action.inLair,
       };
     case "error":
       return { status: "error", message: action.message };
@@ -43,7 +44,7 @@ export function useEncounterRequest() {
         throw new Error(`Request failed with status ${res.status}`);
       }
       const data: EncounterGroup[] = await res.json();
-      dispatch({ type: "success", encounters: data });
+      dispatch({ type: "success", encounters: data, inLair: params.get("inLair") === "true" });
     } catch (err) {
       dispatch({ type: "error", message: err instanceof Error ? err.message : "Failed to generate encounters" });
     }

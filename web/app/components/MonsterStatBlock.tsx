@@ -65,6 +65,11 @@ export default function MonsterStatBlock({ entry }: { entry: MonsterEntry }) {
             <span className="text-slate-400">Skills:</span> {m.skills_raw}
           </p>
         )}
+        {m.vulnerabilities && (
+          <p>
+            <span className="text-slate-400">Vulnerabilities:</span> {m.vulnerabilities}
+          </p>
+        )}
         {m.resistances && (
           <p>
             <span className="text-slate-400">Resistances:</span> {m.resistances}

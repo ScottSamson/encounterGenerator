@@ -29,6 +29,7 @@ export interface MonsterDetail {
   };
   skills_raw?: string;
   resistances?: string;
+  vulnerabilities?: string;
   immunities?: string;
   senses: string;
   languages: string;
@@ -50,6 +51,7 @@ export interface MonsterEntry {
 
 export interface EncounterGroup {
   difficulty: string;
+  xpThreshold: number;
   encounter: MonsterEntry[];
 }
 
@@ -58,6 +60,24 @@ export interface FormState {
   avgPlayerLevel: string;
   monsterCR: string;
   monsterXP: string;
-  type: string;
+  type: string[];
   name: string;
+  inLair: boolean;
+  vulnerabilities: string[];
+  resistances: string[];
+  immunities: string[];
+  senses: string;
+  attacks: string;
+  traits: string;
+  proficiencyBonusMin: string;
+  proficiencyBonusMax: string;
+  hpMin: string;
+  hpMax: string;
+  initiative: string;
+  acMin: string;
+  acMax: string;
+  size: string[];
+  speed: string;
+  maxMonsterProfiles: string;
+  maxTotalMonsters: string;
 }

@@ -1,6 +1,7 @@
 // External Dependencies
 import * as mongoDB from "mongodb";
 import * as dotenv from "dotenv";
+import { loadConfigFromSsmIfConfigured } from "./config.service.ts";
 // Global Variables
 export const collections: { monsters?: mongoDB.Collection, xpthresholds?: mongoDB.Collection } = {}
 
@@ -23,6 +24,10 @@ export function ensureDatabaseConnection(): Promise<void> {
 // Initialize Connection
 export async function connectToDatabase () {
    dotenv.config();
+
+   // In Lambda the DB config is pulled from SSM Parameter Store (see config.service.ts);
+   // locally it comes from api/.env via dotenv above. No-op when SSM_PARAM_PREFIX is unset.
+   await loadConfigFromSsmIfConfigured();
 
    const connectionString = process.env.DB_CONN_STRING;
    const dbName = process.env.DB_NAME;

@@ -1,0 +1,14 @@
+name: web-ci
+
+on:
+  pull_request:
+    branches: [development, main]
+    paths:
+      - 'web/**'
+      - '.github/workflows/wf-web-checks.yml'
+      - '.github/workflows/web-ci.yml'
+
+jobs:
+  checks:
+    uses: ./.github/workflows/wf-web-checks.yml
+    secrets: inherit

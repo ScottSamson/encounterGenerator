@@ -1,0 +1,95 @@
+name: web-deploy
+
+# development -> stage, main -> prod, same mapping as api-deploy. The "prod" GitHub
+# Environment's Required-reviewers gate pauses the deploy job before anything ships to prod.
+#
+# One Cloudflare Worker ("eg-web", web/wrangler.jsonc) serves the static site and proxies
+# /api/* to the Lambda Function URL (web/worker/index.js).
+#   main        -> `wrangler deploy`: live at eg-web.<subdomain>.workers.dev
+#   development -> `wrangler versions upload --preview-alias stage`: uploaded but NOT
+#                  deployed, reachable only at stage-eg-web.<subdomain>.workers.dev
+# Each deploy passes its own LAMBDA_ORIGIN (--var), so stage and prod hit different Lambdas.
+#
+# The AWS keys are NOT managed here. They are Worker secrets set once in Cloudflare
+# (eg-web -> Settings -> Variables and Secrets: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
+# and shared by stage and prod. Deploys never delete secrets. Any *plain* variable set only
+# in the dashboard is removed on deploy, so keep plain vars in wrangler.jsonc or --var.
+#
+# Per-environment configuration (Settings -> Environments -> stage / prod):
+#   secret CLOUDFLARE_API_TOKEN       - token from the "Edit Cloudflare Workers" template
+#   secret CLOUDFLARE_ACCOUNT_ID
+#   var    LAMBDA_ORIGIN              - this environment's Function URL (CDK output FunctionUrl)
+#   var    SITE_URL                   - smoke test target, no trailing slash:
+#                                       stage: https://stage-eg-web.<subdomain>.workers.dev
+#                                       prod:  https://eg-web.<subdomain>.workers.dev
+on:
+  push:
+    branches: [development, main]
+    paths:
+      - 'web/**'
+      - '.github/workflows/wf-web-checks.yml'
+      - '.github/workflows/web-deploy.yml'
+
+concurrency:
+  group: web-deploy-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  checks:
+    uses: ./.github/workflows/wf-web-checks.yml
+    secrets: inherit
+
+  deploy:
+    needs: checks
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref_name == 'main' && 'prod' || 'stage' }}
+    permissions:
+      contents: read
+    steps:
+      # Checkout supplies web/worker and web/wrangler.jsonc; the built site comes from the
+      # checks job so exactly what was linted and built is what ships.
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: web-out
+          path: web/out
+
+      - name: Check LAMBDA_ORIGIN is set
+        run: |
+          if [ -z "${{ vars.LAMBDA_ORIGIN }}" ]; then
+            echo "::error::Environment variable LAMBDA_ORIGIN is not set for this environment" >&2
+            exit 1
+          fi
+
+      - name: Deploy (prod)
+        if: github.ref_name == 'main'
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: web
+          command: deploy --var LAMBDA_ORIGIN:${{ vars.LAMBDA_ORIGIN }} --message "${{ github.sha }}"
+
+      - name: Upload version (stage)
+        if: github.ref_name != 'main'
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: web
+          command: versions upload --preview-alias stage --var LAMBDA_ORIGIN:${{ vars.LAMBDA_ORIGIN }} --message "${{ github.sha }}"
+
+      - name: Smoke test (site + API proxy)
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+        run: |
+          for i in 1 2 3 4 5; do
+            if curl -fsS --retry 2 -o /dev/null "$SITE_URL/" &&
+               curl -fsS --retry 2 -o /dev/null "$SITE_URL/api/monsters"; then
+              echo "OK"; exit 0
+            fi
+            sleep 10
+          done
+          echo "Smoke test failed for $SITE_URL" >&2
+          exit 1

@@ -37,7 +37,18 @@ Same-origin under one CloudFront domain, so there's no CORS to deal with in prod
 
 ## Deployment runbook
 
-Reusable IAM/CloudFront JSON templates live in `infrastructure/` — `*.template.json` files have `${VAR}` placeholders filled in via `sed` at deploy time (see below); `lambda-trust-policy.json` has no placeholders and is used as-is.
+> **Superseded for the API.** The API is now deployed by the CDK app in
+> [`infrastructure/cdk/`](infrastructure/cdk/README.md) (Lambda in a VPC) via GitHub
+> Actions. The steps below remain only as the reference for the CloudFront + S3 web
+> path, which is itself being retired in favour of Cloudflare.
+
+Reusable IAM/CloudFront JSON templates live in `infrastructure/` — `*.template.json` files have `${VAR}` placeholders filled in via `sed` at deploy time (see below). For the Lambda execution role's trust policy, use this inline (CDK now manages that role for the real deployments):
+
+```json
+{ "Version": "2012-10-17", "Statement": [{ "Effect": "Allow", "Principal": { "Service": "lambda.amazonaws.com" }, "Action": "sts:AssumeRole" }] }
+```
+
+`github-deploy-role-trust-policy.template.json` is the trust policy for the GitHub Actions OIDC deploy role — fill `${ACCOUNT_ID}` and apply with `aws iam update-assume-role-policy` if you need to repair the live role without a `cdk deploy`.
 
 ### Prerequisites (one-time)
 
@@ -81,7 +92,7 @@ Recreate `.env.local` afterward for local dev: `echo "NEXT_PUBLIC_API_URL=http:/
 ```bash
 aws iam create-role \
   --role-name "$ROLE_NAME" \
-  --assume-role-policy-document file://infrastructure/lambda-trust-policy.json
+  --assume-role-policy-document '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Service":"lambda.amazonaws.com"},"Action":"sts:AssumeRole"}]}'
 
 aws iam attach-role-policy \
   --role-name "$ROLE_NAME" \

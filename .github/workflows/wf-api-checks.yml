@@ -1,0 +1,48 @@
+name: api-checks
+
+# Reusable job: build, unit tests, coverage gate, and a CDK synth. No AWS credentials.
+# Called by api-ci.yml (on PRs) and as the pre-deploy gate in the deploy workflows.
+on:
+  workflow_call:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            api/package-lock.json
+            infrastructure/cdk/package-lock.json
+
+      - name: API - install
+        working-directory: api
+        run: npm ci
+
+      - name: API - build
+        working-directory: api
+        run: npm run build
+
+      - name: API - test (coverage gate)
+        working-directory: api
+        run: npm test
+
+      - name: API - typecheck tests
+        working-directory: api
+        run: npm run typecheck:test
+
+      - name: API - package Lambda zip
+        working-directory: api
+        run: npm run package:lambda
+
+      - name: CDK - install
+        working-directory: infrastructure/cdk
+        run: npm ci
+
+      - name: CDK - synth
+        working-directory: infrastructure/cdk
+        run: npx cdk synth
