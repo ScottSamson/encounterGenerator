@@ -78,7 +78,7 @@ export default function HomePage() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-950 text-white">
+    <main className="min-h-screen bg-tavern text-fg">
       <Banner />
 
       <section id="start" className="mx-auto max-w-3xl px-6 pb-20">

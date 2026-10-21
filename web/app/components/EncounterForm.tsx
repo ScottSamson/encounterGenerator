@@ -15,7 +15,7 @@ interface EncounterFormProps {
 
 export default function EncounterForm({ form, onFieldChange, onSubmit, loading, error }: EncounterFormProps) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 p-8">
+    <div className="card p-8">
       <h2 className="text-2xl font-semibold">Generate an encounter</h2>
       <form onSubmit={onSubmit} className="mt-6 grid gap-5 sm:grid-cols-2">
         <FormField
@@ -185,12 +185,12 @@ export default function EncounterForm({ form, onFieldChange, onSubmit, loading, 
           onChange={(value) => onFieldChange("maxTotalMonsters", value)}
         />
 
-        <label className="flex items-center gap-3 text-sm text-slate-300 sm:col-span-2">
+        <label className="flex items-center gap-3 text-sm text-fg-muted sm:col-span-2">
           <input
             type="checkbox"
             checked={form.inLair ?? false}
             onChange={(e) => onFieldChange("inLair", e.target.checked)}
-            className="h-4 w-4 rounded border-white/15 bg-slate-900 accent-amber-500"
+            className="h-4 w-4 rounded border-edge-strong bg-field accent-accent"
           />
           Encounter takes place in the monster&apos;s lair
         </label>
@@ -199,7 +199,7 @@ export default function EncounterForm({ form, onFieldChange, onSubmit, loading, 
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-full bg-amber-500 px-5 py-3 font-medium text-slate-950 transition hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-60"
+            className="w-full rounded-full btn-brass px-5 py-3 font-medium text-on-accent transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loading ? "Generating..." : "Generate encounters"}
           </button>
@@ -207,7 +207,7 @@ export default function EncounterForm({ form, onFieldChange, onSubmit, loading, 
       </form>
 
       {error && (
-        <p className="mt-6 rounded-lg border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+        <p className="mt-6 rounded-lg border border-danger-bright/30 bg-danger/10 px-4 py-3 text-sm text-danger-text">
           {error}
         </p>
       )}

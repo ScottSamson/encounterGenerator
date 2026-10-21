@@ -11,7 +11,7 @@ interface RangeFieldProps
 
 export default function RangeField({ label, minValue, maxValue, onMinChange, onMaxChange, ...inputProps }: RangeFieldProps) {
   return (
-    <div className="flex flex-col gap-1.5 text-sm text-slate-300">
+    <div className="flex flex-col gap-1.5 text-sm text-fg-muted">
       {label}
       <div className="flex gap-2">
         <input
@@ -19,14 +19,14 @@ export default function RangeField({ label, minValue, maxValue, onMinChange, onM
           placeholder="Min"
           value={minValue}
           onChange={(e) => onMinChange(e.target.value)}
-          className="w-1/2 rounded-lg border border-white/15 bg-slate-900 px-3 py-2 text-white outline-none focus:border-amber-400"
+          className="w-1/2 rounded-lg border border-edge-strong bg-field px-3 py-2 text-fg outline-none focus:border-accent-bright"
         />
         <input
           {...inputProps}
           placeholder="Max"
           value={maxValue}
           onChange={(e) => onMaxChange(e.target.value)}
-          className="w-1/2 rounded-lg border border-white/15 bg-slate-900 px-3 py-2 text-white outline-none focus:border-amber-400"
+          className="w-1/2 rounded-lg border border-edge-strong bg-field px-3 py-2 text-fg outline-none focus:border-accent-bright"
         />
       </div>
     </div>
