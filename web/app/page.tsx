@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type SubmitEvent } from "react";
+import { useEffect, useRef, useState, type SubmitEvent } from "react";
 import Banner from "./components/Banner";
 import Features from "./components/Features";
 import Footer from "./components/Footer";
@@ -40,6 +40,15 @@ const initialForm: FormState = {
 export default function HomePage() {
   const [form, setForm] = useState<FormState>(initialForm);
   const { state, submit, selectDifficulty } = useEncounterRequest();
+  const summaryRef = useRef<HTMLDivElement>(null);
+
+  // Bring the results into view when a generation finishes. Keyed on the status, so picking
+  // a difficulty tab (status stays "success") doesn't scroll.
+  useEffect(() => {
+    if (state.status !== "success") return;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    summaryRef.current?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+  }, [state.status]);
 
   function updateField(field: keyof FormState, value: string | boolean | string[]) {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -78,7 +87,7 @@ export default function HomePage() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-950 text-white">
+    <main className="min-h-screen bg-tavern text-fg">
       <Banner />
 
       <section id="start" className="mx-auto max-w-3xl px-6 pb-20">
@@ -91,11 +100,13 @@ export default function HomePage() {
         />
 
         {state.status === "success" && (
-          <EncounterSummary
-            encounters={state.encounters}
-            activeDifficulty={state.activeDifficulty}
-            onSelectDifficulty={selectDifficulty}
-          />
+          <div ref={summaryRef} className="scroll-mt-6">
+            <EncounterSummary
+              encounters={state.encounters}
+              activeDifficulty={state.activeDifficulty}
+              onSelectDifficulty={selectDifficulty}
+            />
+          </div>
         )}
 
         {state.status === "success" && (

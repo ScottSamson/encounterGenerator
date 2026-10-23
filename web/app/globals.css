@@ -1,26 +1,125 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: dark;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-cinzel);
+  --font-sans: var(--font-crimson);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Tavern palette: dark walnut and candlelit amber, cream text. Components use these
+   names (bg-page, text-fg-muted, border-edge, ...) rather than palette classes, so a
+   theme is a change to the values below. Text colors were checked for WCAG AA contrast
+   (>= 4.5:1) against the page, panels, fields and the brightest part of the glow. */
+@theme {
+  --color-page: #1a110a;
+  --color-field: #2b1c10;
+  --color-panel: color-mix(in oklab, #f5deb3 6%, transparent);
+  --color-hover: color-mix(in oklab, #f5deb3 12%, transparent);
+  --color-edge: color-mix(in oklab, #c99a45 28%, transparent);
+  --color-edge-strong: color-mix(in oklab, #c99a45 45%, transparent);
+
+  --color-fg: #f6ead2;
+  --color-fg-bright: #fff6df;
+  --color-fg-muted: #dccaa4;
+  --color-fg-subtle: #c4ae86;
+  --color-fg-faint: #b29d75;
+  --color-on-accent: #1c1209;
+
+  --color-accent: #c98a2b;
+  --color-accent-bright: #e3a53a;
+  --color-accent-text: #ebbd5a;
+
+  --color-danger: #a8342b;
+  --color-danger-bright: #d4574d;
+  --color-danger-text: #f2a69e;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-page);
+  color: var(--color-fg);
+}
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: 0.02em;
+  }
+
+  h1 {
+    text-shadow: 0 0 28px rgb(255 180 80 / 0.28);
+  }
+}
+
+/* Tavern interior photo (public/tavern-bg.webp), fixed behind the page. A fixed
+   pseudo-element is used instead of background-attachment: fixed, which mobile browsers
+   ignore. Two dark layers sit over the photo (an even dim plus a vignette) so text stays
+   readable over the lit doors and lanterns. */
+@utility bg-tavern {
+  background-color: var(--color-page);
+  isolation: isolate;
+
+  &::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      radial-gradient(ellipse 55% 90% at 50% 40%, rgb(26 17 10 / 0.55), rgb(26 17 10 / 0.05)),
+      linear-gradient(rgb(26 17 10 / 0.38), rgb(26 17 10 / 0.38)),
+      url("/tavern-bg.webp");
+    background-size: cover;
+    background-position: center top;
+  }
+}
+
+/* Raised panel over the photo: dark frosted glass with a brass edge, a lit top edge and
+   a shadow. Mostly opaque so form text never depends on what is behind it. */
+@utility card {
+  border: 1px solid var(--color-edge-strong);
+  border-radius: var(--radius-2xl);
+  background-image: linear-gradient(180deg, rgb(43 28 16 / 0.8), rgb(30 20 11 / 0.86));
+  backdrop-filter: blur(6px);
+  box-shadow:
+    inset 0 1px 0 rgb(255 225 160 / 0.12),
+    0 8px 24px rgb(0 0 0 / 0.45);
+}
+
+/* Monster stat block: a parchment page with dark ink and red headings, so it reads as a
+   separate object from the dark panel around it. The text color tokens are redefined
+   inside it, so the text-fg / text-fg-muted / text-accent-text classes used by
+   MonsterStatBlock turn into ink without per-element overrides. */
+@utility statblock {
+  --color-fg: #2a1a0e;
+  --color-fg-muted: #3b2a1b;
+  --color-fg-subtle: #5c4530;
+  --color-accent-text: #7a1f12;
+
+  color: var(--color-fg);
+  border: 1px solid #8a5a17;
+  border-radius: var(--radius-xl);
+  background-color: #e4d1a4;
+  background-image:
+    radial-gradient(ellipse at center, transparent 55%, rgb(120 80 30 / 0.18) 100%),
+    linear-gradient(180deg, #efe0bb, #e4d1a4);
+  box-shadow:
+    inset 0 0 0 3px #ead9b3,
+    inset 0 0 0 4px rgb(122 31 18 / 0.45),
+    0 6px 18px rgb(0 0 0 / 0.5);
+}
+
+/* Brass primary button. */
+@utility btn-brass {
+  border: 1px solid #8a5a17;
+  background-image: linear-gradient(180deg, var(--color-accent-bright), var(--color-accent));
+  box-shadow:
+    inset 0 1px 0 rgb(255 240 200 / 0.45),
+    0 2px 6px rgb(0 0 0 / 0.5);
+  font-family: var(--font-display);
+  letter-spacing: 0.04em;
 }
